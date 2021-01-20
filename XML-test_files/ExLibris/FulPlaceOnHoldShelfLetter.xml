@@ -1,0 +1,764 @@
+Subject: FulPlaceOnHoldShelfLetter
+
+<notification_data>
+<attachments_list></attachments_list>
+<general_data><address_from>Your.Department@organization.com</address_from>
+<current_date>2015/09/26</current_date>
+<letter_channel_info></letter_channel_info>
+<letter_name>On Hold Shelf Letter</letter_name> <letter_type>FulPlaceOnHoldShelfLetter</letter_type>
+<subject>On Hold Shelf </subject>
+</general_data>
+<item_loan_due_date_policy></item_loan_due_date_policy>
+<languages><string>en</string>
+</languages>
+<letter_params></letter_params>
+<letter_texts></letter_texts>
+<organization_unit><address><city>Des Plaines</city> <country>USA</country> <country_display>United States</country_display> <create_date>2011/12/17</create_date>
+<entity_action></entity_action>
+<library_id></library_id>
+<library_unit_id></library_unit_id>
+<line1>7. Billing Shipping</line1>
+<line2>1350 E Touhy Ave, Suite 200E</line2> <line3></line3> <line4></line4> <line5></line5> <note>Main circ desk</note> <originating_id></originating_id> <postal_code>60018</postal_code> <preferred>true</preferred> <segment_types_display><string>Billing</string>
+<string>Shipping</string>
+</segment_types_display>
+<state_province>IL</state_province>
+<user_address_types_display></user_address_types_display>
+</address>
+<automatically_activate_locate_profile>false</automatically_activate_locate_profile>
+<automatically_locate_resource>false</automatically_locate_resource>
+<cancel_request_on_locate_failure>false</cancel_request_on_locate_failure>
+<code>MAIN</code>
+<create_date>2011/12/17</create_date>
+<default_acq_loctaion_id>13647790000541</default_acq_loctaion_id>
+<default_item_loctaion_id></default_item_loctaion_id>
+<default_move_loctaion_id></default_move_loctaion_id>
+<default_pickup_loctaion_id></default_pickup_loctaion_id>
+<description>Test library for Igor's experiments</description> <edi_code></edi_code> <edi_type>014</edi_type> <email><create_date>2011/12/17</create_date>
+<description></description>
+<email>AlmaPrint@exlibrisgroup.com</email>
+<entity_action></entity_action>
+<external_id></external_id>
+<library_id></library_id>
+<library_unit_id></library_unit_id>
+<originating_id></originating_id>
+<preferred>true</preferred>
+</email>
+<entity_action></entity_action>
+<itemless_library></itemless_library>
+<library_id></library_id>
+<library_unit_id></library_unit_id>
+<name>Main Library</name>
+<org_scope><customer_id>950</customer_id>
+<institution_id>951</institution_id>
+<library_id>13641560000541</library_id>
+<library_unit_id></library_unit_id>
+</org_scope>
+<organization_id>13641560000541</organization_id>
+<organization_path>950.951.13641560000541</organization_path>
+<organization_type>LIBRARY</organization_type>
+<parent_org_id>951</parent_org_id>
+<path>SUPHQ_1.SUPHQ1_INST.MAIN</path>
+<phone><create_date>2011/12/17</create_date>
+<entity_action></entity_action>
+<external_id></external_id>
+<library_id></library_id>
+<library_unit_id></library_unit_id>
+<originating_id></originating_id>
+<phone>1 847-296-2200</phone>
+<preferred>true</preferred>
+<preferred_phone></preferred_phone>
+<preferred_sms></preferred_sms>
+</phone>
+<resource_sharing_library>false</resource_sharing_library>
+<serves_other_institutions>false</serves_other_institutions>
+<status>ACTIVE</status>
+<support_code></support_code>
+<url_mapping_prefix></url_mapping_prefix>
+</organization_unit>
+<phys_item_display><accession_number></accession_number>
+<alt_call_number_type></alt_call_number_type>
+<attachments></attachments>
+<author>Schama, Chloe.</author>
+<barcode>15969670</barcode>
+<call_number>DA565.Y45 S336 2009</call_number> <call_number_type>0</call_number_type>
+<chron_i></chron_i>
+<chron_j></chron_j>
+<chron_k></chron_k>
+<chron_l></chron_l>
+<chron_m></chron_m>
+<copy_id>0</copy_id>
+<destination_name></destination_name>
+<display_alt_call_numbers></display_alt_call_numbers>
+<edition>1st U.S. ed.</edition>
+<enum_a></enum_a>
+<enum_b></enum_b>
+<enum_c></enum_c>
+<enum_d></enum_d>
+<enum_e></enum_e>
+<enum_f></enum_f>
+<enum_g></enum_g>
+<enum_h></enum_h>
+<fulfillment_note></fulfillment_note>
+<imprint>New York : Walker &amp; Co 2009.</imprint> <internal_note1></internal_note1> <internal_note2></internal_note2> <internal_note3></internal_note3> <inventory_material_type>Book</inventory_material_type>
+<isbn>9780802717368</isbn>
+<issn></issn>
+<issue_level_description></issue_level_description>
+<item_policy></item_policy>
+<library_code>MAIN</library_code>
+<library_name>Main Library</library_name> <location_code>main</location_code>
+<location_name>Main</location_name>
+<material_type>Book</material_type>
+<optional_barcodes><string>15969670</string>
+</optional_barcodes>
+<owning_library_details><address1>7. Billing Shipping</address1>
+<address2>1350 E Touhy Ave, Suite 200E</address2> <address3></address3> <address4></address4> <address5></address5> <city>Des Plaines</city> <country>USA</country> <email>AlmaPrint@exlibrisgroup.com</email>
+<identifiers><code_value><code>Primary Identifier</code> <value></value> </code_value> </identifiers> <name>Main Library</name>
+<phone>1 847-296-2200</phone>
+<postal_code>60018</postal_code>
+<state>IL</state>
+<title></title>
+<user_group></user_group>
+<user_title></user_title>
+</owning_library_details>
+<owning_library_id>13641560000541</owning_library_id>
+<owning_library_name>Main Library</owning_library_name> <parsed_alt_call_number></parsed_alt_call_number>
+<parsed_call_number></parsed_call_number>
+<parsed_issue_level_description></parsed_issue_level_description>
+<permanent_library></permanent_library>
+<permanent_location></permanent_location>
+<public_note></public_note>
+<publication_date>2009.</publication_date>
+<publication_place>New York :</publication_place> <publisher>Walker &amp; Co</publisher> <row_call_number>$$h DA565.Y45$$i S336 2009</row_call_number> <shelving_location></shelving_location>
+<statistics_note1></statistics_note1>
+<statistics_note2></statistics_note2>
+<statistics_note3></statistics_note3>
+<title>Wild romance /</title>
+<title_abcnph>Wild romance / Chloe Schama.</title_abcnph> </phys_item_display> <receivers><receiver><address_types></address_types>
+<attached_to_entity_id>40665190000951</attached_to_entity_id>
+<email_types></email_types>
+<params></params>
+<preferred_language>en</preferred_language>
+<receiver_id></receiver_id>
+<receiver_type></receiver_type>
+<receiver_type_class>com.exlibris.core.infra.model.HFrUser</receiver_type_class>
+<user_address><city>City</city>
+<country></country>
+<create_date>2014/10/13</create_date>
+<entity_action></entity_action>
+<library_id></library_id>
+<library_unit_id></library_unit_id>
+<line1>Street</line1>
+<line2></line2>
+<line3></line3>
+<line4></line4>
+<line5></line5>
+<note></note>
+<originating_id></originating_id>
+<postal_code>60111</postal_code>
+<preferred>true</preferred>
+<state_province>IL</state_province>
+</user_address>
+<user_email><create_date>2014/10/13</create_date>
+<description></description>
+<email>yaala.ariel-joel@exlibrisgroup.com</email>
+<entity_action></entity_action>
+<external_id></external_id>
+<library_id></library_id>
+<library_unit_id></library_unit_id>
+<originating_id></originating_id>
+<preferred>true</preferred>
+</user_email>
+<user_phone><create_date>2014/10/13</create_date>
+<entity_action></entity_action>
+<external_id></external_id>
+<library_id></library_id>
+<library_unit_id></library_unit_id>
+<originating_id></originating_id>
+<phone>123-456-7890</phone>
+<preferred>true</preferred>
+<preferred_phone></preferred_phone>
+<preferred_sms></preferred_sms>
+</user_phone>
+<user><birth_date></birth_date>
+<birth_date_dummy><calendar>1970/01/01</calendar>
+<calendar_ui></calendar_ui>
+<day>1</day>
+<day_ui></day_ui>
+<default_value_for_with_validation>0</default_value_for_with_validation>
+<full_date></full_date>
+<input_date_tag_format>00.00.0</input_date_tag_format>
+<month>0</month>
+<month_ui></month_ui>
+<date>true</date>
+<year>1970</year>
+<year_ui></year_ui>
+</birth_date_dummy>
+<campus_code></campus_code>
+<campus_code_original_value></campus_code_original_value>
+<cataloger_level>00</cataloger_level>
+<cataloger_level_original_value>00</cataloger_level_original_value>
+<checksum></checksum>
+<create_date>2012/06/07</create_date>
+<default_language>en</default_language>
+<entity_action></entity_action>
+<expiry_date>2025/06/14</expiry_date>
+<expiry_date_dummy><calendar>2025/06/14</calendar>
+<calendar_ui></calendar_ui>
+<day>14</day>
+<day_ui></day_ui>
+<default_value_for_with_validation>1749934799999</default_value_for_with_validation>
+<full_date>2025-06-14</full_date>
+<input_date_tag_format>14.06.2025</input_date_tag_format>
+<month>5</month>
+<month_ui></month_ui>
+<date>false</date>
+<year>2025</year>
+<year_ui></year_ui>
+</expiry_date_dummy>
+<external_id></external_id>
+<failed_authentication>0</failed_authentication>
+<first_name>Gerard</first_name>
+<force_update_external>false</force_update_external>
+<gender></gender>
+<from_external_system>false</from_external_system>
+<job_description>Role Doc Test</job_description> <job_title>GeneralAdministrator</job_title>
+<job_title_original_value></job_title_original_value>
+<last_name>Depardieu</last_name>
+<library_id></library_id>
+<library_unit_id></library_unit_id>
+<linked_account>false</linked_account>
+<linking_id></linking_id>
+<locked_out>false</locked_out>
+<locked_out_date></locked_out_date>
+<login_restriction_exception></login_restriction_exception>
+<lti_course_code></lti_course_code>
+<middle_name>Yaala</middle_name>
+<distributed>false</distributed>
+<original_id></original_id>
+<password_expiry_date></password_expiry_date>
+<pin_number></pin_number>
+<pin_number_original_value></pin_number_original_value>
+<product_name></product_name>
+<purge_date></purge_date>
+<purge_date_dummy><calendar>1970/01/01</calendar>
+<calendar_ui></calendar_ui>
+<day>1</day>
+<day_ui></day_ui>
+<default_value_for_with_validation>0</default_value_for_with_validation>
+<full_date></full_date>
+<input_date_tag_format>00.00.0</input_date_tag_format>
+<month>0</month>
+<month_ui></month_ui>
+<date>true</date>
+<year>1970</year>
+<year_ui></year_ui>
+</purge_date_dummy>
+<record_type>PUBLIC</record_type>
+<registration_key></registration_key>
+<library_code></library_code>
+<library_code_original_value></library_code_original_value>
+<secret_key></secret_key>
+<source_institution_id></source_institution_id>
+<source_institution_name></source_institution_name>
+<source_link_id></source_link_id>
+<status>ACTIVE</status>
+<status_date>2012/06/07</status_date>
+<status_date_dummy><calendar>2012/06/07</calendar>
+<calendar_ui></calendar_ui>
+<day>7</day>
+<day_ui></day_ui>
+<default_value_for_with_validation>1339081489673</default_value_for_with_validation>
+<full_date>2012-06-07</full_date>
+<input_date_tag_format>07.06.2012</input_date_tag_format>
+<month>5</month>
+<month_ui></month_ui>
+<date>false</date>
+<year>2012</year>
+<year_ui></year_ui>
+</status_date_dummy>
+<user_address_list><user_address><city>City</city>
+<country></country>
+<create_date>2014/10/13</create_date>
+<entity_action></entity_action>
+<library_id></library_id>
+<library_unit_id></library_unit_id>
+<line1>Street</line1>
+<line2></line2>
+<line3></line3>
+<line4></line4>
+<line5></line5>
+<note></note>
+<originating_id></originating_id>
+<postal_code>60111</postal_code>
+<preferred>true</preferred>
+<state_province>IL</state_province>
+</user_address>
+</user_address_list>
+<user_email_list><user_email><create_date>2014/10/13</create_date>
+<description></description>
+<email>yaala.ariel-joel@exlibrisgroup.com</email>
+<entity_action></entity_action>
+<external_id></external_id>
+<library_id></library_id>
+<library_unit_id></library_unit_id>
+<originating_id></originating_id>
+<preferred>true</preferred>
+</user_email>
+</user_email_list>
+<user_gender></user_gender>
+<user_group>Zoro_User_Group</user_group>
+<user_group_original_value></user_group_original_value>
+<user_name>gerard.depardieu</user_name>
+<user_phone_list><user_phone><create_date>2014/10/13</create_date>
+<entity_action></entity_action>
+<external_id></external_id>
+<library_id></library_id>
+<library_unit_id></library_unit_id>
+<originating_id></originating_id>
+<phone>123-456-7890</phone>
+<preferred>true</preferred>
+<preferred_phone></preferred_phone>
+<preferred_sms></preferred_sms>
+</user_phone>
+</user_phone_list>
+<user_preferred_language>en</user_preferred_language>
+<user_preferred_language_original_value></user_preferred_language_original_value>
+<user_record_type>PUBLIC</user_record_type>
+<user_status>ACTIVE</user_status>
+<user_title></user_title>
+<user_title_original_value></user_title_original_value>
+<user_type>INTERNAL</user_type>
+<user_user_type>INTERNAL</user_user_type>
+<user_web_address_list></user_web_address_list>
+<web_site_url></web_site_url>
+</user>
+</receiver>
+</receivers>
+<request><active>true</active>
+<all_org_fields></all_org_fields>
+<assigned_unit_name>Main Library - Main Default Circulation Desk</assigned_unit_name> <bulk_request>false</bulk_request>
+<calculated_destination_name>Main Library - Main Default Circulation Desk</calculated_destination_name>
+<cancel_reason></cancel_reason>
+<cause_for_recalled_item>false</cause_for_recalled_item>
+<convertable_to_resource_sharing>false</convertable_to_resource_sharing>
+<create_date>2015/09/26</create_date>
+<create_time>03:12:27 PM IDT</create_time> <date_available_to></date_available_to>
+<date_available_to_dummy><calendar>1970/01/01</calendar>
+<calendar_ui></calendar_ui>
+<day>1</day>
+<day_ui></day_ui>
+<default_value_for_with_validation>0</default_value_for_with_validation>
+<full_date></full_date>
+<input_date_tag_format>00.00.0</input_date_tag_format>
+<month>0</month>
+<month_ui></month_ui>
+<date>true</date>
+<year>1970</year>
+<year_ui></year_ui>
+</date_available_to_dummy>
+<delivery_address>Main Library</delivery_address> <deposit_indicator></deposit_indicator>
+<document_delivery_email></document_delivery_email>
+<due_back_date_updated>false</due_back_date_updated>
+<end_time></end_time>
+<end_time_dummy></end_time_dummy>
+<entity_action></entity_action>
+<expiry_by_date_needed_by></expiry_by_date_needed_by>
+<from_another_inst></from_another_inst>
+<from_another_inst_circ_desk></from_another_inst_circ_desk>
+<from_another_inst_library></from_another_inst_library>
+<out_of_institution_pickup></out_of_institution_pickup>
+<last_interest_date></last_interest_date>
+<library_id>13641560000541</library_id>
+<library_unit_id></library_unit_id>
+<manual_description></manual_description>
+<material_type_display>Book</material_type_display>
+<needs_hold_shelf_processing>false</needs_hold_shelf_processing>
+<pickup>false</pickup>
+<note></note>
+<num_copies_for_staff></num_copies_for_staff>
+<num_copies_for_students></num_copies_for_students>
+<original_end_time></original_end_time>
+<original_start_time></original_start_time>
+<originating_mms_key></originating_mms_key>
+<originating_user_key></originating_user_key>
+<out_of_inst_library_id></out_of_inst_library_id>
+<partial_digitization></partial_digitization>
+<pickup_inst_code></pickup_inst_code>
+<print_transit_slip>true</print_transit_slip>
+<record_display_section><isbn></isbn>
+<isbn_list></isbn_list>
+<issn></issn>
+<issn_list></issn_list>
+<accession_number></accession_number>
+<alternate_titles></alternate_titles>
+<author>Schama, Chloe.</author>
+<author_list><string>Schama, Chloe.</string> </author_list> <begin_pub_date>2009</begin_pub_date>
+<bib_id>2009044758</bib_id>
+<bib_level>m</bib_level>
+<call_number></call_number>
+<category_of_material></category_of_material>
+<complete_edition>1st U.S. ed.</complete_edition> <complete_title>Wild romance / Chloe Schama.</complete_title> <completeness></completeness> <copy_number></copy_number> <creator>Schama, Chloe.</creator> <date>2009.</date> <date_of_publication>2009.</date_of_publication>
+<date_of_report></date_of_report>
+<description></description>
+<description_list></description_list>
+<encoding_level></encoding_level>
+<end_pub_date></end_pub_date>
+<format></format>
+<general_retention></general_retention>
+<holdings></holdings>
+<id>66405</id>
+<isbn>9780802717368</isbn>
+<isbn_az>9780802717368</isbn_az>
+<isbn_list><string>9780802717368</string>
+</isbn_list>
+<issn></issn>
+<issn_az></issn_az>
+<issn_list></issn_list>
+<language>eng</language>
+<local_location></local_location>
+<local_notes></local_notes>
+<local_notes_list></local_notes_list>
+<local_subjects></local_subjects>
+<local_subjects_list></local_subjects_list>
+<location></location>
+<material_type>BK</material_type>
+<material_type_list><string>BK</string>
+</material_type_list>
+<medium_type></medium_type>
+<network_number><string>(TrN)66405-train20072_c2db</string>
+<string>65663</string>
+<string>15969670</string>
+</network_number>
+<notes>Includes bibliographical references.</notes> <notes_list><string>Includes bibliographical references.</string> </notes_list> <nuc_code></nuc_code> <operational_sec><elm></elm> <elms></elms> <elms_list></elms_list> <fld></fld> <flds><map_entry><date_of_publication><value><operational_fld><name>date_of_publication</name>
+<value>2009.</value>
+</operational_fld>
+</value>
+</date_of_publication></map_entry><map_entry><subjects><value><operational_fld><name>subjects</name>
+<value>England Social life and customs 19th century.</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Voyages around the world.</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Bigamy History 19th century. England</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Trials (Bigamy) Ireland Dublin.</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Upper class women Biography. England</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Aristocracy (Social class) Biography. England</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Yelverton, Thérèse, Viscountess Avonmore, 1832?-1881 Travel.</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Avonmore, William Charles Yelverton, Viscount, 1824-1883 Trials, litigation, etc.</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Yelverton, Thérèse, Viscountess Avonmore, 1832?-1881 Marriage.</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Yelverton, Thérèse, Viscountess Avonmore, 1832?-1881.</value> </operational_fld> </value> </subjects></map_entry><map_entry><short_edition><value><operational_fld><name>short_edition</name>
+<value>1st U.S. ed.</value>
+</operational_fld>
+</value>
+</short_edition></map_entry><map_entry><place_of_publication><value><operational_fld><name>place_of_publication</name>
+<value>New York :</value>
+</operational_fld>
+</value>
+</place_of_publication></map_entry><map_entry><complete_title><value><operational_fld><name>complete_title</name>
+<value>Wild romance / Chloe Schama.</value> </operational_fld> </value> </complete_title></map_entry><map_entry><title_abcnph><value><operational_fld><name>title_abcnph</name>
+<value>Wild romance / Chloe Schama.</value> </operational_fld> </value> </title_abcnph></map_entry><map_entry><date><value><operational_fld><name>date</name>
+<value>2009.</value>
+</operational_fld>
+</value>
+</date></map_entry><map_entry><type_of_record_bib><value><operational_fld><name>type_of_record_bib</name>
+<value>a</value>
+</operational_fld>
+</value>
+</type_of_record_bib></map_entry><map_entry><publisher_const_b><value><operational_fld><name>publisher_const_b</name>
+<value>Walker &amp; Co</value>
+</operational_fld>
+</value>
+</publisher_const_b></map_entry><map_entry><publisher><value><operational_fld><name>publisher</name>
+<value>Walker &amp; Co</value>
+</operational_fld>
+</value>
+</publisher></map_entry><map_entry><creator><value><operational_fld><name>creator</name>
+<value>Schama, Chloe.</value>
+</operational_fld>
+</value>
+</creator></map_entry><map_entry><id><value><operational_fld><name>id</name>
+<value>66405</value>
+</operational_fld>
+</value>
+</id></map_entry><map_entry><author><value><operational_fld><name>author</name>
+<value>Schama, Chloe.</value>
+</operational_fld>
+</value>
+</author></map_entry><map_entry><title><value><operational_fld><name>title</name>
+<value>Wild romance /</value>
+</operational_fld>
+</value>
+</title></map_entry><map_entry><isbn><value><operational_fld><name>isbn</name>
+<value>9780802717368</value>
+</operational_fld>
+</value>
+</isbn></map_entry><map_entry><poline_title><value><operational_fld><name>poline_title</name>
+<value>Wild romance / Chloe Schama.</value> </operational_fld> </value> </poline_title></map_entry><map_entry><network_number><value><operational_fld><name>network_number</name>
+<value>(TrN)66405-train20072_c2db</value>
+</operational_fld>
+<operational_fld><name>network_number</name>
+<value>65663</value>
+</operational_fld>
+<operational_fld><name>network_number</name>
+<value>15969670</value>
+</operational_fld>
+</value>
+</network_number></map_entry><map_entry><bib_id><value><operational_fld><name>bib_id</name>
+<value>2009044758</value>
+</operational_fld>
+</value>
+</bib_id></map_entry><map_entry><complete_edition><value><operational_fld><name>complete_edition</name>
+<value>1st U.S. ed.</value>
+</operational_fld>
+</value>
+</complete_edition></map_entry><map_entry><place_code><value><operational_fld><name>place_code</name>
+<value>nyu</value>
+</operational_fld>
+</value>
+</place_code></map_entry><map_entry><material_type><value><operational_fld><name>material_type</name>
+<value>BK</value>
+</operational_fld>
+</value>
+</material_type></map_entry><map_entry><isbn_az><value><operational_fld><name>isbn_az</name>
+<value>9780802717368</value>
+</operational_fld>
+</value>
+</isbn_az></map_entry><map_entry><short_creator><value><operational_fld><name>short_creator</name>
+<value>Schama, Chloe.</value>
+</operational_fld>
+</value>
+</short_creator></map_entry><map_entry><short_title><value><operational_fld><name>short_title</name>
+<value>Wild romance /</value>
+</operational_fld>
+</value>
+</short_title></map_entry><map_entry><type_of_date><value><operational_fld><name>type_of_date</name>
+<value>s</value>
+</operational_fld>
+</value>
+</type_of_date></map_entry><map_entry><begin_pub_date><value><operational_fld><name>begin_pub_date</name>
+<value>2009</value>
+</operational_fld>
+</value>
+</begin_pub_date></map_entry><map_entry><language><value><operational_fld><name>language</name>
+<value>eng</value>
+</operational_fld>
+</value>
+</language></map_entry><map_entry><bib_level><value><operational_fld><name>bib_level</name>
+<value>m</value>
+</operational_fld>
+</value>
+</bib_level></map_entry><map_entry><notes><value><operational_fld><name>notes</name>
+<value>Includes bibliographical references.</value> </operational_fld> </value> </notes></map_entry></flds> <flds_list><operational_fld><name>date_of_publication</name>
+<value>2009.</value>
+</operational_fld>
+<operational_fld><name>subjects</name>
+<value>England Social life and customs 19th century.</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Voyages around the world.</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Bigamy History 19th century. England</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Trials (Bigamy) Ireland Dublin.</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Upper class women Biography. England</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Aristocracy (Social class) Biography. England</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Yelverton, Thérèse, Viscountess Avonmore, 1832?-1881 Travel.</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Avonmore, William Charles Yelverton, Viscount, 1824-1883 Trials, litigation, etc.</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Yelverton, Thérèse, Viscountess Avonmore, 1832?-1881 Marriage.</value> </operational_fld> <operational_fld><name>subjects</name>
+<value>Yelverton, Thérèse, Viscountess Avonmore, 1832?-1881.</value> </operational_fld> <operational_fld><name>short_edition</name>
+<value>1st U.S. ed.</value>
+</operational_fld>
+<operational_fld><name>place_of_publication</name>
+<value>New York :</value>
+</operational_fld>
+<operational_fld><name>complete_title</name>
+<value>Wild romance / Chloe Schama.</value> </operational_fld> <operational_fld><name>title_abcnph</name>
+<value>Wild romance / Chloe Schama.</value> </operational_fld> <operational_fld><name>date</name>
+<value>2009.</value>
+</operational_fld>
+<operational_fld><name>type_of_record_bib</name>
+<value>a</value>
+</operational_fld>
+<operational_fld><name>publisher_const_b</name>
+<value>Walker &amp; Co</value>
+</operational_fld>
+<operational_fld><name>publisher</name>
+<value>Walker &amp; Co</value>
+</operational_fld>
+<operational_fld><name>creator</name>
+<value>Schama, Chloe.</value>
+</operational_fld>
+<operational_fld><name>id</name>
+<value>66405</value>
+</operational_fld>
+<operational_fld><name>author</name>
+<value>Schama, Chloe.</value>
+</operational_fld>
+<operational_fld><name>title</name>
+<value>Wild romance /</value>
+</operational_fld>
+<operational_fld><name>isbn</name>
+<value>9780802717368</value>
+</operational_fld>
+<operational_fld><name>poline_title</name>
+<value>Wild romance / Chloe Schama.</value> </operational_fld> <operational_fld><name>network_number</name>
+<value>(TrN)66405-train20072_c2db</value>
+</operational_fld>
+<operational_fld><name>network_number</name>
+<value>65663</value>
+</operational_fld>
+<operational_fld><name>network_number</name>
+<value>15969670</value>
+</operational_fld>
+<operational_fld><name>bib_id</name>
+<value>2009044758</value>
+</operational_fld>
+<operational_fld><name>complete_edition</name>
+<value>1st U.S. ed.</value>
+</operational_fld>
+<operational_fld><name>place_code</name>
+<value>nyu</value>
+</operational_fld>
+<operational_fld><name>material_type</name>
+<value>BK</value>
+</operational_fld>
+<operational_fld><name>isbn_az</name>
+<value>9780802717368</value>
+</operational_fld>
+<operational_fld><name>short_creator</name>
+<value>Schama, Chloe.</value>
+</operational_fld>
+<operational_fld><name>short_title</name>
+<value>Wild romance /</value>
+</operational_fld>
+<operational_fld><name>type_of_date</name>
+<value>s</value>
+</operational_fld>
+<operational_fld><name>begin_pub_date</name>
+<value>2009</value>
+</operational_fld>
+<operational_fld><name>language</name>
+<value>eng</value>
+</operational_fld>
+<operational_fld><name>bib_level</name>
+<value>m</value>
+</operational_fld>
+<operational_fld><name>notes</name>
+<value>Includes bibliographical references.</value> </operational_fld> </flds_list> <name>display</name> </operational_sec> <permanent_call_number></permanent_call_number>
+<permanent_call_number_type></permanent_call_number_type>
+<permanent_physical_location></permanent_physical_location>
+<place_code>nyu</place_code>
+<place_of_publication>New York :</place_of_publication> <preferred_chronological_subdivision_list></preferred_chronological_subdivision_list>
+<preferred_chronological_term_list></preferred_chronological_term_list>
+<preferred_classification_number_list></preferred_classification_number_list>
+<preferred_corporate_name_list></preferred_corporate_name_list>
+<preferred_form_subdivision_list></preferred_form_subdivision_list>
+<preferred_general_subdivision_list></preferred_general_subdivision_list>
+<preferred_genre_form_name_list></preferred_genre_form_name_list>
+<preferred_geographic_name_list></preferred_geographic_name_list>
+<preferred_geographic_subdivision_list></preferred_geographic_subdivision_list>
+<preferred_meeting_name_list></preferred_meeting_name_list>
+<preferred_personal_name_list></preferred_personal_name_list>
+<preferred_topical_term_list></preferred_topical_term_list>
+<preferred_uniform_title_list></preferred_uniform_title_list>
+<public_access_note></public_access_note>
+<public_location_note></public_location_note>
+<publisher>Walker &amp; Co</publisher>
+<publisher_const>Walker &amp; Co</publisher_const> <publisher_const_list><string>Walker &amp; Co</string> </publisher_const_list> <receipt_acq_status></receipt_acq_status>
+<reproduction_note></reproduction_note>
+<resource_type></resource_type>
+<see_also_chronological_subdivision_list></see_also_chronological_subdivision_list>
+<see_also_chronological_term_list></see_also_chronological_term_list>
+<see_also_corporate_name_list></see_also_corporate_name_list>
+<see_also_form_subdivision_list></see_also_form_subdivision_list>
+<see_also_general_subdivision_list></see_also_general_subdivision_list>
+<see_also_genre_form_name_list></see_also_genre_form_name_list>
+<see_also_geographic_name_list></see_also_geographic_name_list>
+<see_also_geographic_subdivision_list></see_also_geographic_subdivision_list>
+<see_also_meeting_name_list></see_also_meeting_name_list>
+<see_also_personal_name_list></see_also_personal_name_list>
+<see_also_topical_term_list></see_also_topical_term_list>
+<see_also_uniform_title_list></see_also_uniform_title_list>
+<see_chronological_subdivision_list></see_chronological_subdivision_list>
+<see_chronological_term_list></see_chronological_term_list>
+<see_corporate_name_list></see_corporate_name_list>
+<see_form_subdivision_list></see_form_subdivision_list>
+<see_general_subdivision_list></see_general_subdivision_list>
+<see_genre_form_name_list></see_genre_form_name_list>
+<see_geographic_name_list></see_geographic_name_list>
+<see_geographic_subdivision_list></see_geographic_subdivision_list>
+<see_meeting_name_list></see_meeting_name_list>
+<see_personal_name_list></see_personal_name_list>
+<see_topical_term_list></see_topical_term_list>
+<see_uniform_title_list></see_uniform_title_list>
+<series_name></series_name>
+<series_small></series_small>
+<series_small_list></series_small_list>
+<series_volume></series_volume>
+<shelving_data></shelving_data>
+<shelving_location></shelving_location>
+<short_creator>Schama, Chloe.</short_creator> <short_edition>1st U.S. ed.</short_edition> <short_title>Wild romance /</short_title> <special_format_designation></special_format_designation>
+<subjects>England Social life and customs 19th century.</subjects> <subjects_list><string>England Social life and customs 19th century.</string> <string>Voyages around the world.</string> <string>Bigamy History 19th century. England</string> <string>Trials (Bigamy) Ireland Dublin.</string> <string>Upper class women Biography. England</string> <string>Aristocracy (Social class) Biography. England</string> <string>Yelverton, Thérèse, Viscountess Avonmore, 1832?-1881 Travel.</string> <string>Avonmore, William Charles Yelverton, Viscount, 1824-1883 Trials, litigation, etc.</string> <string>Yelverton, Thérèse, Viscountess Avonmore, 1832?-1881 Marriage.</string> <string>Yelverton, Thérèse, Viscountess Avonmore, 1832?-1881.</string> </subjects_list> <subjects_list_reversed><string>Yelverton, Thérèse, Viscountess Avonmore, 1832?-1881.</string> <string>Yelverton, Thérèse, Viscountess Avonmore, 1832?-1881 Marriage.</string> <string>Avonmore, William Charles Yelverton, Viscount, 1824-1883 Trials, litigation, etc.</string> <string>Yelverton, Thérèse, Viscountess Avonmore, 1832?-1881 Travel.</string> <string>Aristocracy (Social class) Biography. England</string> <string>Upper class women Biography. England</string> <string>Trials (Bigamy) Ireland Dublin.</string> <string>Bigamy History 19th century. England</string> <string>Voyages around the world.</string> <string>England Social life and customs 19th century.</string> </subjects_list_reversed> <summary_holding_list></summary_holding_list>
+<terms_use_repro></terms_use_repro>
+<title>Wild romance /</title>
+<title_abcnph>Wild romance / Chloe Schama.</title_abcnph> <type_of_date>s</type_of_date> <type_of_record></type_of_record> <type_of_record_bib>a</type_of_record_bib>
+<uniform_title></uniform_title>
+</record_display_section>
+<remote_digitize_indicator></remote_digitize_indicator>
+<request_not_needed>false</request_not_needed>
+<request_type>PATRON_PHYSICAL</request_type>
+<resource_sharing_request_id></resource_sharing_request_id>
+<resource_slip_printed>false</resource_slip_printed>
+<resource_slip_reported>false</resource_slip_reported>
+<scan_from_page></scan_from_page>
+<scan_to_page></scan_to_page>
+<search_type>PHYSICAL_TITLE</search_type>
+<selected_inventory_id>235414380000541</selected_inventory_id>
+<selected_inventory_type>ITEM</selected_inventory_type>
+<show_in_task_list></show_in_task_list>
+<start_time></start_time>
+<start_time_dummy></start_time_dummy>
+<status_note></status_note>
+<status_note_display></status_note_display>
+<system_notes>Loan   -   Blocked from Loans. .
+ </system_notes>
+<user_group>Zoro_User_Group</user_group>
+<user_statistics1></user_statistics1>
+<user_statistics10></user_statistics10>
+<user_statistics2></user_statistics2>
+<user_statistics3></user_statistics3>
+<user_statistics4></user_statistics4>
+<user_statistics5></user_statistics5>
+<user_statistics6></user_statistics6>
+<user_statistics7></user_statistics7>
+<user_statistics8></user_statistics8>
+<user_statistics9></user_statistics9>
+<volume_issue></volume_issue>
+<work_flow_entity><action_date>2015/09/26</action_date>
+<assigned_unit_id>13641580000541</assigned_unit_id>
+<assigned_unit_type>CIRCULATION_DESK</assigned_unit_type>
+<calculated_destination_id>13641580000541</calculated_destination_id>
+<calculated_destination_type>CIRCULATION_DESK</calculated_destination_type>
+<create_date>2015/09/26</create_date>
+<destination_institution_code></destination_institution_code>
+<entity_action></entity_action>
+<estimated_arrival_date></estimated_arrival_date>
+<expiration_date>2015/10/10</expiration_date>
+<expiration_date_to_end_of_day></expiration_date_to_end_of_day>
+<transit>false</transit>
+<work_order_department>false</work_order_department>
+<library_id>13641560000541</library_id>
+<library_unit_id></library_unit_id>
+<step_type>ON_HOLD_SHELF</step_type>
+<user_id>40665190000951</user_id>
+</work_flow_entity>
+</request>
+<send_after_commit>true</send_after_commit>
+<throw_exceptions>false</throw_exceptions>
+<url_list></url_list>
+<user_for_printing><address1>Street</address1>
+<address2></address2>
+<address3></address3>
+<address4></address4>
+<address5></address5>
+<city>City</city>
+<country></country>
+<email>yaala.ariel-joel@exlibrisgroup.com</email>
+<identifiers><code_value><code>Primary Identifier</code> <value>gerard.depardieu</value> </code_value> <code_value><code>BARCODE</code> <value>DEP</value> </code_value> </identifiers> <name>Depardieu ,Gerard</name> <phone>123-456-7890</phone> <postal_code>60111</postal_code> <state>IL</state> <title>GeneralAdministrator</title>
+<user_group>Zoro_User_Group</user_group>
+<user_title></user_title>
+</user_for_printing>
+</notification_data>
