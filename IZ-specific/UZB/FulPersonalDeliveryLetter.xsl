@@ -153,8 +153,18 @@
 					
 							<tr>
 								<td>
-									<b>@@following_details@@: </b>
-                                                                       <xsl:value-of select="notification_data/phys_item_display/author"/>: <xsl:value-of select="notification_data/phys_item_display/title"/> (Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/>)
+									<p><b>@@following_details@@:</b></p>
+                                    Author: <xsl:value-of select="notification_data/phys_item_display/author"/><br />
+                                    Title: <xsl:value-of select="notification_data/phys_item_display/title"/><br />
+                                    Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/><br />
+                                    Call Number: <xsl:value-of select="notification_data/phys_item_display/call_number"/>
+								</td>
+							</tr>
+
+							<tr>
+								<td>
+										<b>Owning library / Besitzende Bibliothek: </b>
+										<xsl:value-of select="/notification_data/phys_item_display/owning_library_name" />
 								</td>
 							</tr>
 

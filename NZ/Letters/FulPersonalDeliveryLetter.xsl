@@ -23,39 +23,40 @@
 
 				<div class="messageArea">
 					<div class="messageBody">
+                        <br/>
+                        <br/>
 						<table cellspacing="0" cellpadding="5" border="0">
 							<tr>
 								<td>
-									@@we_sent@@
-								
-										<xsl:value-of select="notification_data/request/create_date" />.
-									
-								
-								</td>
-							</tr>
-					
+                                    @@we_sent@@ <xsl:value-of select="/notification_data/request/create_date"/>.
+                                </td>
+                            </tr>				
 							<tr>
 								<td>
-									<b>@@following_details@@: </b>
-                                                                       <xsl:value-of select="notification_data/phys_item_display/author"/>: <xsl:value-of select="notification_data/phys_item_display/title"/> (Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/>)
-								</td>
-							</tr>
-
+                                    <b>@@following_details@@: </b>
+                                </td>
+                            </tr>				
 							<tr>
 								<td>
-									<b>@@delivered_to@@: </b>
-									<xsl:value-of select="substring-after(notification_data/delivery_address,':')" /> 
-                                                                      
-								</td>
-							</tr>
-
+                                    Author: <xsl:value-of select="notification_data/phys_item_display/author"/><br />
+                                    Title: <xsl:value-of select="notification_data/phys_item_display/title"/><br />
+                                    Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/><br />
+                                    Call Number: <xsl:value-of select="notification_data/phys_item_display/call_number"/>
+                                </td>
+                            </tr>				
+							<tr>
+								<td>
+                                    <b>@@delivered_to@@: </b>
+                                    <xsl:value-of select="substring-after(notification_data/delivery_address,':')" /> 
+                                </td>
+                            </tr>		
 							<tr>
 								<td>
 									<b>@@due_date@@: </b>
 									<xsl:value-of select="substring(notification_data/due_date,1,10)" />
-								</td>
-							</tr>
-						</table>
+                                </td>
+                            </tr>
+                        </table>
 						<br />
 						<table>
 
