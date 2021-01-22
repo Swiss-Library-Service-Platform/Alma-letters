@@ -16,10 +16,6 @@
 			</xsl:if>
 
 			<head>
-				<title>
-					<xsl:value-of select="notification_data/general_data/subject"/>
-				</title>
-
 				<xsl:call-template name="generalStyle" />
 			</head>
 			<body>
@@ -27,8 +23,6 @@
 				<xsl:call-template name="bodyStyleCss" /> <!-- style.xsl -->
 			</xsl:attribute>
 				<xsl:call-template name="head" /> <!-- header.xsl -->
-				<xsl:call-template name="senderReceiver" /> <!-- SenderReceiver.xsl -->
-				<xsl:call-template name="toWhomIsConcerned" /> <!-- mailReason.xsl -->
 
 				<div class="messageArea">
 					<div class="messageBody">
@@ -39,11 +33,12 @@
 									<xsl:value-of select="notification_data/general_data/current_date" />
 									@@we_cancel_y_req_of@@
 									<xsl:value-of select="notification_data/request/create_date" />
-									@@detailed_below@@ :
+									
 								</td>
 							</tr>
 							<tr>
 								<td>
+									<p><b>@@detailed_below@@</b></p>
 									<xsl:call-template name="recordTitle" /> <!-- recordTitle.xsl -->
 								</td>
 							</tr>
@@ -305,20 +300,23 @@
 							</xsl:if>
 						</table>
 						<br />
-						<table role='presentation' >
+						<table>
+							<tr>
+								<td>
+								@@sincerely@@<br/>
+							        <xsl:value-of select="notification_data/organization_unit/name" />
+								</td>
+							</tr>
 
 							<tr>
-								<td>@@sincerely@@</td>
-							</tr>
-							<tr>
-								<td>@@department@@</td>
+								<td>
+									<br/><i>powered by SLSP</i>
+								</td>
 							</tr>
 
 						</table>
 					</div>
 				</div>
-				<xsl:call-template name="lastFooter" /> <!-- footer.xsl -->
-				<xsl:call-template name="contactUs" />
 			</body>
 		</html>
 	</xsl:template>
