@@ -259,15 +259,36 @@
 								</tr>
 							</xsl:if> -->
 
+						<!--
+							display owning library
+							if the owning library name is resource sharing library then take first address row instead
+						-->
+						<xsl:if test="notification_data/phys_item_display/owning_library_name != '' and notification_data/phys_item_display/owning_library_details/address1 != ''">
+							<tr>
+								<td>
+									<strong> Owning library / Besitzende Bibliothek: </strong>
+									<xsl:choose>
+										<xsl:when test="notification_data/phys_item_display/owning_library_name = 'Resource Sharing Library'">
+											<xsl:value-of select="notification_data/phys_item_display/owning_library_details/address1" />
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="notification_data/phys_item_display/owning_library_name" />
+										</xsl:otherwise>
+									</xsl:choose>
+								</td>
+							</tr>
+						</xsl:if>
+						
 
-							<xsl:if test="notification_data/request/start_time != ''">
-								<tr>
-									<td>
-										<strong> @@start_time@@: </strong>
-										<xsl:value-of select="notification_data/booking_start_time_str" />
-									</td>
-								</tr>
-							</xsl:if>
+
+						<xsl:if test="notification_data/request/start_time != ''">
+							<tr>
+								<td>
+									<strong> @@start_time@@: </strong>
+									<xsl:value-of select="notification_data/booking_start_time_str" />
+								</td>
+							</tr>
+						</xsl:if>
 						<xsl:if test="notification_data/request/end_time != ''">
 								<tr>
 									<td>
