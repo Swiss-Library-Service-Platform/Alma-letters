@@ -7,29 +7,23 @@
 <xsl:include href="footer.xsl" />
 <xsl:include href="style.xsl" />
 <xsl:include href="recordTitle.xsl" />
+
 <xsl:template match="/">
 	<html>
-			<xsl:if test="notification_data/languages/string">
-				<xsl:attribute name="lang">
-					<xsl:value-of select="notification_data/languages/string"/>
-				</xsl:attribute>
-			</xsl:if>
-
 		<head>
-				<title>
-					<xsl:value-of select="notification_data/general_data/subject"/>
-				</title>
-
 			<xsl:call-template name="generalStyle" />
 		</head>
 		<body>
+            <xsl:attribute name="style">
+				<xsl:call-template name="bodyStyleCss" /> <!-- style.xsl -->
+            </xsl:attribute>
 			<xsl:call-template name="head" /> <!-- header.xsl -->
 			<!-- <xsl:call-template name="senderReceiver" /> SenderReceiver.xsl -->
 			<br/>
-			<xsl:call-template name="toWhomIsConcerned" /> <!-- mailReason.xsl -->
+			
 			<div class="messageArea">
 				<div class="messageBody">
-					<table role='presentation'  cellspacing="0" cellpadding="5" border="0">
+					<table cellspacing="0" cellpadding="5" border="0">
 		              <tr>
 		              	<td>
 							@@bodyTextBeforeLink@@
@@ -42,33 +36,18 @@
 		                </td>
 		              </tr>
 		            </table>
-					<table role='presentation' >
+					<table>
 						<tr>
-							<td>@@signature@@</td>
-						</tr>
-						<tr>
-							<td>
-								<xsl:value-of select="notification_data/organization_unit/name" />
-							</td>
-						</tr>
-						<xsl:if test="notification_data/organization_unit/address/city !=''">
-							<tr>
-								<td>
-									<xsl:value-of select="notification_data/organization_unit/address/city" />
-								</td>
-							</tr>
-						</xsl:if>
-						<xsl:if test="notification_data/organization_unit/address/country !=''">
-							<tr>
-								<td>
-									<xsl:value-of select="notification_data/organization_unit/address/country" />
-								</td>
-							</tr>
-						</xsl:if>
+                            <td>@@signature@@<br/>
+                                <xsl:value-of select="notification_data/organization_unit/name" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><br/><i>powered by SLSP</i></td>
+                        </tr>
 					</table>
 		          </div>
 				</div>
-			<xsl:call-template name="lastFooter" /> <!-- footer.xsl -->
 		</body>
 	</html>
 </xsl:template>
