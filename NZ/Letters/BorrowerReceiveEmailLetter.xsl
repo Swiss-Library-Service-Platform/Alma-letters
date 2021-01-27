@@ -89,6 +89,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								<td>@@signature@@</td>
 							</tr>
 							
+							<!-- Solution from Ex Libris to show Alternative address fields.
+								Mixed IZs want to receive ILL in different addresses than Resource Sharing Library (RSL).
+								If no alternative address set up in the request then use the RSL address,
+								otherwise use the alternative address. -->
+								
                                  <xsl:if test="notification_data/request/line1 =''">
 
 							<xsl:if test="notification_data/library/address/line1 !=''">
