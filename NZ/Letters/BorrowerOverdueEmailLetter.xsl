@@ -93,7 +93,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<tr>
 								<td>@@signature@@</td>
 							</tr>
-                                                                <xsl:if test="notification_data/phys_items_display/physical_item_display_for_printing/owning_library_details/address1 =''">
+							<xsl:if test="notification_data/phys_items_display/physical_item_display_for_printing/owning_library_details/address1 =''">
 
 							<xsl:if test="notification_data/library/address/line1 !=''">
 								<tr>
