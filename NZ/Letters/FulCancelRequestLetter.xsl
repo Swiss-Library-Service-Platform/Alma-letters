@@ -266,7 +266,7 @@
 						<xsl:if test="notification_data/phys_item_display/owning_library_name != '' and notification_data/phys_item_display/owning_library_details/address1 != ''">
 							<tr>
 								<td>
-									<strong> Owning library / Besitzende Bibliothek: </strong>
+									<strong>Owning library / Besitzende Bibliothek / Biblioteca titolare / Bibliothèque propriétaire: </strong><br />
 									<xsl:choose>
 										<xsl:when test="notification_data/phys_item_display/owning_library_name = 'Resource Sharing Library'">
 											<xsl:value-of select="notification_data/phys_item_display/owning_library_details/address1" />
