@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- sytle.xsl - 20200918, SLSP -->
+
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:include href="header.xsl" />
@@ -18,8 +18,8 @@
 				<xsl:attribute name="style">
 				<xsl:call-template name="bodyStyleCss" /> <!-- style.xsl -->
 			</xsl:attribute>
-				<xsl:call-template name="head" /> <!-- header.xsl -->
-
+				<xsl:call-template name="head-logo-fixed" /> <!-- header.xsl -->
+				<xsl:call-template name="senderReceiver-reversed" /> <!-- SenderReceiver.xsl -->
 
 				<div class="messageArea">
 					<div class="messageBody">
@@ -27,17 +27,28 @@
 							<tr>
 								<td>
 									@@we_sent@@
-								
 										<xsl:value-of select="notification_data/request/create_date" />.
-									
-								
 								</td>
 							</tr>
 					
 							<tr>
 								<td>
-									<b>@@following_details@@: </b>
-                                                                       <xsl:value-of select="notification_data/phys_item_display/author"/>: <xsl:value-of select="notification_data/phys_item_display/title"/> (Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/>)
+                                    <b>@@following_details@@: </b>
+                                </td>
+                            </tr>				
+							<tr>
+								<td>
+                                    Author: <xsl:value-of select="notification_data/phys_item_display/author"/><br />
+                                    Title: <xsl:value-of select="notification_data/phys_item_display/title"/><br />
+                                    Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/><br />
+                                    Call Number: <xsl:value-of select="notification_data/phys_item_display/call_number"/>
+                                </td>
+                            </tr>	
+
+							<tr>
+								<td>
+									<b>Owning library / Besitzende Bibliothek / Biblioteca titolare / Bibliothèque propriétaire:</b>
+									<xsl:value-of select="/notification_data/phys_item_display/owning_library_name" />
 								</td>
 							</tr>
 
@@ -58,18 +69,12 @@
 						</table>
 						<br />
 						<table>
-
 							<tr>
 								<td>@@sincerely@@<br/>
 							        <xsl:value-of select="notification_data/organization_unit/name" /></td></tr>
-
-
-                                                       <tr>
-                                                       <td><br/><i>powered by SLSP</i></td>
-                                                       </tr>
-
-
-
+                                <tr>
+                                <td><br/><i>powered by SLSP</i></td>
+                                </tr>
 						</table>
 					</div>
 				</div>

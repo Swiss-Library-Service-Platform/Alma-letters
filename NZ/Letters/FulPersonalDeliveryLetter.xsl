@@ -43,7 +43,13 @@
                                     Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/><br />
                                     Call Number: <xsl:value-of select="notification_data/phys_item_display/call_number"/>
                                 </td>
-                            </tr>				
+                            </tr>
+							<tr>
+								<td>
+										<b>Owning library / Besitzende Bibliothek / Biblioteca titolare / Bibliothèque propriétaire:</b>
+										<xsl:value-of select="/notification_data/phys_item_display/owning_library_name" />
+								</td>
+							</tr>
 							<tr>
 								<td>
                                     <b>@@delivered_to@@: </b>
