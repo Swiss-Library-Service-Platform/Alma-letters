@@ -18,7 +18,7 @@
 				<xsl:attribute name="style">
 				<xsl:call-template name="bodyStyleCss" /> <!-- style.xsl -->
 			</xsl:attribute>
-				<xsl:call-template name="head-logo-fixed" /> <!-- header.xsl -->
+				<xsl:call-template name="head" /> <!-- header.xsl -->
 				<xsl:call-template name="senderReceiver-reversed" /> <!-- SenderReceiver.xsl -->
 
 				<div class="messageArea">
@@ -48,7 +48,7 @@
 							<tr>
 								<td>
 									<b>Owning library / Besitzende Bibliothek / Biblioteca titolare / Bibliothèque propriétaire:</b>
-									<xsl:value-of select="/notification_data/phys_item_display/owning_library_name" />
+									<p><xsl:value-of select="/notification_data/phys_item_display/owning_library_name" /></p>
 								</td>
 							</tr>
 
