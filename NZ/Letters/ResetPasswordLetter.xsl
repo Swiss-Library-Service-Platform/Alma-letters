@@ -23,18 +23,23 @@
 			<br/>
 			<div class="messageArea">
 				<div class="messageBody">
-				<!-- terminate the letter if user group is different from Swiss Library-->
-					<table cellspacing="0" cellpadding="5" border="0">
-						<tr>
-							<td>
-								<xsl:for-each select="notification_data/receivers/receiver">
-									<xsl:if test="user/user_group != '12'">
-										<xsl:message terminate="yes">user group is not Swiss Library </xsl:message>
-									</xsl:if>
-								</xsl:for-each>
-							</td>
-						</tr>
-					</table>
+					<!-- Do not send the letter if user group is not allowed to reset password
+						The user group codes are not only numbers so we need to list the allowed
+						user groups and catch others in "otherwise"
+					-->
+					<xsl:for-each select="notification_data/receivers/receiver">
+						<xsl:choose>
+							<xsl:when test="user/user_group = '11'"></xsl:when> <!-- letter passes-->
+							<xsl:when test="user/user_group = '12'"></xsl:when> <!-- letter passes-->
+							<xsl:when test="user/user_group = '13'"></xsl:when> <!-- letter passes-->
+							<xsl:when test="user/user_group = '14'"></xsl:when> <!-- letter passes-->
+							<xsl:when test="user/user_group = '15'"></xsl:when> <!-- letter passes-->
+							<xsl:when test="user/user_group = '16'"></xsl:when> <!-- letter passes-->
+							<xsl:otherwise>
+								<xsl:message terminate="yes">User group is not allowed to reset password.</xsl:message>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:for-each>
 					<table cellspacing="0" cellpadding="5" border="0">
 						<tr>
 							<td>
