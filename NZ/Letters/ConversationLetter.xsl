@@ -74,19 +74,24 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 
 				<xsl:call-template name="head" /> <!-- header.xsl -->
 				<!--<xsl:call-template name="senderReceiver" /> --><!-- SenderReceiver.xsl -->
-
-				<br />
-				<xsl:call-template name="toWhomIsConcerned" /> <!-- mailReason.xsl -->
+				<!--<xsl:call-template name="toWhomIsConcerned" />--><!-- mailReason.xsl -->
+                    
                 <xsl:variable name="library">
                     <xsl:call-template name="getLibrary" />
                 </xsl:variable>
-				<p>
-                    <xsl:for-each select="notification_data/conversation_messages/message">
-                    <xsl:value-of select="message_subject"/>
-                            <br /><xsl:value-of select="message_body" disable-output-escaping="yes"/>
-                            <br />
-                    </xsl:for-each>
-				</p>
+                
+				<xsl:for-each select="notification_data/conversation_messages/message">
+                    <table>
+                        <tr>
+                            <td><h2><xsl:value-of select="message_subject"/></h2></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <xsl:value-of select="message_body" disable-output-escaping="yes"/>
+                            </td>
+                        </tr>
+                    </table>
+                </xsl:for-each>
 				<br />
                 <table>
                     <tr><td>@@sincerely@@<br /></td></tr>

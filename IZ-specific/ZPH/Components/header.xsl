@@ -41,7 +41,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 </xsl:template>
 
 <!-- template for an email header with fixed logo row height
-    max height od e-mail logo is 70 px -->
+    max height of e-mail logo is 70 px -->
 <xsl:template name="head-logo-fixed">
 <table cellspacing="0" cellpadding="5" border="0">
 	<xsl:attribute name="style">
