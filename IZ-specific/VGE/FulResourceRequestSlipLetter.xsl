@@ -23,9 +23,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 			<body>
 			<h1>
-				<strong>@@requested_for@@ :
-							<xsl:value-of select="notification_data/user_for_printing/name"/>
-				</strong>
+				<!-- translate the value -->
+                @@request_type@@: <xsl:value-of select="notification_data/request_type" />
 			</h1>
 
 
@@ -99,7 +98,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							</xsl:if>-->
                         <!-- creation_date einblenden - escherer 8.9.2020 -->
                         <tr><!-- translate -->
-                            <td align="right"><br/><b>Bestellzeit: </b> <xsl:value-of select="notification_data/request/create_date" />, <xsl:value-of select="notification_data/request/create_time" /></td>
+                            <td align="right"><br/><b>Temps de commande: </b> <xsl:value-of select="notification_data/request/create_date" />, <xsl:value-of select="notification_data/request/create_time" /></td>
                         </tr>
                         <!-- print special article/chapter info - escherer 16.09.2020 -->
                         <tr>
@@ -107,11 +106,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 <!-- **** begin table formatting / escherer 21.09.2020 --> 
                                 <table cellspacing="0" cellpadding="5" border="0">
                                     <tr>
-                                        <td colspan="2">Item information</td> <!-- translate -->
+                                        <td colspan="2">Information sur le document</td> <!-- translate -->
                                     </tr>
                                 <xsl:if test="notification_data/request/chapter_article_title != ''">
                                     <tr><!-- translate -->
-                                        <td><b>Artikel/Kapitel: </b></td><td><xsl:value-of select="notification_data/request/chapter_article_title"/></td>
+                                        <td><b>Article/Chapitre: </b></td><td><xsl:value-of select="notification_data/request/chapter_article_title"/></td>
                                     </tr>
                                 </xsl:if>
                                 <xsl:if test="notification_data/request/chapter_article_author != ''">
@@ -121,7 +120,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 </xsl:if>
                                 <xsl:if test="notification_data/request/pages != ''">
                                     <tr><!-- translate -->
-                                        <td><b>Seiten:</b> </td><td><xsl:value-of select="notification_data/request/pages"/></td>
+                                        <td><b>Pages:</b> </td><td><xsl:value-of select="notification_data/request/pages"/></td>
                                     </tr>
                                 </xsl:if>
                                 <xsl:if test="notification_data/request/full_chapter = 'true'">
@@ -142,7 +141,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     <!-- **** inserted / escherer  01.02.2020 -->
                                 <xsl:if test="notification_data/phys_item_display/barcode != ''">           
                                     <tr><!-- translate -->                                                
-                                        <td >Barcode:</td><td><xsl:value-of select="notification_data/phys_item_display/barcode"/></td>
+                                        <td>Code barre:</td><td><xsl:value-of select="notification_data/phys_item_display/barcode"/></td>
                                     </tr>
                                 </xsl:if>
                                     <!-- **** end inserted / escherer  01.02.2020 -->
@@ -272,16 +271,16 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         </xsl:attribute>
                         <tr>
                             <td colspan="6">
-                                <b>Available items:</b>
+                                <b>Articles disponibles:</b>
                             </td>
                         </tr>
                         <tr><!-- translate -->
-                            <th>Barcode</th>
-                            <th>Call number</th>
-                            <th>Library</th>
-                            <th>Location</th>
-                            <th>Item policy</th>
-                            <th>Public note</th>
+                            <th>Code barre</th>
+                            <th>Cote</th>
+                            <th>Bibliothèque</th>
+                            <th>Localisation</th>
+                            <th>Politique d'article</th>
+                            <th>Note publique</th>
                         </tr>
                     <xsl:for-each select="notification_data/phys_item_display/available_items/available_item">
                         <tr>
