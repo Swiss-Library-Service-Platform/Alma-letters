@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- SLSP customized -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 xmlns:date="http://exslt.org/dates-and-times"
@@ -125,7 +126,7 @@ xmlns:date="http://exslt.org/dates-and-times"
 					<xsl:for-each select="notification_data/loans_by_library/library_loans_for_display">
 						<tr>
 							<td>
-								<table cellpadding="5" class="listing">
+								<table cellpadding="5" class="listing" width="100%">
 									<xsl:attribute name="style">
 										<xsl:call-template name="mainTableStyleCss" />
 									</xsl:attribute>
