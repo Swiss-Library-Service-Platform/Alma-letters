@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- SLSP customized -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:include href="header.xsl" />
@@ -7,6 +8,33 @@
 	<xsl:include href="footer.xsl" />
 	<xsl:include href="style.xsl" />
 	<xsl:include href="recordTitle.xsl" />
+
+	<!-- Source code from https://github.com/uio-library/alma-letters-ubo -->
+	<!--
+	Template to make it easier to insert multilingual text.
+	Depends on: (none)
+	USAGE:
+		<xsl:call-template name="multilingual">
+			<xsl:with-param name="en" select="'Testing multilingual text.'"/>
+			<xsl:with-param name="fr" select="'Test de texte multilingue.'"/>
+			<xsl:with-param name="it" select="'Test di testi multilingue.'"/>
+			<xsl:with-param name="de" select="'Testen von mehrsprachigem Text.'"/>
+		</xsl:call-template>
+	-->
+	<xsl:template name="multilingual">
+	<xsl:param name="en" />
+	<xsl:param name="fr" />
+	<xsl:param name="de" />
+	<xsl:param name="it" />
+	<xsl:choose>
+		<xsl:when test="notification_data/receivers/receiver/preferred_language = 'fr'"><xsl:value-of select="$fr"/></xsl:when>
+		<xsl:when test="notification_data/receivers/receiver/preferred_language = 'en'"><xsl:value-of select="$en"/></xsl:when>
+		<xsl:when test="notification_data/receivers/receiver/preferred_language = 'it'"><xsl:value-of select="$it"/></xsl:when>
+		<xsl:when test="notification_data/receivers/receiver/preferred_language = 'de'"><xsl:value-of select="$de"/></xsl:when>
+		<xsl:otherwise><xsl:value-of select="$en"/></xsl:otherwise>
+	</xsl:choose>
+	</xsl:template>
+
 	<xsl:template match="/">
 		<html>
 			<xsl:if test="notification_data/languages/string">
@@ -30,15 +58,11 @@
 							<tr>
 								<td>
 									@@on@@
-									<xsl:value-of select="notification_data/general_data/current_date" />
-									@@we_cancel_y_req_of@@
-									<xsl:value-of select="notification_data/request/create_date" />
-									
+									<xsl:value-of select="notification_data/general_data/current_date" />@@we_cancel_y_req_of@@:
 								</td>
 							</tr>
 							<tr>
 								<td>
-									<p><b>@@detailed_below@@</b></p>
 									<xsl:call-template name="recordTitle" /> <!-- recordTitle.xsl -->
 								</td>
 							</tr>
@@ -186,14 +210,7 @@
 									</td>
 								</tr>
 							</xsl:if>
-							<xsl:if test="notification_data/metadata/call_number != ''">
-								<tr>
-									<td>
-										<strong> @@call_number@@: </strong>
-										<xsl:value-of select="notification_data/metadata/call_number" />
-									</td>
-								</tr>
-							</xsl:if>
+							
 							<xsl:if test="notification_data/metadata/volume != ''">
 								<tr>
 									<td>
@@ -259,6 +276,15 @@
 								</tr>
 							</xsl:if> -->
 
+						<xsl:if test="notification_data/phys_item_display/call_number != ''">
+							<tr>
+								<td>
+									@@call_number@@: 
+									<xsl:value-of select="notification_data/phys_item_display/call_number" />
+								</td>
+							</tr>
+						</xsl:if>
+
 						<!--
 							display owning library
 							if the owning library name is resource sharing library then take first address row instead
@@ -266,7 +292,14 @@
 						<xsl:if test="notification_data/phys_item_display/owning_library_name != '' and notification_data/phys_item_display/owning_library_details/address1 != ''">
 							<tr>
 								<td>
-									<strong>Owning library / Besitzende Bibliothek / Biblioteca titolare / Bibliothèque propriétaire: </strong><br />
+									<strong>
+										<xsl:call-template name="multilingual">
+											<xsl:with-param name="en" select="'Owning library'"/>
+											<xsl:with-param name="fr" select="'Bibliothèque propriétaire'"/>
+											<xsl:with-param name="it" select="'Biblioteca titolare'"/>
+											<xsl:with-param name="de" select="'Besitzende Bibliothek'"/>
+										</xsl:call-template>
+									: </strong><br />
 									<xsl:choose>
 										<xsl:when test="notification_data/phys_item_display/owning_library_name = 'Resource Sharing Library'">
 											<xsl:value-of select="notification_data/phys_item_display/owning_library_details/address1" />

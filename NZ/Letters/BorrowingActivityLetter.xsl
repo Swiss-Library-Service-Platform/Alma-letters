@@ -3,7 +3,8 @@
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 xmlns:date="http://exslt.org/dates-and-times"
-                extension-element-prefixes="date">
+                extension-element-prefixes="date"
+xmlns:str="http://exslt.org/strings">
 
   <xsl:include href="header.xsl" />
   <xsl:include href="senderReceiver.xsl" />
@@ -32,6 +33,33 @@ xmlns:date="http://exslt.org/dates-and-times"
             </span>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<xsl:template name="formatDecimalNumber">
+  <!--
+    Template to change decimal comma to decimal point
+	Original code from: https://github.com/uio-library/alma-letters-ubo/blob/master/xsl/letters/call_template/header.xsl
+	Can be adapted to support different language number format.
+
+	Deletes currency string, thousand separator dot and spaces.
+	Transforms ALMA decimal comma to decimal point
+	Formats output with spaces for thousands and decimal point
+	Adds CHF string
+  -->
+	<xsl:param name="value"/>
+	<xsl:variable name="numeric_value" select="number(translate($value, ',. CHF', '.'))"/>
+	<xsl:decimal-format name="chf" decimal-separator="." grouping-separator="&#160;"/>
+	<xsl:value-of select="format-number($numeric_value, '###&#160;###.00', 'chf')"/>&#160;CHF 
+  <!-- <xsl:choose>
+    <xsl:when test="/notification_data/receivers/receiver/preferred_language = 'nob' or /notification_data/receivers/receiver/preferred_language = 'no' or /notification_data/receivers/receiver/preferred_language = 'nb' or /notification_data/receivers/receiver/preferred_language = 'nn' or /notification_data/receivers/receiver/preferred_language = 'nno'">
+      <xsl:decimal-format name="no" decimal-separator="," grouping-separator="&#160;"/>
+      <xsl:value-of select="format-number($numeric_value, '#&#160;##0,00', 'no')"></xsl:value-of>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:decimal-format name="en" decimal-separator="." grouping-separator=","/>
+      <xsl:value-of select="format-number($numeric_value, '#,##0.00', 'en')"></xsl:value-of>
+    </xsl:otherwise>
+  </xsl:choose> -->
 </xsl:template>
 
 
@@ -185,35 +213,51 @@ xmlns:date="http://exslt.org/dates-and-times"
 
             </xsl:if>
 
-			  <xsl:if test="notification_data/organization_fee_list/string">
-	              <tr>
-	              	<td>
-                        <br/>
-                        <br/>
+			<xsl:if test="notification_data/organization_fee_list/string">
+				<tr>
+					<td>
+						<br/>
+						<br/>
 						<b>@@debt_message@@</b>
-	                </td>
-	              </tr>
+					</td>
+				</tr>
 
-	              <xsl:for-each select="notification_data/organization_fee_list/string">
-	              	<tr>
-						<td><xsl:value-of select="."/></td>
-					</tr>
-	              </xsl:for-each>
 
-				  <tr>
-	              	<td>
-						<b>
-						@@total@@ <xsl:value-of select="notification_data/total_fee"/>
-						</b>
-	                </td>
-	              </tr>
+				<tr>
+					<td>
+						<table>
+							<xsl:for-each select="notification_data/organization_fee_list/string">
+								<tr>
+									<td>
+										<xsl:value-of select="substring-before(., ':')"/>: <!-- library -->
+									</td>
+									<td align="right">
+										<xsl:call-template name="formatDecimalNumber"> <!-- debt -->
+											<xsl:with-param name="value" select="substring-after(., ':')"/>
+										</xsl:call-template>
+									</td>
+								</tr>
+							</xsl:for-each>
 
-	              <tr>
+								<tr>
+									<td>
+										<b>@@total@@</b>
+									</td>
+									<td align="right">
+										<xsl:call-template name="formatDecimalNumber">
+											<xsl:with-param name="value" select="notification_data/total_fee"/>
+										</xsl:call-template>
+									</td>
+								</tr>
+						</table>
+					</td>
+				</tr>
+	              <!-- <tr>
 	              	<td>
 						<b>@@please_pay_message@@</b>
 						<br/><br/>
 	                </td>
-	              </tr>
+	              </tr> -->
 
 			  </xsl:if>
             </table>
