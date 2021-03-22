@@ -47,7 +47,17 @@ xmlns:str="http://exslt.org/strings">
 	Adds CHF string
   -->
 	<xsl:param name="value"/>
-	<xsl:variable name="numeric_value" select="number(translate($value, ',. CHF', '.'))"/>
+	
+	<xsl:variable name="numeric_value">
+		<xsl:choose>
+			<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'en'">
+				<xsl:value-of select="number(translate($value, ', CHF', ''))"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="number(translate($value, ',. CHF', '.'))"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
 	<xsl:decimal-format name="chf" decimal-separator="." grouping-separator="&#160;"/>
 	<xsl:value-of select="format-number($numeric_value, '###&#160;###.00', 'chf')"/>&#160;CHF 
   <!-- <xsl:choose>

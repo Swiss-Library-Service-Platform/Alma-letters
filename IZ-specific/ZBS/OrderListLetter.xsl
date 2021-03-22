@@ -189,7 +189,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             <xsl:value-of select="meta_data_values/date"/><br />
                             <xsl:value-of select="identifier_type"/>&#160;<xsl:value-of select="identifier"/><br />
                             <xsl:if test="vendor_note !=''">
-                                @@note@@&#160;:&#160;<xsl:value-of select="vendor_note"/>
+                                <strong>@@note@@:&#160;<xsl:value-of select="vendor_note"/></strong>
                             </xsl:if>
                         </td>
 						<td align="right">
