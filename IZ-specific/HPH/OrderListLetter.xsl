@@ -159,18 +159,54 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					<xsl:call-template name="mainTableStyleCss" /> <!-- style.xsl -->
 				</xsl:attribute>
 					<tr>
-						<th>@@po_line_number@@</th>
-                        <th>@@quantity@@</th>
+						<th width="25%">
+                            @@po_line_number@@
+                            / <br />
+                            <xsl:call-template name="multilingual">
+                                <xsl:with-param name="en" select="'Fund'"/>
+                                <xsl:with-param name="fr" select="'Fonds'"/>
+                                <xsl:with-param name="it" select="'Fondo'"/>
+                                <xsl:with-param name="de" select="'Fonds'"/>
+                            </xsl:call-template>
+                            / <br />
+                            <xsl:call-template name="multilingual">
+                                <xsl:with-param name="en" select="'PO Line Owner'"/>
+                                <xsl:with-param name="fr" select="'Propriétaire de la ligne PO'"/>
+                                <xsl:with-param name="it" select="'Ordine di acquisto linea proprietario'"/>
+                                <xsl:with-param name="de" select="'Bestellposten-Besitzer'"/>
+                            </xsl:call-template>
+                        </th>
 						<!-- <th>@@date@@</th> -->
 						<!-- <th>@@issn_isbn@@</th> -->
-						<th>@@title@@</th>
-						<th>@@price@@</th>
+						<th align="center">@@title@@</th>
+                        <th width="5%" align="center">@@quantity@@</th>
+						<!-- <th>@@price@@</th> -->
 						<!-- <th>@@note@@</th> -->
 					</tr>
 					<xsl:for-each select="notification_data/po/po_line_list/po_line">
 					<tr>
-						<td><xsl:value-of select="line_reference"/></td>
-						<!-- <td><xsl:value-of select="create_date"/></td> -->
+						<td>
+                            <xsl:value-of select="line_reference"/>
+                            / <br />
+                            <xsl:for-each select="funds_transaction_items/funds_transaction_item">
+                                <xsl:value-of select="fund/name"/>&#160;
+                            </xsl:for-each>
+                            / <br />
+                            <xsl:value-of select="ordering_for"/>
+                        </td>
+						<!-- <td><xsl:value-of select="create_date"/></td> --> 
+						<td>
+                            <xsl:value-of select="meta_data_values/title"/><br />
+                            <xsl:value-of select="meta_data_values/acqterms_place"/>:
+                            <xsl:value-of select="meta_data_values/publisher"/>,
+                            <xsl:value-of select="meta_data_values/date"/><br />
+                            <xsl:if test="identifier != ''">
+                                <xsl:value-of select="identifier_type"/>&#160;<xsl:value-of select="identifier"/><br />
+                            </xsl:if>
+                            <xsl:if test="vendor_note !=''">
+                                <strong>@@note@@:&#160;<xsl:value-of select="vendor_note"/></strong>
+                            </xsl:if>
+                        </td>
                         <td align="center">
                             <xsl:value-of select="total_quantity"/><br />
                             <xsl:if test="rush = 'true'">
@@ -182,19 +218,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 </xsl:call-template></strong>
                             </xsl:if>
                         </td>
-						<td>
-                            <xsl:value-of select="meta_data_values/title"/><br />
-                            <xsl:value-of select="meta_data_values/acqterms_place"/>:
-                            <xsl:value-of select="meta_data_values/publisher"/>,
-                            <xsl:value-of select="meta_data_values/date"/><br />
-                            <xsl:value-of select="identifier_type"/>&#160;<xsl:value-of select="identifier"/><br />
-                            <xsl:if test="vendor_note !=''">
-                                <strong>@@note@@:&#160;<xsl:value-of select="vendor_note"/></strong>
-                            </xsl:if>
-                        </td>
-						<td align="right">
+						<!-- <td align="right">
                             <xsl:value-of select="total_price_compose/currency"/>&#160;<xsl:value-of select="total_price_compose_with_normalized_sum/normalized_sum"/>
-                        </td>
+                        </td> -->
 						
 					</tr>
 					</xsl:for-each>
