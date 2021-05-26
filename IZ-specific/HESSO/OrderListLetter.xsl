@@ -63,7 +63,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         <td>
                             <strong><xsl:call-template name="multilingual">
                                 <xsl:with-param name="en" select="'PO number'"/>
-                                <xsl:with-param name="fr" select="'Nombre de commande'"/>
+                                <xsl:with-param name="fr" select="'Numéro de commande'"/>
                                 <xsl:with-param name="it" select="'Numero PO'"/>
                                 <xsl:with-param name="de" select="'Bestellnummer'"/>
                             </xsl:call-template></strong>
@@ -159,29 +159,33 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					<xsl:call-template name="mainTableStyleCss" /> <!-- style.xsl -->
 				</xsl:attribute>
 					<tr>
-						<th>@@po_line_number@@</th>
-                        <th>@@quantity@@</th>
+						<th>
+                            @@po_line_number@@
+                            /
+                            <xsl:call-template name="multilingual">
+                                <xsl:with-param name="en" select="'Fund'"/>
+                                <xsl:with-param name="fr" select="'Fonds'"/>
+                                <xsl:with-param name="it" select="'Fondo'"/>
+                                <xsl:with-param name="de" select="'Fonds'"/>
+                            </xsl:call-template>
+                        </th>
+                        
 						<!-- <th>@@date@@</th> -->
 						<!-- <th>@@issn_isbn@@</th> -->
 						<th>@@title@@</th>
-						<th>@@price@@</th>
+						<!-- <th>@@price@@</th> -->
 						<!-- <th>@@note@@</th> -->
+                        <th>@@quantity@@</th>
 					</tr>
 					<xsl:for-each select="notification_data/po/po_line_list/po_line">
 					<tr>
-						<td><xsl:value-of select="line_reference"/></td>
-						<!-- <td><xsl:value-of select="create_date"/></td> -->
-                        <td align="center">
-                            <xsl:value-of select="total_quantity"/><br />
-                            <xsl:if test="rush = 'true'">
-                                <strong><xsl:call-template name="multilingual">
-                                    <xsl:with-param name="en" select="'Rush order'"/>
-                                    <xsl:with-param name="fr" select="'Commande urgente'"/>
-                                    <xsl:with-param name="it" select="'Ordine urgente'"/>
-                                    <xsl:with-param name="de" select="'Eilbestellung'"/>
-                                </xsl:call-template></strong>
-                            </xsl:if>
+						<td>
+                            <xsl:value-of select="line_reference"/>
+                            / <br />
+                            <xsl:value-of select="funds_transaction_items/funds_transaction_item/fund/name"/>
                         </td>
+						<!-- <td><xsl:value-of select="create_date"/></td> -->
+                        
 						<td>
                             <xsl:value-of select="meta_data_values/title"/><br />
                             <xsl:value-of select="meta_data_values/acqterms_place"/>:
@@ -192,8 +196,19 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 <strong>@@note@@:&#160;<xsl:value-of select="vendor_note"/></strong>
                             </xsl:if>
                         </td>
-						<td align="right">
+						<!-- <td align="right">
                             <xsl:value-of select="total_price_compose/currency"/>&#160;<xsl:value-of select="total_price_compose_with_normalized_sum/normalized_sum"/>
+                        </td> -->
+                        <td align="center">
+                            <xsl:value-of select="total_quantity"/><br />
+                            <xsl:if test="rush = 'true'">
+                                <strong><xsl:call-template name="multilingual">
+                                    <xsl:with-param name="en" select="'Rush order'"/>
+                                    <xsl:with-param name="fr" select="'Commande urgente'"/>
+                                    <xsl:with-param name="it" select="'Ordine urgente'"/>
+                                    <xsl:with-param name="de" select="'Eilbestellung'"/>
+                                </xsl:call-template></strong>
+                            </xsl:if>
                         </td>
 						
 					</tr>

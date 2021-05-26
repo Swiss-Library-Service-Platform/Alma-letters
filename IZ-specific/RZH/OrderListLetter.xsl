@@ -159,12 +159,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					<xsl:call-template name="mainTableStyleCss" /> <!-- style.xsl -->
 				</xsl:attribute>
 					<tr>
-						<th>@@po_line_number@@</th>
-                        <th>@@quantity@@</th>
+						<th width="15%">@@po_line_number@@</th>
+                        <th width="10%" align="center">@@quantity@@</th>
 						<!-- <th>@@date@@</th> -->
 						<!-- <th>@@issn_isbn@@</th> -->
-						<th>@@title@@</th>
-						<th>@@price@@</th>
+						<th align="center">@@title@@</th>
+						<th width="5%" align="center">@@price@@</th>
 						<!-- <th>@@note@@</th> -->
 					</tr>
 					<xsl:for-each select="notification_data/po/po_line_list/po_line">
@@ -187,7 +187,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             <xsl:value-of select="meta_data_values/acqterms_place"/>:
                             <xsl:value-of select="meta_data_values/publisher"/>,
                             <xsl:value-of select="meta_data_values/date"/><br />
-                            <xsl:value-of select="identifier_type"/>&#160;<xsl:value-of select="identifier"/><br />
+                            <xsl:if test="identifier != ''">
+                                <xsl:value-of select="identifier_type"/>&#160;<xsl:value-of select="identifier"/><br />
+                            </xsl:if>
                             <xsl:if test="vendor_note !=''">
                                 <strong>@@note@@:&#160;<xsl:value-of select="vendor_note"/></strong>
                             </xsl:if>

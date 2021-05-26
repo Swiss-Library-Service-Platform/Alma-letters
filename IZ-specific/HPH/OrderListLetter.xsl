@@ -179,7 +179,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<!-- <th>@@date@@</th> -->
 						<!-- <th>@@issn_isbn@@</th> -->
 						<th align="center">@@title@@</th>
-                        <th width="5%" align="center">@@quantity@@</th>
+                        <th width="10%" align="center">@@quantity@@</th>
 						<!-- <th>@@price@@</th> -->
 						<!-- <th>@@note@@</th> -->
 					</tr>
