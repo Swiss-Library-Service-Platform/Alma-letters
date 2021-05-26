@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP customized-->
+<!-- SLSP customized; 26.5.2021-->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:include href="header.xsl" />
 <xsl:include href="senderReceiver.xsl" />
@@ -35,6 +35,7 @@
 							<xsl:when test="user/user_group = '14'"></xsl:when> <!-- letter passes-->
 							<xsl:when test="user/user_group = '15'"></xsl:when> <!-- letter passes-->
 							<xsl:when test="user/user_group = '16'"></xsl:when> <!-- letter passes-->
+							<xsl:when test="user/user_group = '99'"></xsl:when> <!-- letter passes-->
 							<xsl:otherwise>
 								<xsl:message terminate="yes">User group is not allowed to reset password.</xsl:message>
 							</xsl:otherwise>
