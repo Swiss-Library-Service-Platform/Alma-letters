@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- sytle.xsl - 20200929, SLSP -->
+<!-- SLSP customized; reversed senderReceiver -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -20,7 +20,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			</xsl:attribute>
 
 				<xsl:call-template name="head" /> <!-- header.xsl -->
-				<xsl:call-template name="senderReceiver" /> <!-- SenderReceiver.xsl -->
+				<xsl:call-template name="senderReceiver-reversed" /> <!-- SenderReceiver.xsl -->
 
 				<br />
                                 

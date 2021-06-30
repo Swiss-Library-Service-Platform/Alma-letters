@@ -66,8 +66,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 <xsl:with-param name="fr" select="'Numéro de commande'"/>
                                 <xsl:with-param name="it" select="'Numero PO'"/>
                                 <xsl:with-param name="de" select="'Bestellnummer'"/>
-                            </xsl:call-template></strong>
-                            :
+                            </xsl:call-template>:</strong>
                             <xsl:value-of select="po/number"/>
                         </td>
                     </tr>
@@ -173,9 +172,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<!-- <th>@@date@@</th> -->
 						<!-- <th>@@issn_isbn@@</th> -->
 						<th>@@title@@</th>
-						<!-- <th>@@price@@</th> -->
+						
 						<!-- <th>@@note@@</th> -->
                         <th>@@quantity@@</th>
+                        <th>@@price@@</th>
 					</tr>
 					<xsl:for-each select="notification_data/po/po_line_list/po_line">
 					<tr>
@@ -196,9 +196,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 <strong>@@note@@:&#160;<xsl:value-of select="vendor_note"/></strong>
                             </xsl:if>
                         </td>
-						<!-- <td align="right">
-                            <xsl:value-of select="total_price_compose/currency"/>&#160;<xsl:value-of select="total_price_compose_with_normalized_sum/normalized_sum"/>
-                        </td> -->
+						
                         <td align="center">
                             <xsl:value-of select="total_quantity"/><br />
                             <xsl:if test="rush = 'true'">
@@ -211,6 +209,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             </xsl:if>
                         </td>
 						
+                        <td align="right">
+                            <xsl:value-of select="total_price_compose/currency"/>&#160;<xsl:value-of select="total_price_compose_with_normalized_sum/normalized_sum"/>
+                        </td>
 					</tr>
 					</xsl:for-each>
 				</table>
