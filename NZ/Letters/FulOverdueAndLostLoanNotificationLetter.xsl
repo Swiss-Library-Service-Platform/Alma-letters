@@ -86,17 +86,6 @@ If overdue profiles are changed then the text bellow has to be adapted.
 	</xsl:for-each>
 </xsl:template>
 
-<!-- Returns the value of NZ barcode if present for user -->
-<xsl:template name="NZ-barcode">
-	<xsl:for-each select="notification_data/user_for_printing/identifiers/code_value">
-		<xsl:choose>
-			<xsl:when test="code = '02'">
-				<xsl:value-of select="value"/>
-			</xsl:when>
-		</xsl:choose>
-	</xsl:for-each>
-</xsl:template>
-
 <!-- Template to output the delivery address only, on the right side -->
 <xsl:template name="senderReceiver-receiver-only">
 	<table cellspacing="0" border="0" width="100%">
@@ -263,20 +252,25 @@ If overdue profiles are changed then the text bellow has to be adapted.
 					<strong>
 						<xsl:call-template name="recall-type" /><br />
 					</strong>
+					<!-- set the Barcode NZ, if there are more then only first one is returned -->
 					<xsl:variable name="NZ_barcode">
-						<xsl:call-template name="NZ-barcode" />
+						<xsl:value-of select="notification_data/user_for_printing/identifiers/code_value[code='02']/value"/>
+					</xsl:variable>
+					<!-- set the Barcode edu-ID, if there are more then only first one is returned -->
+					<xsl:variable name="edu-id_barcode">
+						<xsl:value-of select="notification_data/user_for_printing/identifiers/code_value[code='01']/value"/>
 					</xsl:variable>
 					<xsl:value-of select="notification_data/user_for_printing/first_name"/>&#160;<xsl:value-of select="notification_data/user_for_printing/last_name"/><br />
 					@@borrowed_by_you@@:
 					<xsl:choose>
-						<xsl:when test="$NZ_barcode = ''">
-							<xsl:for-each select="notification_data/user_for_printing/identifiers/code_value[code='Primary Identifier']">
-								<xsl:value-of select="value"/>
-							</xsl:for-each>
-							<br />
+						<xsl:when test="$edu-id_barcode != ''">
+							<xsl:value-of select="$edu-id_barcode"/><br />
+						</xsl:when>
+						<xsl:when test="$NZ_barcode != ''">
+							<xsl:value-of select="$NZ_barcode"/><br />
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="$NZ_barcode"/><br />
+							<xsl:value-of select="notification_data/user_for_printing/identifiers/code_value[code='Primary Identifier']/value"/>
 						</xsl:otherwise>
 					</xsl:choose>
 					<br/>

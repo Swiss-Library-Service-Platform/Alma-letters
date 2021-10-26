@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP customized -->
+<!-- SLSP customized, 09/2021
+    Dependency:
+        recordTitle - SLSP-multilingual
+        header - head
+        senderReceiver - senderReceiver
+        style - mainTableStyleCss -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -8,32 +13,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:include href="mailReason.xsl" />
 <xsl:include href="footer.xsl" />
 <xsl:include href="style.xsl" />
-
-<!-- Source code from https://github.com/uio-library/alma-letters-ubo -->
-	<!--
-	Template to make it easier to insert multilingual text.
-	Depends on: (none)
-	USAGE:
-		<xsl:call-template name="multilingual">
-			<xsl:with-param name="en" select="'Testing multilingual text.'"/>
-			<xsl:with-param name="fr" select="'Test de texte multilingue.'"/>
-			<xsl:with-param name="it" select="'Test di testi multilingue.'"/>
-			<xsl:with-param name="de" select="'Testen von mehrsprachigem Text.'"/>
-		</xsl:call-template>
-	-->
-	<xsl:template name="multilingual">
-	<xsl:param name="en" />
-	<xsl:param name="fr" />
-	<xsl:param name="de" />
-	<xsl:param name="it" />
-	<xsl:choose>
-		<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'fr'"><xsl:value-of select="$fr"/></xsl:when>
-		<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'en'"><xsl:value-of select="$en"/></xsl:when>
-		<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'it'"><xsl:value-of select="$it"/></xsl:when>
-		<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'de'"><xsl:value-of select="$de"/></xsl:when>
-		<xsl:otherwise><xsl:value-of select="$en"/></xsl:otherwise>
-	</xsl:choose>
-	</xsl:template>
+<xsl:include href="recordTitle.xsl" />
 
 <xsl:template match="/">
 	<html>
@@ -61,7 +41,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					</tr>
                     <tr>
                         <td>
-                            <strong><xsl:call-template name="multilingual">
+                            <strong><xsl:call-template name="SLSP-multilingual">
                                 <xsl:with-param name="en" select="'PO number'"/>
                                 <xsl:with-param name="fr" select="'Nombre de commande'"/>
                                 <xsl:with-param name="it" select="'Numero PO'"/>
@@ -80,7 +60,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						</tr>
 					</xsl:if>
 				</table>
-                
+                <!-- Shipping and billing address next to each other -->
                 <table width="100%">
                     <tr>
                         <td width="50%">
@@ -106,8 +86,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             <xsl:if test="po/ship_to_address/city != ''">
                                 <xsl:value-of select="po/bill_to_address/postal_code"/>&#160;<xsl:value-of select="po/ship_to_address/city"/><br />
                             </xsl:if>
-                            <xsl:if test="po/ship_to_address/country != ''">
-                                <xsl:value-of select="po/ship_to_address/country"/>
+                            <xsl:if test="po/ship_to_address/country_display != ''">
+                                <xsl:value-of select="po/ship_to_address/country_display"/>
                             </xsl:if>
                         </td>
                         <td width="50%">
@@ -133,8 +113,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             <xsl:if test="po/bill_to_address/city != ''">
                                 <xsl:value-of select="po/bill_to_address/postal_code"/>&#160;<xsl:value-of select="po/bill_to_address/city"/><br />
                             </xsl:if>
-                            <xsl:if test="po/bill_to_address/country != ''">
-                                <xsl:value-of select="po/bill_to_address/country"/>
+                            <xsl:if test="po/bill_to_address/country_display != ''">
+                                <xsl:value-of select="po/bill_to_address/country_display"/>
                             </xsl:if>
                         </td>                                    
                     </tr>
@@ -146,6 +126,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
                 <xsl:for-each select="notification_data/letter_texts">
                     <table cellspacing="0" cellpadding="5" border="0">
+                        <tr>
+                            <td><xsl:call-template name="dear" /> <!-- mailReason.xsl --></td>
+                        </tr>
+                        
                         <tr>
                             <td>@@place_order_introduction@@:</td>
                         </tr>
@@ -170,11 +154,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					<xsl:for-each select="notification_data/po/po_line_list/po_line">
 					<tr>
 						<td><xsl:value-of select="line_reference"/></td>
-						<!-- <td><xsl:value-of select="create_date"/></td> -->
+                        <!-- Show quantity and if rush order -->
                         <td align="center">
                             <xsl:value-of select="total_quantity"/><br />
                             <xsl:if test="rush = 'true'">
-                                <strong><xsl:call-template name="multilingual">
+                                <strong><xsl:call-template name="SLSP-multilingual">
                                     <xsl:with-param name="en" select="'Rush order'"/>
                                     <xsl:with-param name="fr" select="'Commande urgente'"/>
                                     <xsl:with-param name="it" select="'Ordine urgente'"/>
@@ -182,6 +166,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 </xsl:call-template></strong>
                             </xsl:if>
                         </td>
+                        <!-- Show title, imprint, ISSN/ISBN, vendor note vertically -->
 						<td>
                             <xsl:value-of select="meta_data_values/title"/><br />
                             <xsl:value-of select="meta_data_values/acqterms_place"/>:
@@ -202,7 +187,14 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<br />
 				<table>
 						<tr><td>@@sincerely@@</td></tr>
+                        <tr><td>&#160;</td></tr>
+                        <tr><td>@@department@@</td></tr>
 						<tr><td><xsl:value-of select="/notification_data/organization_unit/name"/></td></tr>
+                        <tr>
+                            <td>
+                                <br/><i>powered by SLSP</i>
+                            </td>
+                        </tr>
 				</table>
 				<!-- <xsl:call-template name="lastFooter" /> --> <!-- footer.xsl -->
 			</body>
