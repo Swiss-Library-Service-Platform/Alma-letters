@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP WG: Letters version 09/2021;
-        10/2021 fixed printUserAnonymize -->
+        10/2021 fixed printUserAnonymize
+        11/2021 smaller margin to fix issue on slip printers (SUPPORT-13074)
+        11/2021 added Barcode edu-ID -->
 <!-- Dependance:
         recordTitle - SLSP-multilingual
         style - generalStyle, bodyStyleCss
@@ -66,6 +68,9 @@ xmlns:str="http://exslt.org/strings">
                     @@expiration_date@@: <xsl:value-of select="/notification_data/request/lastInterestDate" /><br />
                 </xsl:if>
                 <xsl:for-each select="/notification_data/user_for_printing/identifiers/code_value">
+                    <xsl:if test="code = 01">
+                        Barcode edu-ID: <xsl:value-of select="value" /><br />
+                    </xsl:if>
                     <xsl:if test="code = 02">
                         Barcode NZ: <xsl:value-of select="value" /><br />
                         <!-- <span style="font-family:'CarolinaBar-B39-2.5-22x158x720'; font-size:24pt">*<xsl:value-of select="value" />*</span> -->
@@ -90,7 +95,7 @@ xmlns:str="http://exslt.org/strings">
                 </xsl:attribute>
                 <!-- <xsl:call-template name="head" />  -->
                 <!-- header.xsl -->
-                <div class="messageArea" style="padding: 5mm">
+                <div class="messageArea" style="padding: 5">
                     <div class="messageBody">
                         <p style="font-size: 160%; font-weight: bold">&#x21e8;<xsl:value-of select="notification_data/request/calculated_destination_name" /></p>
                         <xsl:call-template name="head-letterName-only" />
