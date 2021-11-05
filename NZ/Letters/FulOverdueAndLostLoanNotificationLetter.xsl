@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 10/2021 -->
+<!-- SLSP WG: Letters version 10/2021
+		10/2021 - fix date in header -->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
         recordTitle - SLSP-multilingual, SLSP-userAccount
@@ -48,7 +49,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 				<h1>@@letterName@@&#160;-&#160;<xsl:call-template name="recall-type" /></h1>
 			</td>
 			<td align="right">
-				<xsl:value-of select="current_date"/>
+				<xsl:value-of select="/notification_data/general_data/current_date"/>
 			</td>
 		</tr>
 	</table>
