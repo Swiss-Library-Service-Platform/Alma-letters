@@ -3,7 +3,6 @@
 		10/2021 - fix date in header
 		11/2021 - senderReceiver-receiver-only: added 1cm margin on the left side to better fit envelope window
 		11/2021 - body style: font-size: 100% -->
-<!-- Customized: reversed senderReceiver address field -->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
         recordTitle - SLSP-multilingual, SLSP-userAccount
@@ -247,7 +246,7 @@ If overdue profiles are changed then the text bellow has to be adapted.
 			<!-- Show patron address only for special cases - user group 92 or 3rd Recall -->
 			
 			<xsl:if test="notification_data/user_for_printing/user_group = '92' or notification_data/notification_type = 'OverdueNotificationType4'">
-				<xsl:call-template name="senderReceiver-receiver-only-reversed" />
+				<xsl:call-template name="senderReceiver-receiver-only" />
 			</xsl:if>
 			<br />
 			<div id="user-additional-info" align="left">
@@ -344,13 +343,16 @@ If overdue profiles are changed then the text bellow has to be adapted.
 												<xsl:value-of select="organization_unit/address/postal_code"/>&#160;<xsl:value-of select="organization_unit/address/city"/>
 												<br/>
 											</xsl:if>
-											<xsl:if test="organization_unit/phone/phone != ''">
+											<!-- <xsl:if test="organization_unit/phone/phone != ''">
 												<xsl:value-of select="organization_unit/phone/phone"/>
 												<br/>
-											</xsl:if>
-											<xsl:if test="organization_unit/email/email != ''">
+											</xsl:if> -->
+											Mahnwesen 
+											<br/>
+											<!-- <xsl:if test="organization_unit/email/email != ''">
 												<xsl:value-of select="organization_unit/email/email"/>
-											</xsl:if>
+											</xsl:if> -->
+											mediareturn@unisg.ch
 										</td>
 									</tr>
 									<tr align="left">
@@ -383,7 +385,7 @@ If overdue profiles are changed then the text bellow has to be adapted.
 													</xsl:otherwise>
 												</xsl:choose>
 												<br />
-												<xsl:if test="physical_item_display_for_printing/issue_level_description !='' and physical_item_display_for_printing/issue_level_description != 'Vol.' and physical_item_display_for_printing/issue_level_description != '_'">
+												<xsl:if test="physical_item_display_for_printing/issue_level_description !='' and physical_item_display_for_printing/issue_level_description != 'Vol.' and physical_item_display_for_printing/issue_level_description != '_' and physical_item_display_for_printing/title != 'Kleinmaterialien-Ausleihe'">
 													<strong>@@description@@: </strong>
 													<xsl:value-of select="physical_item_display_for_printing/issue_level_description"/>
 												</xsl:if>
