@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP WG: Letters version 10/2021
-		10/2021 - fix date in header -->
+		10/2021 - fix date in header
+		11/2021 - senderReceiver-receiver-only: added 1cm margin on the left side to better fit envelope window
+		11/2021 - body style: font-size: 100% -->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
         recordTitle - SLSP-multilingual, SLSP-userAccount
@@ -92,7 +94,7 @@ If overdue profiles are changed then the text bellow has to be adapted.
 	<table cellspacing="0" border="0" width="100%">
 		<tr>
 			<td width="50%"  align="left"></td>
-			<td width="50%" align="left" style="padding: 10mm 10mm 10mm 5mm;">
+			<td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm;">
 				<table cellspacing="0" cellpadding="0" border="0">
 					<xsl:attribute name="style">
 						<xsl:call-template name="listStyleCss" />
@@ -237,8 +239,7 @@ If overdue profiles are changed then the text bellow has to be adapted.
 		</head>
 		<body>
 			<xsl:attribute name="style">
-				<xsl:call-template name="bodyStyleCss" />
-				<!-- style.xsl -->
+				<xsl:call-template name="bodyStyleCss" />;font-size: 100%;
 			</xsl:attribute>
 			<!-- Use specific header with information what recall this is -->
 			<xsl:call-template name="head-overdue-letter" />
@@ -411,7 +412,7 @@ If overdue profiles are changed then the text bellow has to be adapted.
 				</xsl:for-each>
 			</table>
 			<xsl:if test="/notification_data/notification_type != 'OverdueNotificationType4'">
-				<div align="right" style="padding: 5px;">
+				<div align="right" style="padding: 5px; font-size: 80%;">
 					<span>
 						@@additional_info_2@@
 					</span>
