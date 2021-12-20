@@ -44,6 +44,284 @@
 		</a>
 	</xsl:template>
 
+	<!-- Address template printing delivery address on the right side
+	The sender address is with smaller font and the delivery address is bold -->
+	<xsl:template name="senderReceiver-personal-delivery-right">
+		<table cellspacing="0" border="0" width="100%">
+			<tr>
+				<!-- sender -->
+				<td width="50%" align="left" style="padding: 10mm 10mm 10mm 10mm;">
+					<xsl:for-each select="/notification_data/phys_item_display/owning_library_details">
+						<table>
+						<xsl:attribute name="style">
+							font-size: 80%;
+							<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
+						</xsl:attribute>
+							<tr><td><xsl:value-of select="address1"/></td></tr>
+							<tr><td><xsl:value-of select="address2"/></td></tr>
+							<xsl:if test="string-length(address3)!=0">
+								<tr><td><xsl:value-of select="address3"/></td></tr>
+							</xsl:if>
+							<xsl:if test="string-length(address4)!=0">
+								<tr><td><xsl:value-of select="address4"/></td></tr>
+							</xsl:if>
+							<xsl:if test="string-length(address5)!=0">
+								<tr><td><xsl:value-of select="address5"/></td></tr>
+							</xsl:if>
+							<tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr>
+							<xsl:if test="string-length(phone)!=0">  
+								<tr><td><xsl:value-of select="phone"/></td></tr> 
+							</xsl:if>
+							<xsl:if test="string-length(email)!=0">
+								<tr><td><xsl:value-of select="email"/></td></tr> 
+							</xsl:if>
+						</table>
+					</xsl:for-each>
+				</td>
+				<!-- receiver -->
+				<td width="50%"  align="left" style="padding: 10mm 10mm 10mm 15mm; vertical-align: top;">
+					<xsl:choose>
+						<xsl:when test="notification_data/user_for_printing">
+							<table cellspacing="0" cellpadding="0" border="0">
+								<xsl:attribute name="style">
+									font-weight: 600;
+									<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
+								</xsl:attribute>
+								<tr>
+									<td>
+										<xsl:if test="notification_data/user_for_printing/first_name != ''">
+											<xsl:value-of select="notification_data/user_for_printing/first_name"/>&#160;</xsl:if><xsl:value-of select="notification_data/user_for_printing/last_name"/>
+									</td>
+								</tr>
+								<xsl:if test="count(str:tokenize(notification_data/delivery_address,'&#10;'))>4">
+								<tr>
+									<td>
+										<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[2]"/>
+									</td>
+								</tr>
+								</xsl:if>
+								<xsl:if test="count(str:tokenize(notification_data/delivery_address,'&#10;'))>5">
+								<tr>
+									<td>
+										<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[3]"/>
+									</td>
+								</tr>
+								</xsl:if>
+								<xsl:if test="count(str:tokenize(notification_data/delivery_address,'&#10;'))>6">
+								<tr>
+									<td>
+										<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[4]"/>
+									</td>
+								</tr>
+								</xsl:if>
+								<xsl:if test="count(str:tokenize(notification_data/delivery_address,'&#10;'))>7">
+								<tr>
+									<td>
+										<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[5]"/>
+									</td>
+								</tr>
+								</xsl:if>
+								<tr>
+									<td>
+										<xsl:variable name="number_code" select="count(str:tokenize(notification_data/delivery_address,'&#10;'))-1" />
+										<xsl:variable name="number_city" select="count(str:tokenize(notification_data/delivery_address,'&#10;'))-2" />
+										<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[$number_code]"/><xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[$number_city]"/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<xsl:variable name="number_country" select="count(str:tokenize(notification_data/delivery_address,'&#10;'))" />
+										<xsl:if test="str:tokenize(notification_data/delivery_address,'&#10;')[$number_country]!=' CHE'">
+											<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[$number_country]"/>
+										</xsl:if>
+									</td>
+								</tr>
+							</table>
+						</xsl:when>
+						<xsl:when test="notification_data/receivers/receiver/user">
+							<xsl:for-each select="notification_data/receivers/receiver/user">
+								<table>
+								<xsl:attribute name="style">
+									<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
+								</xsl:attribute>
+									<tr>
+										<td>
+											<xsl:if test="first_name != ''"><xsl:value-of select="first_name"/>&#160;</xsl:if><xsl:value-of select="last_name"/>
+										</td>
+									</tr>
+									<tr><td><xsl:value-of select="user_address_list/user_address/line1"/></td></tr>
+									<tr><td><xsl:value-of select="user_address_list/user_address/line2"/></td></tr>
+									<xsl:if test="string-length(user_address_list/user_address/line3)!=0">
+										<tr><td><xsl:value-of select="user_address_list/user_address/line3"/></td></tr>
+									</xsl:if>
+									<xsl:if test="string-length(user_address_list/user_address/line4)!=0">
+									<tr><td><xsl:value-of select="user_address_list/user_address/line4"/></td></tr>
+									</xsl:if>
+									<tr><td>
+										<xsl:value-of select="user_address_list/user_address/postal_code"/>&#160;<xsl:value-of select="user_address_list/user_address/city"/>
+									</td></tr>
+									<tr><td>
+										<xsl:choose>
+											<xsl:when test="user_address_list/user_address/country = 'Null'">
+											<xsl:text> </xsl:text>
+											</xsl:when>
+											<xsl:when test="user_address_list/user_address/country = 'CHE'">
+											<xsl:text> </xsl:text>
+											</xsl:when>
+											<xsl:otherwise>
+												&#160;<xsl:value-of select="user_address_list/user_address/country"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</td></tr>
+								</table>
+							</xsl:for-each>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+					</xsl:choose>
+				</td>
+			</tr>
+		</table>
+	</xsl:template>
+
+	<!-- Address template printing delivery address on the left side
+	The sender address is with smaller font and the delivery address is bold -->
+	<xsl:template name="senderReceiver-personal-delivery-left">
+		<table cellspacing="0" border="0" width="100%">
+			<tr>
+				<!-- receiver -->
+				<td width="50%"  align="left" style="padding: 10mm 10mm 10mm 10mm; vertical-align: top;">
+					<xsl:choose>
+						<xsl:when test="notification_data/user_for_printing">
+							<table cellspacing="0" cellpadding="0" border="0">
+								<xsl:attribute name="style">
+									font-weight: 600;
+									<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
+								</xsl:attribute>
+								<tr>
+									<td>
+										<xsl:if test="notification_data/user_for_printing/first_name != ''">
+											<xsl:value-of select="notification_data/user_for_printing/first_name"/>&#160;</xsl:if><xsl:value-of select="notification_data/user_for_printing/last_name"/>
+									</td>
+								</tr>
+								<xsl:if test="count(str:tokenize(notification_data/delivery_address,'&#10;'))>4">
+								<tr>
+									<td>
+										<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[2]"/>
+									</td>
+								</tr>
+								</xsl:if>
+								<xsl:if test="count(str:tokenize(notification_data/delivery_address,'&#10;'))>5">
+								<tr>
+									<td>
+										<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[3]"/>
+									</td>
+								</tr>
+								</xsl:if>
+								<xsl:if test="count(str:tokenize(notification_data/delivery_address,'&#10;'))>6">
+								<tr>
+									<td>
+										<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[4]"/>
+									</td>
+								</tr>
+								</xsl:if>
+								<xsl:if test="count(str:tokenize(notification_data/delivery_address,'&#10;'))>7">
+								<tr>
+									<td>
+										<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[5]"/>
+									</td>
+								</tr>
+								</xsl:if>
+								<tr>
+									<td>
+										<xsl:variable name="number_code" select="count(str:tokenize(notification_data/delivery_address,'&#10;'))-1" />
+										<xsl:variable name="number_city" select="count(str:tokenize(notification_data/delivery_address,'&#10;'))-2" />
+										<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[$number_code]"/><xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[$number_city]"/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<xsl:variable name="number_country" select="count(str:tokenize(notification_data/delivery_address,'&#10;'))" />
+										<xsl:if test="str:tokenize(notification_data/delivery_address,'&#10;')[$number_country]!=' CHE'">
+											<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[$number_country]"/>
+										</xsl:if>
+									</td>
+								</tr>
+							</table>
+						</xsl:when>
+						<xsl:when test="notification_data/receivers/receiver/user">
+							<xsl:for-each select="notification_data/receivers/receiver/user">
+								<table>
+								<xsl:attribute name="style">
+									<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
+								</xsl:attribute>
+									<tr>
+										<td>
+											<xsl:if test="first_name != ''"><xsl:value-of select="first_name"/>&#160;</xsl:if><xsl:value-of select="last_name"/>
+										</td>
+									</tr>
+									<tr><td><xsl:value-of select="user_address_list/user_address/line1"/></td></tr>
+									<tr><td><xsl:value-of select="user_address_list/user_address/line2"/></td></tr>
+									<xsl:if test="string-length(user_address_list/user_address/line3)!=0">
+										<tr><td><xsl:value-of select="user_address_list/user_address/line3"/></td></tr>
+									</xsl:if>
+									<xsl:if test="string-length(user_address_list/user_address/line4)!=0">
+									<tr><td><xsl:value-of select="user_address_list/user_address/line4"/></td></tr>
+									</xsl:if>
+									<tr><td>
+										<xsl:value-of select="user_address_list/user_address/postal_code"/>&#160;<xsl:value-of select="user_address_list/user_address/city"/>
+									</td></tr>
+									<tr><td>
+										<xsl:choose>
+											<xsl:when test="user_address_list/user_address/country = 'Null'">
+											<xsl:text> </xsl:text>
+											</xsl:when>
+											<xsl:when test="user_address_list/user_address/country = 'CHE'">
+											<xsl:text> </xsl:text>
+											</xsl:when>
+											<xsl:otherwise>
+												&#160;<xsl:value-of select="user_address_list/user_address/country"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</td></tr>
+								</table>
+							</xsl:for-each>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+					</xsl:choose>
+				</td>
+				<!-- sender -->
+				<td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm;">
+					<xsl:for-each select="/notification_data/phys_item_display/owning_library_details">
+						<table>
+						<xsl:attribute name="style">
+							font-size: 80%;
+							<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
+						</xsl:attribute>
+							<tr><td><xsl:value-of select="address1"/></td></tr>
+							<tr><td><xsl:value-of select="address2"/></td></tr>
+							<xsl:if test="string-length(address3)!=0">
+								<tr><td><xsl:value-of select="address3"/></td></tr>
+							</xsl:if>
+							<xsl:if test="string-length(address4)!=0">
+								<tr><td><xsl:value-of select="address4"/></td></tr>
+							</xsl:if>
+							<xsl:if test="string-length(address5)!=0">
+								<tr><td><xsl:value-of select="address5"/></td></tr>
+							</xsl:if>
+							<tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr>
+							<xsl:if test="string-length(phone)!=0">  
+								<tr><td><xsl:value-of select="phone"/></td></tr> 
+							</xsl:if>
+							<xsl:if test="string-length(email)!=0">
+								<tr><td><xsl:value-of select="email"/></td></tr> 
+							</xsl:if>
+						</table>
+					</xsl:for-each>
+				</td>
+			</tr>
+		</table>
+	</xsl:template>
+
 	<xsl:template match="/">
 		<html>
 			<head>
@@ -56,138 +334,7 @@
 				<xsl:call-template name="head" /> <!-- header.xsl -->
 				<div class="messageArea">
 					<div class="messageBody">
-						<!-- sender on the left, delivery to the right -->
-						<table cellspacing="0" border="0" width="100%">
-							<tr>
-								<!-- sender -->
-								<td width="50%" align="left" style="padding: 10mm 10mm 10mm 10mm;">
-									<xsl:for-each select="/notification_data/phys_item_display/owning_library_details">
-										<table>
-										<xsl:attribute name="style">
-											font-size: 80%;
-											<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
-										</xsl:attribute>
-											<tr><td><xsl:value-of select="name"/></td></tr>
-											<tr><td><xsl:value-of select="address1"/></td></tr>
-											<tr><td><xsl:value-of select="address2"/></td></tr>
-											<xsl:if test="string-length(address3)!=0">
-												<tr><td><xsl:value-of select="address3"/></td></tr>
-											</xsl:if>
-											<xsl:if test="string-length(address4)!=0">
-												<tr><td><xsl:value-of select="address4"/></td></tr>
-											</xsl:if>
-											<xsl:if test="string-length(address5)!=0">
-												<tr><td><xsl:value-of select="address5"/></td></tr>
-											</xsl:if>
-											<tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr>
-											<xsl:if test="string-length(phone)!=0">  
-												<tr><td><xsl:value-of select="phone"/></td></tr> 
-											</xsl:if>
-											<xsl:if test="string-length(email)!=0">
-												<tr><td><xsl:value-of select="email"/></td></tr> 
-											</xsl:if>
-										</table>
-									</xsl:for-each>
-								</td>
-								<!-- receiver -->
-								<td width="50%"  align="left" style="padding: 10mm 10mm 10mm 15mm; vertical-align: top;">
-									<xsl:choose>
-										<xsl:when test="notification_data/user_for_printing">
-											<table cellspacing="0" cellpadding="0" border="0">
-												<xsl:attribute name="style">
-													font-weight: 600;
-													<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
-												</xsl:attribute>
-												<tr>
-													<td>
-														<xsl:if test="notification_data/user_for_printing/first_name != ''">
-															<xsl:value-of select="notification_data/user_for_printing/first_name"/>&#160;</xsl:if><xsl:value-of select="notification_data/user_for_printing/last_name"/>
-													</td>
-												</tr>
-												<xsl:if test="count(str:tokenize(notification_data/delivery_address,'&#10;'))>4">
-												<tr>
-													<td>
-														<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[2]"/>
-													</td>
-												</tr>
-												</xsl:if>
-												<xsl:if test="count(str:tokenize(notification_data/delivery_address,'&#10;'))>5">
-												<tr>
-													<td>
-														<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[3]"/>
-													</td>
-												</tr>
-												</xsl:if>
-												<xsl:if test="count(str:tokenize(notification_data/delivery_address,'&#10;'))>6">
-												<tr>
-													<td>
-														<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[4]"/>
-													</td>
-												</tr>
-												</xsl:if>
-												<xsl:if test="count(str:tokenize(notification_data/delivery_address,'&#10;'))>7">
-												<tr>
-													<td>
-														<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[5]"/>
-													</td>
-												</tr>
-												</xsl:if>
-												<tr>
-													<td>
-														<xsl:variable name="number_code" select="count(str:tokenize(notification_data/delivery_address,'&#10;'))-1" />
-														<xsl:variable name="number_city" select="count(str:tokenize(notification_data/delivery_address,'&#10;'))-2" />
-														<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[$number_code]"/><xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[$number_city]"/>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<xsl:variable name="number_country" select="count(str:tokenize(notification_data/delivery_address,'&#10;'))" />
-														<xsl:if test="str:tokenize(notification_data/delivery_address,'&#10;')[$number_country]!=' CHE'">
-															<xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[$number_country]"/>
-														</xsl:if>
-													</td>
-												</tr>
-											</table>
-										</xsl:when>
-										<xsl:when test="notification_data/receivers/receiver/user">
-											<xsl:for-each select="notification_data/receivers/receiver/user">
-												<table>
-												<xsl:attribute name="style">
-													<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
-												</xsl:attribute>           
-													<tr><td><xsl:value-of select="first_name"/>&#160;<xsl:value-of select="last_name"/></td></tr>
-													<tr><td><xsl:value-of select="user_address_list/user_address/line1"/></td></tr>
-													<tr><td><xsl:value-of select="user_address_list/user_address/line2"/></td></tr>
-													<xsl:if test="string-length(user_address_list/user_address/line3)!=0">
-														<tr><td><xsl:value-of select="user_address_list/user_address/line3"/></td></tr>
-													</xsl:if>
-													<xsl:if test="string-length(user_address_list/user_address/line4)!=0">
-													<tr><td><xsl:value-of select="user_address_list/user_address/line4"/></td></tr>
-													</xsl:if>
-													<tr><td>
-														<xsl:value-of select="user_address_list/user_address/postal_code"/>&#160;<xsl:value-of select="user_address_list/user_address/city"/>
-													</td></tr>
-													<tr><td>
-														<xsl:choose>
-															<xsl:when test="user_address_list/user_address/country = 'Null'">
-															<xsl:text> </xsl:text>
-															</xsl:when>
-															<xsl:when test="user_address_list/user_address/country = 'CHE'">
-															<xsl:text> </xsl:text>
-															</xsl:when>
-															<xsl:otherwise>
-																&#160;<xsl:value-of select="user_address_list/user_address/country"/>
-															</xsl:otherwise>
-														</xsl:choose>
-													</td></tr>
-												</table>
-											</xsl:for-each>
-										</xsl:when>
-										<xsl:otherwise></xsl:otherwise>
-									</xsl:choose>
-								</td>
-							</tr>
-						</table>
+						<xsl:call-template name="senderReceiver-personal-delivery-right" />
 						<br/>
 						<br/>
 						<table cellspacing="0" cellpadding="5" border="0">

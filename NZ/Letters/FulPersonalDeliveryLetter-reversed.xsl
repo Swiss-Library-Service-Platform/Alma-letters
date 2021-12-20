@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 12/2021 -->
+<!-- SLSP WG: Letters version 12/2021 - delivery on left -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount
 		style - bodyStyleCss, listStyleCss
@@ -334,7 +334,7 @@
 				<xsl:call-template name="head" /> <!-- header.xsl -->
 				<div class="messageArea">
 					<div class="messageBody">
-						<xsl:call-template name="senderReceiver-personal-delivery-right" />
+						<xsl:call-template name="senderReceiver-personal-delivery-left" />
 						<br/>
 						<br/>
 						<table cellspacing="0" cellpadding="5" border="0">

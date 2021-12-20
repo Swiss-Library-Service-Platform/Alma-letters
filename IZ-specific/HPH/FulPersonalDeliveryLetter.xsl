@@ -154,7 +154,7 @@
 							<tr>
 								<td>
 									<b>@@following_details@@: </b>
-                                                                       <xsl:value-of select="notification_data/phys_item_display/author"/>: <xsl:value-of select="notification_data/phys_item_display/title"/> (Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/>, Call Number: <xsl:value-of select="notification_data/phys_item_display/display_alt_call_numbers/string"/>)
+                                                                       <xsl:value-of select="notification_data/phys_item_display/author"/>: <xsl:value-of select="notification_data/phys_item_display/title"/> (Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/>)
 								</td>
 							</tr>
 

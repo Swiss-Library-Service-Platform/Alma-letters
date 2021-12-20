@@ -135,15 +135,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 											<xsl:value-of select="notification_data/phys_item_display/call_number"/>
 										</xsl:otherwise>
 									</xsl:choose>
-									<xsl:if test="notification_data/phys_item_display/issue_level_description !='' and notification_data/phys_item_display/issue_level_description != 'Vol.' and notification_data/phys_item_display/issue_level_description != '_'">
-										<br />
-										<xsl:call-template name="SLSP-multilingual">
-										<xsl:with-param name="en" select="'Description'"/>
-										<xsl:with-param name="fr" select="'Description'"/>
-										<xsl:with-param name="it" select="'Descrizione'"/>
-										<xsl:with-param name="de" select="'Beschreibung'"/>
-										</xsl:call-template>: <xsl:value-of select="notification_data/phys_item_display/issue_level_description"/>
-									</xsl:if>
 								</td>
 							</tr>
 							<tr>
@@ -166,7 +157,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 									-->
 									<xsl:variable name="notice">@@additional_id@@</xsl:variable>
 
-									<xsl:if test="$notice != ''">
+									<xsl:if test="$notice != '' and $notice != 'blank'">
 										<br /><strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
 											<xsl:with-param name="en" select="'Notice of the library'"/>
 											<xsl:with-param name="fr" select="'Avis de la bibliothèque'"/>

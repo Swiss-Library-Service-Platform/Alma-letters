@@ -18,13 +18,12 @@
 				<xsl:attribute name="style">
 				<xsl:call-template name="bodyStyleCss" /> <!-- style.xsl -->
 			</xsl:attribute>
-				<xsl:call-template name="head" /> <!-- header.xsl -->
+				<xsl:call-template name="single_logo" /> <!-- header.xsl -->
 
 
-				<div class="messageArea">
+				<div style="margin-top: -20px;" class="messageArea">
 					<div class="messageBody">
-<br/>
-<table cellspacing="0" cellpadding="5" border="0" width="100%">
+<table cellspacing="0" cellpadding="30" border="0" width="100%">
 	<tr>
                         <td width="50%" align="left">
 <xsl:choose>
@@ -104,28 +103,21 @@
 
 		        </td>
 		<td width="50%"  align="right">
-			<xsl:for-each select="notification_data/organization_unit">
+			<xsl:for-each select="notification_data/phys_item_display/owning_library_details">
 		        <table>
 		        <xsl:attribute name="style">
 			<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 		        </xsl:attribute>
 			<tr><td><xsl:value-of select="name"/></td></tr>
-			<tr><td><xsl:value-of select="address/line1"/></td></tr>
-			<tr><td><xsl:value-of select="address/line2"/></td></tr>
-                        <xsl:if test="string-length(address/line3)!=0">
-                        <tr><td><xsl:value-of select="address/line3"/></td></tr>
+			<tr><td><xsl:value-of select="address1"/></td></tr>
+			<tr><td><xsl:value-of select="address2"/></td></tr><br />
+                        <xsl:if test="string-length(address3)!=0">
+                        <tr><td><xsl:value-of select="address3"/></td></tr>
                         </xsl:if>
-                        <xsl:if test="string-length(address/line4)!=0">
-                        <tr><td><xsl:value-of select="address/line4"/></td></tr>
-                        </xsl:if>
-			<tr><td><xsl:value-of select="address/postal_code"/>&#160;<xsl:value-of select="address/city"/></td></tr>
-                     <xsl:if test="string-length(phone/phone)!=0">  
-                                      <tr><td><xsl:value-of select="phone/phone"/></td></tr> 
-                   </xsl:if>
-                    <xsl:if test="string-length(email/email)!=0">
-                                      <tr><td><xsl:value-of select="email/email"/></td></tr> 
-                                
-                  </xsl:if>             
+                        <xsl:if test="string-length(address4)!=0">
+                        <tr><td><xsl:value-of select="address4"/></td></tr>
+                        </xsl:if>  
+			<tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr>        
 		        </table>
 	                </xsl:for-each>
 
@@ -136,13 +128,15 @@
 </table>
 <br/>
 <br/>
+				<xsl:call-template name="single_title" /> <!-- header.xsl -->
+<br/>
+<br/>
 						<table cellspacing="0" cellpadding="5" border="0">
 							<tr>
 								<td>
                                                            <br/>
                                                            <br/>
-                                                           <br/>
-                                                           <br/>
+                                                      
 									@@we_sent@@
 								
 										<xsl:value-of select="notification_data/request/create_date" />.
@@ -154,7 +148,7 @@
 							<tr>
 								<td>
 									<b>@@following_details@@: </b>
-                                                                       <xsl:value-of select="notification_data/phys_item_display/author"/>: <xsl:value-of select="notification_data/phys_item_display/title"/> (Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/>, Call Number: <xsl:value-of select="notification_data/phys_item_display/display_alt_call_numbers/string"/>)
+                                                                       <xsl:value-of select="notification_data/phys_item_display/author"/>: <xsl:value-of select="notification_data/phys_item_display/title"/> (Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/>)
 								</td>
 							</tr>
 
@@ -174,6 +168,7 @@
 							</tr>
 						</table>
 						<br />
+
 						<table>
 
 							<tr>
