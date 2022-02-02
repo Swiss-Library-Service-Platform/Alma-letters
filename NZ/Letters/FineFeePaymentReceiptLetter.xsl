@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP customized 02/2021
-		02/2022 - Added SLSP greeting -->
+		02/2022 - Added SLSP greeting; vertical fee info -->
 <!-- Dependance: 
 		recordTitle - SLSP-multilingual
 		style - bodyStyleCss, generalStyle, mainTableStyleCss
