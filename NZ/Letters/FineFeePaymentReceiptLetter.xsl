@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP customized -->
+<!-- SLSP customized 02/2021
+		02/2022 - Added SLSP greeting -->
+<!-- Dependance: 
+		recordTitle - SLSP-multilingual
+		style - bodyStyleCss, generalStyle, mainTableStyleCss
+		senderReceiver - senderReceiver
+		header - head-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -8,6 +14,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:include href="mailReason.xsl" />
 <xsl:include href="footer.xsl" />
 <xsl:include href="style.xsl" />
+<xsl:include href="recordTitle.xsl" />
 
 <xsl:template match="/">
 	<html>
@@ -33,18 +40,34 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<xsl:call-template name="senderReceiver" />
 
 				<br />
-				<xsl:call-template name="toWhomIsConcerned" /> <!-- mailReason.xsl -->
 
-				<xsl:if  test="notification_data/transaction_id != ''" >
-					<h3>@@transaction_id@@: <xsl:value-of select="notification_data/transaction_id"/></h3>
-				</xsl:if>
-
-				<xsl:for-each select="notification_data/labels_list">
-                    <p>
-                        <xsl:value-of select="notification_data/letter.fineFeePaymentReceiptLetter.message"/>
-                    </p>
-                </xsl:for-each>
-
+				<!-- <xsl:call-template name="toWhomIsConcerned" />  --><!-- mailReason.xsl -->
+				<table cellspacing="0" cellpadding="5" border="0">
+					<tr>
+						<td>
+					<xsl:call-template name="SLSP-multilingual">
+						<xsl:with-param name="en" select="'Hello'"/>
+						<xsl:with-param name="fr" select="'Bonjour'"/>
+						<xsl:with-param name="it" select="'Buongiorno,'"/>
+						<xsl:with-param name="de" select="'Guten Tag'"/>
+					</xsl:call-template>
+						</td>
+					</tr>
+					<xsl:if  test="notification_data/transaction_id != ''" >
+						<tr>
+							<td>
+								<span>@@transaction_id@@: <xsl:value-of select="notification_data/transaction_id"/></span>
+							</td>
+						</tr>
+					</xsl:if>
+					<xsl:for-each select="notification_data/labels_list">
+						<tr>
+							<td>
+								<xsl:value-of select="notification_data/letter.fineFeePaymentReceiptLetter.message"/>
+							</td>
+						</tr>
+					</xsl:for-each>
+				</table>
 				<br />
 
 				<table cellpadding="5" class="listing">
@@ -53,52 +76,42 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				</xsl:attribute>
 					<tr>
 						<th align="left">@@fee_type@@</th>
-                        <th align="left">
-							Title
-                        </th>
                         <th align="left">@@payment_date@@</th>
                         <th align="right">@@paid_amount@@</th>
 					</tr>
 					<xsl:for-each select="notification_data/user_fines_fees_list/user_fines_fees">
 					<tr>
-                        <td valign="top">
-                            <xsl:value-of select="fine_fee_type_display"/>
-                            <xsl:if test="fines_fee_transactions/fines_fee_transaction/transaction_note != ''">
-                                <br />(<xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_note"/>)
-                            </xsl:if>
-                        </td>
-                        <td valign="top">
-							<xsl:choose>
-								<xsl:when test="item_title != ''">
-									<xsl:value-of select="item_title"/>
-									<xsl:if test="item_barcode != ''">
-										<tt>&#32;(<xsl:value-of select="item_barcode"/>)</tt>
-									</xsl:if>
-								</xsl:when>
-								<xsl:otherwise>
-									-
-								</xsl:otherwise>
-							</xsl:choose>
-                        </td>
-                        <td valign="top" style="white-space: nowrap;">
-                            <xsl:value-of select="create_date"/>
-                        </td>
-                        <td align="right" valign="top">
-                            <xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_amount_display"/>&#160;<xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_ammount/currency"/>
-                        </td>
-                    </tr>
+						<td valign="top">
+							<xsl:value-of select="fine_fee_type_display"/>
+							<xsl:if test="item_title != ''">
+								<br />
+								<xsl:value-of select="item_title"/>
+								<xsl:if test="item_barcode != ''">
+									(<xsl:value-of select="item_barcode"/>)
+								</xsl:if>
+							</xsl:if>
+							<xsl:if test="fines_fee_transactions/fines_fee_transaction/transaction_note != ''">
+								<br />
+								<xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_note"/>
+							</xsl:if>
+						</td>
+						<td valign="top" style="white-space: nowrap;">
+							<xsl:value-of select="create_date"/>
+						</td>
+						<td align="right" valign="top">
+							<xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_amount_display"/>&#160;<xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_ammount/currency"/>
+						</td>
+					</tr>
 					</xsl:for-each>
 
 					<tr>
-						<td> </td>
-                        <td> </td>
-						<td align="right"><strong>@@total@@:</strong></td>
+						<td align="right" colspan="2"><strong>@@total@@:</strong></td>
 						<td align="right"><xsl:value-of select="notification_data/total_amount_paid"/>&#160;<xsl:value-of select="notification_data/currency"/></td>
 					</tr>
 
 				</table>
 				<br />
-				<table>
+				<table cellspacing="0" cellpadding="5" border="0">
 					<tr>
 						<td>@@sincerely@@</td>
 					</tr>
