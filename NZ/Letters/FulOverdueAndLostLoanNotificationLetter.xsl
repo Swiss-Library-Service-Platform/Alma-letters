@@ -2,7 +2,8 @@
 <!-- SLSP WG: Letters version 10/2021
 		10/2021 - fix date in header
 		11/2021 - senderReceiver-receiver-only: added 1cm margin on the left side to better fit envelope window
-		11/2021 - body style: font-size: 100% -->
+		11/2021 - body style: font-size: 100%
+		02/2022 - added greeting to all languages -->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
         recordTitle - SLSP-multilingual, SLSP-userAccount
@@ -278,11 +279,9 @@ If overdue profiles are changed then the text bellow has to be adapted.
 					<br/>
 				</p>
 			</div>
-			<xsl:if test="/notification_data/receivers/receiver/preferred_language = 'fr'">
-				<p>
-					@@dear@@
-				</p>
-			</xsl:if>
+			<p>
+				@@dear@@
+			</p>
 			<p>
 				<xsl:choose>
 					<xsl:when test="/notification_data/notification_type = 'OverdueNotificationType1'">
