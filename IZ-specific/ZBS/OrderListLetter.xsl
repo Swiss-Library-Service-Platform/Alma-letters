@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP customized, 09/2021
+    02/2022 Added custom text in billing / shipping address
     Dependency:
         recordTitle - SLSP-multilingual
         header - head
@@ -71,6 +72,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             <xsl:if test="po/ship_to_address/line1 != ''">
                                 <xsl:value-of select="po/ship_to_address/line1"/><br />
                             </xsl:if>
+                            <!-- 02/2022 Added on request (SUPPORT-4060) -->
+                            <span>REF-903-EKSZBFEL</span><br />
+                            <!-- END -->
                             <xsl:if test="po/ship_to_address/line2 != ''">
                                 <xsl:value-of select="po/ship_to_address/line2"/><br />
                             </xsl:if>
@@ -98,6 +102,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             <xsl:if test="po/bill_to_address/line1 != ''">
                                 <xsl:value-of select="po/bill_to_address/line1"/><br />
                             </xsl:if>
+                            <!-- 02/2022 Added on request (SUPPORT-4060) -->
+                            <span>REF-903-EKSZBFEL</span><br />
+                            <!-- END -->
                             <xsl:if test="po/bill_to_address/line2 != ''">
                                 <xsl:value-of select="po/bill_to_address/line2"/><br />
                             </xsl:if>
@@ -127,7 +134,14 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                 <xsl:for-each select="notification_data/letter_texts">
                     <table cellspacing="0" cellpadding="5" border="0">
                         <tr>
-                            <td><xsl:call-template name="dear" /> <!-- mailReason.xsl --></td>
+                            <td>
+                                <xsl:call-template name="SLSP-multilingual">
+                                    <xsl:with-param name="en" select="'Hello'"/>
+                                    <xsl:with-param name="fr" select="'Bonjour'"/>
+                                    <xsl:with-param name="it" select="'Buongiorno,'"/>
+                                    <xsl:with-param name="de" select="'Guten Tag'"/>
+                                </xsl:call-template>
+                            </td>
                         </tr>
                         
                         <tr>
