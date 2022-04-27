@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!-- SLSP-customized 12/2021 - added onerror attribute to logo so it displays in user attachment preview -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -19,7 +19,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		<td colspan="2">
 		<div id="mailHeader">
               <div id="logoContainer" class="alignLeft">
-                    <img src="cid:logo.jpg" alt="logo"/>
+                    <img onerror="this.src='/infra/branding/logo/logo-email.png'" src="cid:logo.jpg" alt="logo"/>
                </div>
 		</div>
 		</td>

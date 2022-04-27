@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 08/2021 -->
+<!-- SLSP WG: Letters version 08/2021-->
 <!-- 10/2021 - added template userAccount; removed labels for author and imprint -->
+<!-- 01/2022 - SLSP-multilingual option for IZ with disabled languages -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- Source code from https://github.com/uio-library/alma-letters-ubo -->
 	<!--
 	Template to make it easier to insert multilingual text.
+	*** Important ***: If the IZ has disabled a language in Alma UI, the appropriate param and <when> row need to be commented here as well (see SUPPORT-14329)
 	Depends on: (none)
 	When calling the template, the fr param is using CDATA to avoid error when single quote is in the text, i.e. n'ont
 	USAGE:
