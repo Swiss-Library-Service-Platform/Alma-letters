@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP customized, 03/2021-->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<!-- SLSP-customized
+    05/2022 Added padding for Post envelopes -->
+<xsl:stylesheet version="1.0"
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+    <!-- Adapted by SLSP - delivery address on right
+        - Fixed padding for envelopes with window
+        - Delivery address bold
+        - Sender address smaller font -->
     <xsl:template name="senderReceiver">
         <table cellspacing="0" cellpadding="5" border="0" width="100%">
             <tr>
-                <td width="50%" align="left">
+                <td width="50%" align="left" style="padding: 10mm 10mm 10mm 10mm;">
                     <xsl:for-each select="notification_data/organization_unit">
                         <table>
                             <xsl:attribute name="style">
+                                font-size: 80%;
                                 <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                             </xsl:attribute>
                             <!-- <tr><td><xsl:value-of select="name"/></td></tr> -->
@@ -34,11 +41,12 @@
                         </table>
                     </xsl:for-each>
                 </td>
-                <td width="50%"  align="right">
+                <td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm; vertical-align: top;">
                     <xsl:choose>
                         <xsl:when test="notification_data/user_for_printing">
                             <table cellspacing="0" cellpadding="0" border="0">
                                 <xsl:attribute name="style">
+                                    font-weight: 600;
                                     <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                                 </xsl:attribute>
                                 <xsl:choose>
@@ -94,6 +102,7 @@
                             <xsl:for-each select="notification_data/receivers/receiver/user">
                                 <table>
                                     <xsl:attribute name="style">
+                                        font-weight: 600;
                                         <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                                     </xsl:attribute>
                                     <xsl:choose>
@@ -144,10 +153,7 @@
                                     </td></tr>
                                 </table>
                             </xsl:for-each>
-
                         </xsl:when>
-                        <xsl:otherwise>
-                        </xsl:otherwise>
                     </xsl:choose>
                 </td>
             </tr>
@@ -155,15 +161,19 @@
         <br/>
         <br/>
     </xsl:template>
-
+    <!-- Adapted by SLSP - delivery address on left
+        - Fixed padding for envelopes with window
+        - Delivery address bold
+        - Sender address smaller font -->
     <xsl:template name="senderReceiver-reversed">
         <table cellspacing="0" cellpadding="5" border="0" width="100%">
             <tr>
-                <td width="50%"  align="left">
+                <td width="50%"  align="left" style="padding: 10mm 10mm 10mm 10mm; vertical-align: top;">
                     <xsl:choose>
                         <xsl:when test="notification_data/user_for_printing">
                             <table cellspacing="0" cellpadding="0" border="0">
                                 <xsl:attribute name="style">
+                                    font-weight: 600;
                                     <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                                 </xsl:attribute>
                                 <xsl:choose>
@@ -219,6 +229,7 @@
                             <xsl:for-each select="notification_data/receivers/receiver/user">
                                 <table>
                                     <xsl:attribute name="style">
+                                        font-weight: 600;
                                         <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                                     </xsl:attribute>
                                     <xsl:choose>
@@ -269,16 +280,14 @@
                                     </td></tr>
                                 </table>
                             </xsl:for-each>
-
                         </xsl:when>
-                        <xsl:otherwise>
-                        </xsl:otherwise>
                     </xsl:choose>
                 </td>
-                <td width="50%" align="right">
+                <td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm;">
                     <xsl:for-each select="notification_data/organization_unit">
                         <table>
                             <xsl:attribute name="style">
+                                font-size: 80%;
                                 <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                             </xsl:attribute>
                             <!-- <tr><td><xsl:value-of select="name"/></td></tr> -->
