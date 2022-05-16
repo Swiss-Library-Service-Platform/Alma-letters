@@ -2,7 +2,7 @@
 <!-- SLSP WG: Letters version 08/2021
 10/2021	added template userAccount; removed labels for author and imprint
 01/2022	SLSP-multilingual option for IZ with disabled languages
-05/2022	added templates for extraction of volume and request note in Rapido request slip
+05/2022	added templates for extraction of volume, pages and request note in Resource Request Slip Letter
 -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -72,12 +72,13 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- Template to extract request note from Rapido request
 	Usage:
-		<xsl:variable name="requestVolume">
-			<xsl:call-template name="SLSP-Rapido-extract-volume" />
+		<xsl:variable name="requestNote">
+			<xsl:call-template name="SLSP-Rapido-request-note" />
 		</xsl:variable>
-		<xsl:if test="$requestVolume != ''">
+		<xsl:if test="$requestNote != ''">
 		...
 		</xsl:if>
+		
 -->
 <xsl:template name="SLSP-Rapido-request-note">
 	<xsl:choose>
@@ -92,10 +93,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- Template to extract volume from the encoded XML metadata provided in letter XML
 	Usage: 
-		<xsl:variable name="requestNote">
-			<xsl:call-template name="SLSP-Rapido-request-note" />
+		<xsl:variable name="requestVolume">
+			<xsl:call-template name="SLSP-Rapido-extract-volume" />
 		</xsl:variable>
-		<xsl:if test="$requestNote != ''">
+		<xsl:if test="$requestVolume != ''">
 		...
 		</xsl:if>
 -->
@@ -112,6 +113,30 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		</xsl:choose>
 	</xsl:variable>
 	<xsl:value-of select="substring-before($user-volume-temp, '&lt;/dc:volume')"/>
+</xsl:template>
+
+<!-- Template to extract pages from the encoded XML metadata provided in letter XML
+	Usage: 
+		<xsl:variable name="requestPages">
+			<xsl:call-template name="SLSP-Rapido-extract-pages" />
+		</xsl:variable>
+		<xsl:if test="$requestPages != ''">
+		...
+		</xsl:if>
+-->
+<xsl:template name="SLSP-Rapido-extract-pages">
+	<!-- Loading of the righthand part of metadata field based on XML layout -->
+	<xsl:variable name="user-pages-temp">
+		<xsl:choose>
+			<xsl:when test="/notification_data/incoming_request/request_metadata != ''">
+				<xsl:value-of select="substring-after(/notification_data/incoming_request/request_metadata, 'dc:rlterms_pages&gt;')"/>
+			</xsl:when>
+			<xsl:when test="/notification_data/resource_sharing_request/request_metadata != ''">
+				<xsl:value-of select="substring-after(/notification_data/resource_sharing_request/request_metadata, 'dc:rlterms_pages&gt;')"/>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:variable>
+	<xsl:value-of select="substring-before($user-pages-temp, '&lt;/dc:rlterms_pages')"/>
 </xsl:template>
 
 <xsl:template name="recordTitle">
