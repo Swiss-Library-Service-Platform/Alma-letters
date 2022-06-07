@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 12/2021 -->
+<!-- SLSP WG: Letters version 12/2021
+		01/2022 - Fixed FR version of librariesURL template -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle
 		style - generalStyle, bodyStyleCss
@@ -24,7 +25,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 		</xsl:attribute>
 		<xsl:call-template name="SLSP-multilingual">
 			<xsl:with-param name="en" select="'Further information on library location'"/>
-			<xsl:with-param name="fr" select="'Plus des informations sur la localisation des bibliothèques'"/>
+			<xsl:with-param name="fr"><![CDATA[Plus d’informations sur la localisation des bibliothèques]]></xsl:with-param>
 			<xsl:with-param name="it" select="'Ulteriori informazioni sulla biblioteca'"/>
 			<xsl:with-param name="de" select="'Weitere Informationen zum Bibliotheksstandort'"/>
 		</xsl:call-template>

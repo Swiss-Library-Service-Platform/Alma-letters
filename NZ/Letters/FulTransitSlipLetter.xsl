@@ -2,7 +2,8 @@
 <!-- SLSP WG: Letters version 09/2021;
         10/2021 fixed printUserAnonymize
         11/2021 smaller margin to fix issue on slip printers (SUPPORT-13074)
-        11/2021 added Barcode edu-ID -->
+        11/2021 added Barcode edu-ID
+        05/2022 synced header adaptation -->
 <!-- Dependance:
         recordTitle - SLSP-multilingual
         style - generalStyle, bodyStyleCss
@@ -20,7 +21,7 @@ xmlns:str="http://exslt.org/strings">
     <!-- insert transit header without logo-->
     <xsl:template name="head-letterName-only">
         <p style="background-color:#e9e9e9; width:100%; height:30px; line-height: 30px; margin: 0 15 5 0;" id="head-letter-name">
-            <span style="font-size: 170%; vertical-align: middle; text-shadow:1px 1px 1px #fff;">@@letterName@@</span>
+            <span style="font-size: 170%; vertical-align: middle; text-shadow:1px 1px 1px #fff;"><xsl:value-of select="/notification_data/general_data/subject"/></span>
         </p>
     </xsl:template>
 

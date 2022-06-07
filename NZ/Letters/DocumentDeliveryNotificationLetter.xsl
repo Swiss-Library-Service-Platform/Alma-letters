@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 05/2022 -->
+<!-- SLSP WG: Letters version 05/2022
+      05/2022 Rapido: request metadata, info about providing library, max views message -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount
 		style - generalStyle, bodyStyleCss
@@ -51,6 +52,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		</a>
 	</xsl:template>
 
+  <!-- Template to extract chapter from the encoded XML metadata provided in letter -->
+  <xsl:template name="extract-chapter">
+    <xsl:variable name="user-chapter-temp" select="substring-after(/notification_data/resource_sharing_request/request_metadata, 'dc:rlterms_chapter_title&gt;')"/>
+    <xsl:value-of select="substring-before($user-chapter-temp, '&lt;/dc:rlterms_chapter_title')"/>
+  </xsl:template>
+
   <xsl:template match="/">
     <html>
       <head>
@@ -82,41 +89,113 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
           		<tr>
                 <td>@@your_request@@<br/><br />
                   <xsl:call-template name="recordTitle"/>
-                  <xsl:if test="notification_data/phys_item_display/issue_level_description !='' and notification_data/phys_item_display/issue_level_description != 'Vol.' and notification_data/phys_item_display/issue_level_description != '_'">
-                    <xsl:call-template name="SLSP-multilingual">
-                      <xsl:with-param name="en" select="'Description'"/>
-                      <xsl:with-param name="fr" select="'Description'"/>
-                      <xsl:with-param name="it" select="'Descrizione'"/>
-                      <xsl:with-param name="de" select="'Beschreibung'"/>
-                    </xsl:call-template>: <xsl:value-of select="notification_data/phys_item_display/issue_level_description"/><br />
-                  </xsl:if>
-                  <xsl:if test="notification_data/request/chapter_article_title !=''">
-                    <xsl:call-template name="SLSP-multilingual">
-                      <xsl:with-param name="en" select="'Article / Chapter'"/>
-                      <xsl:with-param name="fr" select="'Article / Chapitre'"/>
-                      <xsl:with-param name="it" select="'Articolo / Capitolo'"/>
-                      <xsl:with-param name="de" select="'Artikel / Kapitel'"/>
-                    </xsl:call-template>: <xsl:value-of select="notification_data/request/chapter_article_title" /><br />
-                  </xsl:if>
-                  <xsl:if test="notification_data/request/pages !=''">
-                    <xsl:call-template name="SLSP-multilingual">
-                      <xsl:with-param name="en" select="'Pages'"/>
-                      <xsl:with-param name="fr" select="'Pages'"/>
-                      <xsl:with-param name="it" select="'Pagine'"/>
-                      <xsl:with-param name="de" select="'Seiten'"/>
-                    </xsl:call-template>: <xsl:value-of select="/notification_data/request/pages" /><br />
-                  </xsl:if>
-                  <xsl:if test="notification_data/request/note !=''">
-                    <xsl:call-template name="SLSP-multilingual">
-                      <xsl:with-param name="en" select="'Request note'"/>
-                      <xsl:with-param name="fr" select="'Note de demande	'"/>
-                      <xsl:with-param name="it" select="'Nota di richiesta'"/>
-                      <xsl:with-param name="de" select="'Bestell-Notiz'"/>
-                    </xsl:call-template>: <xsl:value-of select="/notification_data/request/note" /><br />
-                  </xsl:if>
-                  <!-- <xsl:value-of select="notification_data/phys_item_display/author"/>: <xsl:value-of select="notification_data/phys_item_display/title"/> (Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/>)<br/> -->
+                  <xsl:choose>
+                    <!-- Alma DocDel request -->
+                    <xsl:when test="notification_data/request != ''">
+                      <xsl:if test="notification_data/phys_item_display/issue_level_description !='' and notification_data/phys_item_display/issue_level_description != 'Vol.' and notification_data/phys_item_display/issue_level_description != '_'">
+                        <xsl:call-template name="SLSP-multilingual">
+                          <xsl:with-param name="en" select="'Description'"/>
+                          <xsl:with-param name="fr" select="'Description'"/>
+                          <xsl:with-param name="it" select="'Descrizione'"/>
+                          <xsl:with-param name="de" select="'Beschreibung'"/>
+                        </xsl:call-template>: <xsl:value-of select="notification_data/phys_item_display/issue_level_description"/><br />
+                      </xsl:if>
+                      <xsl:if test="notification_data/request/chapter_article_title !=''">
+                        <xsl:call-template name="SLSP-multilingual">
+                          <xsl:with-param name="en" select="'Article / Chapter'"/>
+                          <xsl:with-param name="fr" select="'Article / Chapitre'"/>
+                          <xsl:with-param name="it" select="'Articolo / Capitolo'"/>
+                          <xsl:with-param name="de" select="'Artikel / Kapitel'"/>
+                        </xsl:call-template>: <xsl:value-of select="notification_data/request/chapter_article_title" /><br />
+                      </xsl:if>
+                      <xsl:if test="notification_data/request/pages !=''">
+                        <xsl:call-template name="SLSP-multilingual">
+                          <xsl:with-param name="en" select="'Pages'"/>
+                          <xsl:with-param name="fr" select="'Pages'"/>
+                          <xsl:with-param name="it" select="'Pagine'"/>
+                          <xsl:with-param name="de" select="'Seiten'"/>
+                        </xsl:call-template>: <xsl:value-of select="/notification_data/request/pages" /><br />
+                      </xsl:if>
+                      <xsl:if test="notification_data/request/note !=''">
+                        <xsl:call-template name="SLSP-multilingual">
+                          <xsl:with-param name="en" select="'Request note'"/>
+                          <xsl:with-param name="fr" select="'Note de demande	'"/>
+                          <xsl:with-param name="it" select="'Nota di richiesta'"/>
+                          <xsl:with-param name="de" select="'Bestell-Notiz'"/>
+                        </xsl:call-template>: <xsl:value-of select="/notification_data/request/note" /><br />
+                      </xsl:if>
+                      <!-- <xsl:value-of select="notification_data/phys_item_display/author"/>: <xsl:value-of select="notification_data/phys_item_display/title"/> (Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/>)<br/> -->
+                    </xsl:when>
+                    <!-- Rapido DocDel request -->
+                    <xsl:when test="notification_data/resource_sharing_request != ''">
+                      <xsl:variable name="requestVolume">
+                        <xsl:call-template name="SLSP-Rapido-extract-volume" />
+                      </xsl:variable>
+                      <xsl:variable name="user-chapter">
+                        <xsl:call-template name="extract-chapter" />
+                      </xsl:variable>
+                      <xsl:variable name="requestPages">
+                        <xsl:call-template name="SLSP-Rapido-extract-pages" />
+                      </xsl:variable>
+
+                      <xsl:if test="$requestVolume !=''">
+                        <xsl:call-template name="SLSP-multilingual">
+                          <xsl:with-param name="en" select="'Description'"/>
+                          <xsl:with-param name="fr" select="'Description'"/>
+                          <xsl:with-param name="it" select="'Descrizione'"/>
+                          <xsl:with-param name="de" select="'Beschreibung'"/>
+                        </xsl:call-template>: Vol. <xsl:value-of select="$requestVolume"/><br />
+                      </xsl:if>
+
+                      <xsl:if test="$user-chapter !=''">
+                        <xsl:call-template name="SLSP-multilingual">
+                          <xsl:with-param name="en" select="'Article / Chapter'"/>
+                          <xsl:with-param name="fr" select="'Article / Chapitre'"/>
+                          <xsl:with-param name="it" select="'Articolo / Capitolo'"/>
+                          <xsl:with-param name="de" select="'Artikel / Kapitel'"/>
+                        </xsl:call-template>: <xsl:value-of select="$user-chapter" /><br />
+                      </xsl:if>
+
+                      <xsl:if test="$requestPages !=''">
+                        <xsl:call-template name="SLSP-multilingual">
+                          <xsl:with-param name="en" select="'Pages'"/>
+                          <xsl:with-param name="fr" select="'Pages'"/>
+                          <xsl:with-param name="it" select="'Pagine'"/>
+                          <xsl:with-param name="de" select="'Seiten'"/>
+                        </xsl:call-template>: <xsl:value-of select="$requestPages" /><br />
+                      </xsl:if>
+
+                      <xsl:if test="notification_data/resource_sharing_request/note !=''">
+                        <xsl:call-template name="SLSP-multilingual">
+                          <xsl:with-param name="en" select="'Request note'"/>
+                          <xsl:with-param name="fr" select="'Note de demande	'"/>
+                          <xsl:with-param name="it" select="'Nota di richiesta'"/>
+                          <xsl:with-param name="de" select="'Bestell-Notiz'"/>
+                        </xsl:call-template>: <xsl:value-of select="/notification_data/resource_sharing_request/note" /><br />
+                      </xsl:if>
+                    </xsl:when>
+                  </xsl:choose>
                 </td> 
               </tr>
+              <!-- RapidILL library that scanned the item -->
+              <xsl:if test="notification_data/resource_sharing_request != '' and notification_data/resource_sharing_request/self_ownership = 'false'">
+              <tr>
+                <td>
+                    <xsl:call-template name="SLSP-multilingual">
+                        <xsl:with-param name="en" select="'The digital copy is provided by'"/>
+                        <xsl:with-param name="fr" select="'La version numérique est fournie par '"/>
+                        <xsl:with-param name="it" select="'La versione digitale è fornita da'"/>
+                        <xsl:with-param name="de" select="'Die digitale Version wird bereitgestellt von'"/>
+                    </xsl:call-template>: <xsl:value-of select="notification_data/resource_sharing_request/additional_lender_information"/>
+                    (<xsl:call-template name="SLSP-multilingual">
+                        <xsl:with-param name="en" select="'Please note that digitization fees, if applicable, will be charged by this library.'"/>
+                        <xsl:with-param name="fr" select="'Veuillez noter que les frais de numérisation, le cas échéant, seront facturés par cette bibliothèque.'"/>
+                        <xsl:with-param name="it" select="'Si prega di notare che i costi di digitalizzazione, se applicabili, saranno addebitati da questa biblioteca.'"/>
+                        <xsl:with-param name="de" select="'Bitte beachten Sie, dass die Bibliothek ggf. Digitalisierungsgebühren erhebt.'"/>
+                    </xsl:call-template>)
+                </td>
+              </tr>
+              </xsl:if>
               <tr>
                 <td><br />@@to_see_the_resource@@</td>
               </tr>
@@ -126,11 +205,20 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <tr>
                 <td>@@for_saml_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_saml" /></xsl:attribute>@@click_here@@</a></td>
               </tr>
-              <tr>
-                <xsl:if test="string-length(notification_data/request/document_delivery_max_num_of_view)!=0">
-                  <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/request/document_delivery_max_num_of_views"/>.</td>
-                </xsl:if>
-              </tr>
+              <xsl:choose>
+                  <!-- non-rapido request -->
+                  <xsl:when test="notification_data/request/document_delivery_max_num_of_view != ''">
+                    <tr>
+                      <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/request/document_delivery_max_num_of_views"/>.</td>
+                    </tr>
+                  </xsl:when>
+                  <!-- Rapido request -->
+                  <xsl:when test="notification_data/borrowing_document_delivery_max_num_of_views != ''">
+                    <tr>
+                      <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/borrowing_document_delivery_max_num_of_views"/>.</td>
+                    </tr>
+                  </xsl:when>
+              </xsl:choose>
               <tr>
                 <td>
                   <br />
