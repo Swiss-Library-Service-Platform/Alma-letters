@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP Customized 11/2021
-		01/2022 - Added user Barcode (SUPPORT-8376)
-		01/2022 - Fix for item non-readable barcodes with 11 chars (SUPPORT-5303)
-		05/2022 Added rapido request note, rapido volume, rapido pages
-	Dependance:
-		header - head
-		style - generalStyle
-		recordTitle - recordTitle, SLSP-multilingual, SLSP-Rapido-request-note, SLSP-Rapido-extract-volume, SLSP-Rapido-extract-pages -->
+<!-- SLSP Customized 11/2021 -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:include href="header.xsl" />
@@ -15,28 +8,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:include href="footer.xsl" />
 	<xsl:include href="style.xsl" />
 	<xsl:include href="recordTitle.xsl" />
-
-	<!-- Prints barcode from the node phys_item_display. Based on the owning library of the item chooses different printing method.
-	Workaround for issue with non-readable barcodes. https://slsp.atlassian.net/browse/SUPPORT-5303 -->
-	<xsl:template name="printBarcode">
-		<xsl:choose>
-			<xsl:when test="/notification_data/phys_item_display/library_code = 'E32'"> <!-- only items from Schweizerisches Nationalmuseum -->
-				<xsl:variable name="itemBarcode" select="/notification_data/phys_item_display/barcode"/>
-				<xsl:choose>
-					<xsl:when test="string-length($itemBarcode) = 11 and contains($itemBarcode, '-')"> <!-- use font for printing -->
-						<span style="font-family:Libre Barcode 39 Extended Text; font-size:32pt;">*<xsl:value-of select="$itemBarcode"/>*</span>
-					</xsl:when>
-					<xsl:otherwise> <!-- use Ex Libris barcode image -->
-						<img src="cid:item_id_barcode.png" alt="Item Barcode"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:when>
-			<xsl:otherwise> <!-- use Ex Libris barcode image -->
-				<img src="cid:item_id_barcode.png" alt="Item Barcode"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
 	<xsl:template match="/">
 		<html>
 			<xsl:if test="notification_data/languages/string">
@@ -48,12 +19,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<title>
 					<xsl:value-of select="notification_data/general_data/subject"/>
 				</title>
-				<!-- Linking Google Open License font for barcodes. Works only sometimes when seen in browser. In most cases needs to be installed on the computer. -->
-				<xsl:element name="link">
-					<xsl:attribute name="href">https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Extended+Text</xsl:attribute>
-					<xsl:attribute name="rel">stylesheet</xsl:attribute>
-					<xsl:attribute name="type">text/css</xsl:attribute>
-				</xsl:element>
 				<xsl:call-template name="generalStyle" />
 			</head>
 			<body>
@@ -84,20 +49,15 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							</xsl:if>
 							<tr>
 								<td>
-									<strong>@@request_id@@:</strong><br />
+									<strong>@@request_id@@: </strong>
 									<img src="cid:request_id_barcode.png" alt="Request Barcode"/>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									
 								</td>
 							</tr>
 							<xsl:if  test="notification_data/request/selected_inventory_type='ITEM'" >
 								<tr>
-									<td colspan="2">
-										<strong>@@item_barcode@@:</strong><br />
-										<xsl:call-template name="printBarcode" />
+									<td>
+										<strong>@@item_barcode@@: </strong>
+										<img src="cid:item_id_barcode.png" alt="Item Barcode"/>
 									</td>
 								</tr>
 							</xsl:if>
@@ -113,42 +73,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								<tr>
 									<td>
 										<strong>@@requested_for@@: </strong>
-										<xsl:value-of select="notification_data/user_for_printing/name"/><br />
-										<!-- set the barcode values in variables -->
-										<!-- set the Barcode NZ, if there are more then only first one is returned -->
-										<xsl:variable name="NZ_barcode">
-											<xsl:value-of select="/notification_data/user_for_printing/identifiers/code_value[code='02']/value"/>
-										</xsl:variable>
-										<!-- set the Barcode edu-ID, if there are more then only first one is returned -->
-										<xsl:variable name="edu-id_barcode">
-											<xsl:value-of select="/notification_data/user_for_printing/identifiers/code_value[code='01']/value"/>
-										</xsl:variable>
-										<!-- set the Barcode IZ, if there are more then only first one is returned -->
-										<xsl:variable name="IZ_barcode">
-											<xsl:value-of select="/notification_data/user_for_printing/identifiers/code_value[code='03']/value"/>
-										</xsl:variable>
-										<!-- set the barcode values in variables -->
-
-										<strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
-											<xsl:with-param name="en" select="'User ID'"/>
-											<xsl:with-param name="fr" select="'ID utilisateur'"/>
-											<xsl:with-param name="it" select="'ID utente'"/>
-											<xsl:with-param name="de" select="'Benutzer-ID'"/>
-										</xsl:call-template>: </strong>
-										<xsl:choose>
-											<xsl:when test="$edu-id_barcode != ''">
-												<xsl:value-of select="$edu-id_barcode"/><br />
-											</xsl:when>
-											<xsl:when test="$NZ_barcode != ''">
-												<xsl:value-of select="$NZ_barcode"/><br />
-											</xsl:when>
-											<xsl:when test="$IZ_barcode != ''">
-												<xsl:value-of select="$IZ_barcode"/><br />
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:value-of select="/notification_data/user_for_printing/identifiers/code_value[code='Primary Identifier']/value"/>
-											</xsl:otherwise>
-										</xsl:choose>
+										<xsl:value-of select="notification_data/user_for_printing/name"/>
 									</td>
 								</tr>
 							</xsl:if>
@@ -179,7 +104,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								<td>@@imprint@@: <xsl:value-of select="notification_data/phys_item_display/imprint"/></td>
 								</tr>
 							</xsl:if> -->
-							<!-- DBL (4. 6. 2021): Added Series field to better localize norms -->
+							<!-- DBL (4. 6. 2021): Added Series field to better localize norms 
+								Reused Bcc for Series label -->
 							<xsl:if test="notification_data/request/record_display_section/series_small != ''">
 								<tr>
 									<td>
@@ -188,46 +114,15 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 											<xsl:with-param name="fr" select="'Collection'"/>
 											<xsl:with-param name="it" select="'Serie'"/>
 											<xsl:with-param name="de" select="'Serie'"/>
-										</xsl:call-template>: </strong><xsl:value-of select="notification_data/request/record_display_section/series_small"/>
+										</xsl:call-template>: </strong>
+										<xsl:for-each select="notification_data/request/record_display_section/series_small_list/string">
+											<xsl:value-of select="."/>;
+										</xsl:for-each>
 									</td>
 								</tr>
 							</xsl:if>
 							<!-- DBL -->
-							<!-- SLSP Add volume from Rapido request if available -->
-							<xsl:variable name="requestVolume">
-								<xsl:call-template name="SLSP-Rapido-extract-volume" />
-							</xsl:variable>
-							<xsl:if test="$requestVolume != ''">
-								<tr>
-									<td colspan="3">
-										<strong>
-											<xsl:call-template name="SLSP-multilingual">
-												<xsl:with-param name="en" select="'Volume'"/>
-												<xsl:with-param name="fr" select="'Volume'"/>
-												<xsl:with-param name="it" select="'Volume'"/>
-												<xsl:with-param name="de" select="'Band'"/>
-											</xsl:call-template>:
-										</strong><xsl:value-of select="$requestVolume"/>
-									</td>
-								</tr>
-							</xsl:if>
-							<!-- SLSP Add pages from Rapido request if available -->
-							<xsl:variable name="requestPages">
-								<xsl:call-template name="SLSP-Rapido-extract-pages" />
-							</xsl:variable>
-							<xsl:if test="$requestPages != ''">
-								<tr>
-									<td colspan="3">
-										<strong>
-											<xsl:call-template name="SLSP-multilingual">
-												<xsl:with-param name="en" select="'Pages'"/>
-												<xsl:with-param name="fr" select="'Pages'"/>
-												<xsl:with-param name="it" select="'Pagine'"/>
-												<xsl:with-param name="de" select="'Seiten'"/>
-											</xsl:call-template>: </strong><xsl:value-of select="$requestPages"/>
-									</td>
-								</tr>
-							</xsl:if>
+							<strong></strong>
 							<tr>
 								<td>
 									<h2>
@@ -255,7 +150,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<xsl:if  test="notification_data/phys_item_display/shelving_location/string" >
 								<xsl:if  test="notification_data/request/selected_inventory_type='ITEM'" >
 									<tr>
-										<td>
+										<td colspan="3">
 											<strong>@@shelving_location_for_item@@: </strong>
 											<xsl:for-each select="notification_data/phys_item_display/shelving_location/string">
 												<xsl:value-of select="."/>
@@ -266,7 +161,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								</xsl:if>
 								<xsl:if  test="notification_data/request/selected_inventory_type='HOLDING'" >
 									<tr>
-										<td>
+										<td colspan="3">
 											<strong>@@shelving_locations_for_holding@@: </strong>
 											<xsl:for-each select="notification_data/phys_item_display/shelving_location/string">
 												<xsl:value-of select="."/>
@@ -277,7 +172,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								</xsl:if>
 								<xsl:if  test="notification_data/request/selected_inventory_type='VIRTUAL_HOLDING'" >
 									<tr>
-										<td>
+										<td colspan="3">
 											<strong>@@shelving_locations_for_holding@@: </strong>
 											<xsl:for-each select="notification_data/phys_item_display/shelving_location/string">
 												<xsl:value-of select="."/>
@@ -343,14 +238,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 									</td>
 								</tr>
 							</xsl:if>
-							<!-- SLSP: Add request note from the Rapido request or normal request -->
-							<xsl:variable name="requestNote">
-								<xsl:call-template name="SLSP-Rapido-request-note" />
-							</xsl:variable>
-							<xsl:if test="$requestNote != ''">
+							<xsl:if test="notification_data/request/note != ''">
 								<tr>
-									<td colspan="3">
-										<strong>@@request_note@@: </strong><xsl:value-of select="$requestNote"/>
+									<td>
+										<strong>@@request_note@@:</strong>
+										<xsl:value-of select="notification_data/request/note"/>
 									</td>
 								</tr>
 							</xsl:if>
@@ -388,6 +280,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 												<xsl:with-param name="it" select="'Segnatura'"/>
 												<xsl:with-param name="de" select="'Signatur'"/>
 											</xsl:call-template>
+											(@@inventory_number@@)
 										</th>
 										<th>
 											<xsl:call-template name="SLSP-multilingual">
@@ -397,7 +290,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 												<xsl:with-param name="de" select="'Bibliothek'"/>
 											</xsl:call-template>
 										</th>
-										<th>@@location@@</th>
+										<th>@@location@@ (@@shelving_location_for_item@@)</th>
 										<th>
 											<xsl:call-template name="SLSP-multilingual">
 												<xsl:with-param name="en" select="'Item policy'"/>
@@ -424,12 +317,18 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 											</td>
 											<td>
 												<xsl:value-of select="call_number"/>
+												<xsl:if test="inventory_number != ''">
+													(<xsl:value-of select="inventory_number"/>)
+												</xsl:if>
 											</td>
 											<td>
 												<xsl:value-of select="library_name"/>
 											</td>
 											<td>
 												<xsl:value-of select="location_name"/>
+												<xsl:if test="shelving_location != ''">
+													(<xsl:value-of select="shelving_location"/>)
+												</xsl:if>
 											</td>
 											<td>
 												<xsl:value-of select="item_policy"/>
@@ -447,7 +346,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<table>
 					<tr>
 						<td>
-							<br /><xsl:value-of select="notification_data/organization_unit/name" />
+							<xsl:value-of select="notification_data/organization_unit/name" />
 						</td>
 					</tr>
 					<tr>

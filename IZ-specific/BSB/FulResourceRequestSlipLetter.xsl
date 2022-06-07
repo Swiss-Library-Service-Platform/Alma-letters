@@ -80,6 +80,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						</tr>
 
 						</xsl:if>
+						
+						<xsl:if test="notification_data/proxy_requester/name">
+							<tr>
+								<td><strong>@@proxy_requester@@: </strong><xsl:value-of select="notification_data/proxy_requester/name"/></td>
+							</tr>
+						</xsl:if>
 
 						<tr>
 							<td><xsl:call-template name="recordTitle" />
@@ -198,13 +204,13 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							</tr>
 							</xsl:if>
 						</xsl:if>
+
 						<tr>
 							<td><strong>@@move_to_library@@: </strong><xsl:value-of select="notification_data/destination"/></td>
 						</tr>
 						<tr>
 							<td><strong>@@request_type@@: </strong><xsl:value-of select="notification_data/request_type"/></td>
 						</tr>
-
 						<xsl:if test="notification_data/request/system_notes != ''">
 							<tr>
 							<td><strong>@@system_notes@@:</strong><xsl:value-of select="notification_data/request/system_notes"/></td>
@@ -224,16 +230,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					</table>
 				</div>
 			</div>
-
-
-
-
-<!-- 	<xsl:call-template name="lastFooter" /> --> <!-- footer.xsl -->
-
-
-
-
-
+	<!-- <xsl:call-template name="lastFooter" />  --><!-- footer.xsl -->
 </body>
 </html>
 

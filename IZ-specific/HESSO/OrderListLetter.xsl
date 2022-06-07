@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP customized -->
+<!-- SLSP customized 11/2021
+    Dependance:
+        recordTitle - SLSP-multilingual
+        style - bodyStyleCss, generalStyle, mainTableStyleCss
+        header - head
+        senderReceiver - senderReceiver
+         -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -8,32 +14,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:include href="mailReason.xsl" />
 <xsl:include href="footer.xsl" />
 <xsl:include href="style.xsl" />
-
-<!-- Source code from https://github.com/uio-library/alma-letters-ubo -->
-	<!--
-	Template to make it easier to insert multilingual text.
-	Depends on: (none)
-	USAGE:
-		<xsl:call-template name="multilingual">
-			<xsl:with-param name="en" select="'Testing multilingual text.'"/>
-			<xsl:with-param name="fr" select="'Test de texte multilingue.'"/>
-			<xsl:with-param name="it" select="'Test di testi multilingue.'"/>
-			<xsl:with-param name="de" select="'Testen von mehrsprachigem Text.'"/>
-		</xsl:call-template>
-	-->
-	<xsl:template name="multilingual">
-	<xsl:param name="en" />
-	<xsl:param name="fr" />
-	<xsl:param name="de" />
-	<xsl:param name="it" />
-	<xsl:choose>
-		<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'fr'"><xsl:value-of select="$fr"/></xsl:when>
-		<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'en'"><xsl:value-of select="$en"/></xsl:when>
-		<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'it'"><xsl:value-of select="$it"/></xsl:when>
-		<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'de'"><xsl:value-of select="$de"/></xsl:when>
-		<xsl:otherwise><xsl:value-of select="$en"/></xsl:otherwise>
-	</xsl:choose>
-	</xsl:template>
+<xsl:include href="recordTitle.xsl" />
 
 <xsl:template match="/">
 	<html>
@@ -61,13 +42,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					</tr>
                     <tr>
                         <td>
-                            <strong><xsl:call-template name="multilingual">
+                            <strong><xsl:call-template name="SLSP-multilingual">
                                 <xsl:with-param name="en" select="'PO number'"/>
                                 <xsl:with-param name="fr" select="'Numéro de commande'"/>
                                 <xsl:with-param name="it" select="'Numero PO'"/>
                                 <xsl:with-param name="de" select="'Bestellnummer'"/>
-                            </xsl:call-template>:</strong>
-                            <xsl:value-of select="po/number"/>
+                            </xsl:call-template>: </strong><xsl:value-of select="po/number"/>
                         </td>
                     </tr>
                     <!-- <tr>
@@ -161,7 +141,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<th>
                             @@po_line_number@@
                             /
-                            <xsl:call-template name="multilingual">
+                            <xsl:call-template name="SLSP-multilingual">
                                 <xsl:with-param name="en" select="'Fund'"/>
                                 <xsl:with-param name="fr" select="'Fonds'"/>
                                 <xsl:with-param name="it" select="'Fondo'"/>
@@ -200,7 +180,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         <td align="center">
                             <xsl:value-of select="total_quantity"/><br />
                             <xsl:if test="rush = 'true'">
-                                <strong><xsl:call-template name="multilingual">
+                                <strong><xsl:call-template name="SLSP-multilingual">
                                     <xsl:with-param name="en" select="'Rush order'"/>
                                     <xsl:with-param name="fr" select="'Commande urgente'"/>
                                     <xsl:with-param name="it" select="'Ordine urgente'"/>
