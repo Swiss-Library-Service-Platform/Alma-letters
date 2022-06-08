@@ -349,7 +349,7 @@
                 </td>
                 <!-- Sender -->
                 <td width="50%" align="left" valign="top" style="padding: 10mm 10mm 10mm 10mm;vertical-align: top;">
-                    <xsl:for-each select="/notification_data/item/owning_library_details">
+                    <xsl:for-each select="/notification_data/library">
                         <table>
                             <xsl:attribute name="style">
                                 font-size: 80%;
