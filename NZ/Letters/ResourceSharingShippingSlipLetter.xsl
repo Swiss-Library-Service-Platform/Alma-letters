@@ -5,7 +5,8 @@
 	05/2022 rapido: formatting as transit letter - address and logo shows up only for ILL and Personal delivery
 	05/2022 rapido: Added note to partner and author
 	05/2022 rapido: Added shipping cost for Personal Delivery
-	05/2022 rapido: Added notice for Reading room Pod-->
+	05/2022 rapido: Added notice for Reading room Pod
+	06/2022 rapido: fix receiver address country-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -127,6 +128,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:template name="senderReceiver-shippingSlip">
 	<table width="100%">
 		<tr>
+			<!-- Sender -->
 			<td width="50%" align="left" valign="top" style="padding: 10mm 10mm 10mm 10mm;">
 				<xsl:for-each select="/notification_data/item/owning_library_details">
 					<table>
@@ -150,8 +152,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<tr><td><xsl:value-of select="address5"/></td></tr>
 						</xsl:if>
 						<tr><td><xsl:value-of select="/notification_data/item/owning_library_details/postal_code"/>&#160;<xsl:value-of select="/notification_data/item/owning_library_details/city"/></td></tr>
-						<xsl:if test="country=''">
-							<tr><td>Switzerland</td></tr>
+						<xsl:if test="country != ''">
+							<tr><td><xsl:value-of select="country"/></td></tr>
 						</xsl:if>
 						<xsl:if test="string-length(phone)!=0">
 							<tr><td><xsl:value-of select="phone"/></td></tr>
@@ -162,6 +164,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					</table>
 				</xsl:for-each>
 			</td>
+			<!-- Receiver -->
 			<td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm; vertical-align: top;">
 				<table cellspacing="0" cellpadding="0" border="0">
 					<xsl:attribute name="style">
@@ -187,15 +190,20 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<xsl:if test="string-length(address5)!=0">
 							<tr><td><xsl:value-of select="address5"/></td></tr>
 						</xsl:if>
-						<tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr>
-						<xsl:choose>
-							<xsl:when test="country=''">
-								<tr><td>Switzerland</td></tr>
-							</xsl:when>
-							<xsl:otherwise>
-								<tr><td><xsl:value-of select="country"/></td></tr>
-							</xsl:otherwise>
-						</xsl:choose>
+						<xsl:if test="postal_code != '' or city != ''">
+							<tr><td>
+								<xsl:if test="postal_code != ''">
+									<xsl:value-of select="postal_code"/>
+								</xsl:if>
+								<xsl:if test="city != ''">
+									&#160;<xsl:value-of select="city"/>
+								</xsl:if>
+							</td></tr>
+						</xsl:if>
+						<!-- <tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr> -->
+						<xsl:if test="country != ''">
+							<tr><td><xsl:value-of select="country"/></td></tr>
+						</xsl:if>
 					</xsl:for-each>
 				</table>
 			</td>
@@ -208,7 +216,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:template name="senderReceiver-shippingSlip-reversed">
 	<table width="100%">
 		<tr>
-			<td width="50%" align="left" style="padding: 10mm 10mm 10mm 25mm;vertical-align: top;">
+			<!-- Receiver -->
+			<td width="50%" align="left" style="padding: 10mm 10mm 10mm 20mm;vertical-align: top;">
 				<table cellspacing="0" cellpadding="0" border="0">
 					<xsl:attribute name="style">
 						font-weight: 600;
@@ -232,18 +241,24 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<xsl:if test="string-length(address5)!=0">
 							<tr><td><xsl:value-of select="address5"/></td></tr>
 						</xsl:if>
-						<tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr>
-						<xsl:choose>
-							<xsl:when test="country=''">
-								<tr><td>Switzerland</td></tr>
-							</xsl:when>
-							<xsl:otherwise>
-								<tr><td><xsl:value-of select="country"/></td></tr>
-							</xsl:otherwise>
-						</xsl:choose>
+						<xsl:if test="postal_code != '' or city != ''">
+							<tr><td>
+								<xsl:if test="postal_code != ''">
+									<xsl:value-of select="postal_code"/>
+								</xsl:if>
+								<xsl:if test="city != ''">
+									&#160;<xsl:value-of select="city"/>
+								</xsl:if>
+							</td></tr>
+						</xsl:if>
+						<!-- <tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr> -->
+						<xsl:if test="country != ''">
+							<tr><td><xsl:value-of select="country"/></td></tr>
+						</xsl:if>
 					</xsl:for-each>
 				</table>
 			</td>
+			<!-- Sender -->
 			<td width="50%" align="left" valign="top" style="padding: 10mm 10mm 10mm 10mm;vertical-align: top;">
 				<xsl:for-each select="/notification_data/item/owning_library_details">
 					<table>
@@ -267,8 +282,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<tr><td><xsl:value-of select="address5"/></td></tr>
 						</xsl:if>
 						<tr><td><xsl:value-of select="/notification_data/item/owning_library_details/postal_code"/>&#160;<xsl:value-of select="/notification_data/item/owning_library_details/city"/></td></tr>
-						<xsl:if test="country=''">
-							<tr><td>Switzerland</td></tr>
+						<xsl:if test="country != ''">
+							<tr><td><xsl:value-of select="country"/></td></tr>
 						</xsl:if>
 						<xsl:if test="string-length(phone)!=0">
 							<tr><td><xsl:value-of select="phone"/></td></tr>
