@@ -2,7 +2,7 @@
 <!-- SLSP customized 02/2021
 		02/2022 - Added SLSP greeting; vertical fee info
 		07/2022 - added fee comment and owning library
-		07/2022 - fee info layout as bursar invoices-->
+		08/2022 - on column fee info layout -->
 <!-- Dependance: 
 		recordTitle - SLSP-multilingual
 		style - bodyStyleCss, generalStyle, mainTableStyleCss
@@ -39,7 +39,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			</xsl:attribute>
 
 				<xsl:call-template name="head" />
-				<xsl:call-template name="senderReceiver" />
+				<!-- <xsl:call-template name="senderReceiver" /> -->
 
 				<br />
 
@@ -76,40 +76,32 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<xsl:attribute name="style">
 					<xsl:call-template name="mainTableStyleCss" /> <!-- style.xsl -->
 				</xsl:attribute>
-					<tr>
-						<th align="left">@@fee_type@@</th>
-                        <th align="left">@@payment_date@@</th>
-                        <th align="right">@@paid_amount@@</th>
-					</tr>
 					<xsl:for-each select="notification_data/user_fines_fees_list/user_fines_fees">
 					<tr>
 						<td valign="top">
-							<xsl:value-of select="fine_owner/name"/><br />
-							<br />
 							<xsl:value-of select="fine_fee_type_display"/>
 							<xsl:if test="item_title != ''">
-								:
-								<xsl:value-of select="substring(item_title, 0, 100)" disable-output-escaping="yes"/>
+								<br/>
+								<strong><xsl:value-of select="substring(item_title, 0, 100)" disable-output-escaping="yes"/></strong>
 								<xsl:if test="string-length(item_title) > 100">...</xsl:if>
 							</xsl:if>
+							<br />
+							@@department@@: <xsl:value-of select="fine_owner/name"/>
 							<xsl:if test="fine_comment != ''">
 								<br />
 								@@note@@:
 								<xsl:value-of select="fine_comment"/>
 							</xsl:if>
-						</td>
-						<td valign="top" style="white-space: nowrap;">
-							<xsl:value-of select="create_date"/>
-						</td>
-						<td align="right" valign="top">
-							<xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_amount_display"/>&#160;<xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_ammount/currency"/>
+							<br />
+							@@payment_date@@: <xsl:value-of select="create_date"/>
+							<br />
+							@@paid_amount@@: <xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_amount_display"/>&#160;<xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_ammount/currency"/>
 						</td>
 					</tr>
 					</xsl:for-each>
 
 					<tr>
-						<td align="right" colspan="2"><strong>@@total@@:</strong></td>
-						<td align="right"><xsl:value-of select="notification_data/total_amount_paid"/>&#160;<xsl:value-of select="notification_data/currency"/></td>
+						<td align="right" colspan="2"><strong>@@total@@: </strong><xsl:value-of select="notification_data/total_amount_paid"/>&#160;<xsl:value-of select="notification_data/currency"/></td>
 					</tr>
 
 				</table>
