@@ -9,6 +9,7 @@
     04/2022 - hide sincerely
     05/2022 - sender address as one line; formatted receiver address position with div
     06/2022 - letter types; logo, address and texts shown only for ILL
+    07/2022 - removed hello section in ILL
     -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:include href="header.xsl"/>
@@ -60,8 +61,9 @@
                     <xsl:choose>
                         <!-- SLSP Courier -->
                         <xsl:when test="pod_name = 'SLSP Courier'">SLSP Courier</xsl:when>
-                        <!-- Rapido personal deliery -->
-                        <xsl:when test="pod_name = ''">Personal Delivery</xsl:when>
+                        <!-- Rapido personal deliery
+                            Not possible to distinguish a clear state when pod name empty -> do not print -->
+                        <!-- <xsl:when test="pod_name = ''">Personal Delivery</xsl:when> -->
                         <!-- Local Courier -->
                         <xsl:when test="pod_name != ''"><xsl:value-of select="pod_name"/></xsl:when>
                     </xsl:choose>
@@ -145,7 +147,7 @@
                     </xsl:for-each>
                 </td>
                 <!-- Receiver -->
-                <td width="50%" align="left" style="padding: 10mm 20mm 10mm 15mm; vertical-align: top;">
+                <td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm; vertical-align: top;">
                     <table cellspacing="0" cellpadding="0" border="0">
                         <xsl:attribute name="style">
                             font-weight: 600;
@@ -193,7 +195,7 @@
         <table width="100%">
             <tr>
                 <!-- Receiver -->
-                <td width="50%" align="left" style="padding: 10mm 10mm 10mm 20mm;vertical-align: top;">
+                <td width="50%" align="left" style="padding: 10mm 5mm 10mm 20mm;vertical-align: top;">
                     <table cellspacing="0" cellpadding="0" border="0">
                         <xsl:attribute name="style">
                             font-weight: 600;
@@ -232,7 +234,7 @@
                     </table>
                 </td>
                 <!-- Sender -->
-                <td width="50%" align="left" valign="top" style="padding: 10mm 10mm 10mm 10mm;vertical-align: top;">
+                <td width="50%" align="left" valign="top" style="padding: 10mm 10mm 10mm 15mm;vertical-align: top;">
                     <xsl:for-each select="/notification_data/library">
                         <table>
                             <xsl:attribute name="style">
@@ -310,18 +312,8 @@
                         </xsl:choose>
                         
 						<table role='presentation'  cellspacing="0" cellpadding="5" border="0">
-                            <!-- SLSP: show hello and return text for ILL -->
+                            <!-- SLSP: show return text for ILL -->
                             <xsl:if test="$requestType = 'ILL'">
-                                <tr>
-                                    <td>
-                                        <xsl:call-template name="SLSP-multilingual">
-                                            <xsl:with-param name="en" select="'Hello'"/>
-                                            <xsl:with-param name="fr" select="'Bonjour,'"/>
-                                            <xsl:with-param name="it" select="'Buongiorno,'"/>
-                                            <xsl:with-param name="de" select="'Guten Tag'"/>
-                                        </xsl:call-template>
-                                    </td>
-                                </tr>
                                 <tr>
                                     <td>
                                         @@returned@@

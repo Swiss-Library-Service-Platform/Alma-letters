@@ -9,7 +9,9 @@
 	05/2022 rapido: formatting as transit letter - address and logo shows up only for ILL and Personal delivery
 	05/2022 rapido: Added note to partner and author
 	05/2022 rapido: Added shipping cost for Personal Delivery
-	05/2022 rapido: Added notice for Reading room Pod -->
+	05/2022 rapido: Added notice for Reading room Pod
+	06/2022 rapido: fix receiver address country
+	07/2022 rapido: add support for multiple scanned barcodes -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -131,6 +133,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:template name="senderReceiver-shippingSlip">
 	<table width="100%">
 		<tr>
+			<!-- Sender -->
 			<td width="50%" align="left" valign="top" style="padding: 10mm 10mm 10mm 10mm;">
 				<xsl:for-each select="/notification_data/item/owning_library_details">
 					<table>
@@ -154,8 +157,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<tr><td><xsl:value-of select="address5"/></td></tr>
 						</xsl:if>
 						<tr><td><xsl:value-of select="/notification_data/item/owning_library_details/postal_code"/>&#160;<xsl:value-of select="/notification_data/item/owning_library_details/city"/></td></tr>
-						<xsl:if test="country=''">
-							<tr><td>Switzerland</td></tr>
+						<xsl:if test="country != ''">
+							<tr><td><xsl:value-of select="country"/></td></tr>
 						</xsl:if>
 						<xsl:if test="string-length(phone)!=0">
 							<tr><td><xsl:value-of select="phone"/></td></tr>
@@ -166,6 +169,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					</table>
 				</xsl:for-each>
 			</td>
+			<!-- Receiver -->
 			<td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm; vertical-align: top;">
 				<table cellspacing="0" cellpadding="0" border="0">
 					<xsl:attribute name="style">
@@ -191,15 +195,20 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<xsl:if test="string-length(address5)!=0">
 							<tr><td><xsl:value-of select="address5"/></td></tr>
 						</xsl:if>
-						<tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr>
-						<xsl:choose>
-							<xsl:when test="country=''">
-								<tr><td>Switzerland</td></tr>
-							</xsl:when>
-							<xsl:otherwise>
-								<tr><td><xsl:value-of select="country"/></td></tr>
-							</xsl:otherwise>
-						</xsl:choose>
+						<xsl:if test="postal_code != '' or city != ''">
+							<tr><td>
+								<xsl:if test="postal_code != ''">
+									<xsl:value-of select="postal_code"/>
+								</xsl:if>
+								<xsl:if test="city != ''">
+									&#160;<xsl:value-of select="city"/>
+								</xsl:if>
+							</td></tr>
+						</xsl:if>
+						<!-- <tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr> -->
+						<xsl:if test="country != ''">
+							<tr><td><xsl:value-of select="country"/></td></tr>
+						</xsl:if>
 					</xsl:for-each>
 				</table>
 			</td>
@@ -212,6 +221,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:template name="senderReceiver-shippingSlip-reversed">
 	<table width="100%">
 		<tr>
+			<!-- Receiver -->
 			<td width="50%" align="left" style="padding: 10mm 10mm 10mm 20mm;vertical-align: top;">
 				<table cellspacing="0" cellpadding="0" border="0">
 					<xsl:attribute name="style">
@@ -236,18 +246,24 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<xsl:if test="string-length(address5)!=0">
 							<tr><td><xsl:value-of select="address5"/></td></tr>
 						</xsl:if>
-						<tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr>
-						<xsl:choose>
-							<xsl:when test="country=''">
-								<tr><td>Switzerland</td></tr>
-							</xsl:when>
-							<xsl:otherwise>
-								<tr><td><xsl:value-of select="country"/></td></tr>
-							</xsl:otherwise>
-						</xsl:choose>
+						<xsl:if test="postal_code != '' or city != ''">
+							<tr><td>
+								<xsl:if test="postal_code != ''">
+									<xsl:value-of select="postal_code"/>
+								</xsl:if>
+								<xsl:if test="city != ''">
+									&#160;<xsl:value-of select="city"/>
+								</xsl:if>
+							</td></tr>
+						</xsl:if>
+						<!-- <tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr> -->
+						<xsl:if test="country != ''">
+							<tr><td><xsl:value-of select="country"/></td></tr>
+						</xsl:if>
 					</xsl:for-each>
 				</table>
 			</td>
+			<!-- Sender -->
 			<td width="50%" align="left" valign="top" style="padding: 10mm 10mm 10mm 10mm;vertical-align: top;">
 				<xsl:for-each select="/notification_data/item/owning_library_details">
 					<table>
@@ -271,8 +287,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<tr><td><xsl:value-of select="address5"/></td></tr>
 						</xsl:if>
 						<tr><td><xsl:value-of select="/notification_data/item/owning_library_details/postal_code"/>&#160;<xsl:value-of select="/notification_data/item/owning_library_details/city"/></td></tr>
-						<xsl:if test="country=''">
-							<tr><td>Switzerland</td></tr>
+						<xsl:if test="country != ''">
+							<tr><td><xsl:value-of select="country"/></td></tr>
 						</xsl:if>
 						<xsl:if test="string-length(phone)!=0">
 							<tr><td><xsl:value-of select="phone"/></td></tr>
@@ -370,6 +386,32 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								</td>
 							</tr>
 						</xsl:if>
+						<!-- SLSP: print all available barcode images for multiple barcodes scanned -->
+						<xsl:if test="notification_data/item">
+							<tr>
+								<td>
+									<strong>@@item_barcode@@:</strong>
+									<xsl:for-each select="notification_data/multi_barcodes/string">
+										<xsl:variable name="index" select="position()"/>
+										<xsl:if test="$index != '1'">
+											<br/>
+										</xsl:if>
+										<br/>
+										<xsl:variable name="barcode" select="concat('Barcode', $index)"/>
+										<!-- <xsl:value-of select="$barcode"/><br/> -->
+										<img>
+											<xsl:attribute name="alt">
+												<xsl:value-of select="$barcode"/>
+											</xsl:attribute>
+											<xsl:attribute name="src">
+												<xsl:value-of select="concat($barcode, '.png')"/>
+											</xsl:attribute>
+										</img>
+									</xsl:for-each>
+								</td>
+							</tr>
+						</xsl:if>
+						<!-- Original Ex Libris code
 						<xsl:if test="notification_data/item">
 							<tr>
 								<td>
@@ -377,7 +419,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 									<img src="Barcode1.png" alt="Barcode1" />
 								</td>
 							</tr>
-						</xsl:if>
+						</xsl:if> -->
 						<tr>
 							<td>
 								<strong><xsl:call-template name="SLSP-multilingual">
@@ -420,6 +462,17 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								<td>
 									<b>@@request_note@@: </b>
 									<xsl:value-of select="notification_data/incoming_request/note"/>
+								</td>
+							</tr>
+						</xsl:if>
+						<xsl:variable name="barcodes_count">
+							<xsl:value-of select="count(notification_data/multi_barcodes/string)" />
+						</xsl:variable>
+						<xsl:if test="$barcodes_count > 1">
+							<tr>
+								<td>
+									<b>Multiple barcodes: </b>
+									<xsl:value-of select="$barcodes_count"/>
 								</td>
 							</tr>
 						</xsl:if>

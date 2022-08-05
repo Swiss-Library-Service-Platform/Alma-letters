@@ -9,7 +9,8 @@
 	05/2022 rapido: Added note to partner and author
 	05/2022 rapido: Added shipping cost for Personal Delivery
 	05/2022 rapido: Added notice for Reading room Pod
-	06/2022 rapido: fix receiver address country -->
+	06/2022 rapido: fix receiver address country
+	07/2022 rapido: add support for multiple scanned barcodes -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -384,6 +385,32 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								</td>
 							</tr>
 						</xsl:if>
+						<!-- SLSP: print all available barcode images for multiple barcodes scanned -->
+						<xsl:if test="notification_data/item">
+							<tr>
+								<td>
+									<strong>@@item_barcode@@:</strong>
+									<xsl:for-each select="notification_data/multi_barcodes/string">
+										<xsl:variable name="index" select="position()"/>
+										<xsl:if test="$index != '1'">
+											<br/>
+										</xsl:if>
+										<br/>
+										<xsl:variable name="barcode" select="concat('Barcode', $index)"/>
+										<!-- <xsl:value-of select="$barcode"/><br/> -->
+										<img>
+											<xsl:attribute name="alt">
+												<xsl:value-of select="$barcode"/>
+											</xsl:attribute>
+											<xsl:attribute name="src">
+												<xsl:value-of select="concat($barcode, '.png')"/>
+											</xsl:attribute>
+										</img>
+									</xsl:for-each>
+								</td>
+							</tr>
+						</xsl:if>
+						<!-- Original Ex Libris code
 						<xsl:if test="notification_data/item">
 							<tr>
 								<td>
@@ -391,7 +418,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 									<img src="Barcode1.png" alt="Barcode1" />
 								</td>
 							</tr>
-						</xsl:if>
+						</xsl:if> -->
 						<tr>
 							<td>
 								<strong><xsl:call-template name="SLSP-multilingual">
@@ -434,6 +461,17 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								<td>
 									<b>@@request_note@@: </b>
 									<xsl:value-of select="notification_data/incoming_request/note"/>
+								</td>
+							</tr>
+						</xsl:if>
+						<xsl:variable name="barcodes_count">
+							<xsl:value-of select="count(notification_data/multi_barcodes/string)" />
+						</xsl:variable>
+						<xsl:if test="$barcodes_count > 1">
+							<tr>
+								<td>
+									<b>Multiple barcodes: </b>
+									<xsl:value-of select="$barcodes_count"/>
 								</td>
 							</tr>
 						</xsl:if>
