@@ -2,7 +2,7 @@
 <!-- SLSP customized 02/2021
 		02/2022 - Added SLSP greeting; vertical fee info
 		07/2022 - added fee comment and owning library
-		08/2022 - on column fee info layout -->
+		08/2022 - one column fee info layout -->
 <!-- Dependance: 
 		recordTitle - SLSP-multilingual
 		style - bodyStyleCss, generalStyle, mainTableStyleCss
@@ -17,6 +17,34 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:include href="footer.xsl" />
 <xsl:include href="style.xsl" />
 <xsl:include href="recordTitle.xsl" />
+
+<!--
+Template to change decimal comma to decimal point
+Original code from: https://github.com/uio-library/alma-letters-ubo/blob/master/xsl/letters/call_template/header.xsl
+Can be adapted to support different language number format.
+
+Deletes currency string, thousand separator dot and spaces.
+Transforms ALMA decimal comma to decimal point
+Formats output with spaces for thousands and decimal point
+Adds CHF string
+-->
+<xsl:template name="formatDecimalNumberNoCurrency">
+	<xsl:param name="value"/>
+	
+	<xsl:variable name="numeric_value">
+		<xsl:choose>
+			<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'en'">
+				<xsl:value-of select="number(translate($value, ', CHF', ''))"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="number(translate($value, ',. CHF', '.'))"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+
+	<xsl:decimal-format name="chf" decimal-separator="." grouping-separator="&#160;"/>
+	<xsl:value-of select="format-number($numeric_value, '###&#160;###.00', 'chf')"/>
+</xsl:template>
 
 <xsl:template match="/">
 	<html>
@@ -95,13 +123,18 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<br />
 							@@payment_date@@: <xsl:value-of select="create_date"/>
 							<br />
-							@@paid_amount@@: <xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_amount_display"/>&#160;<xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_ammount/currency"/>
+							@@paid_amount@@: <strong><xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_ammount/currency"/>&#160;<xsl:value-of select="fines_fee_transactions/fines_fee_transaction/transaction_ammount/sum"/></strong>
 						</td>
 					</tr>
 					</xsl:for-each>
 
 					<tr>
-						<td align="right" colspan="2"><strong>@@total@@: </strong><xsl:value-of select="notification_data/total_amount_paid"/>&#160;<xsl:value-of select="notification_data/currency"/></td>
+						<td align="left" colspan="2">
+							<strong>@@total@@: </strong>
+							<xsl:value-of select="notification_data/currency"/>&#160;<xsl:call-template name="formatDecimalNumberNoCurrency">
+								<xsl:with-param name="value" select="notification_data/total_amount_paid"/>
+							</xsl:call-template>
+						</td>
 					</tr>
 
 				</table>
