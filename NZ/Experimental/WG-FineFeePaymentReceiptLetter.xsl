@@ -2,7 +2,7 @@
 <!-- SLSP customized 02/2021
 		02/2022 - Added SLSP greeting; vertical fee info
 		07/2022 - added fee comment and owning library
-		08/2022 - one column fee info layout -->
+		08/2022 - one column fee info layout; added user name -->
 <!-- Dependance: 
 		recordTitle - SLSP-multilingual
 		style - bodyStyleCss, generalStyle, mainTableStyleCss
@@ -73,6 +73,24 @@ Adds CHF string
 
 				<!-- <xsl:call-template name="toWhomIsConcerned" />  --><!-- mailReason.xsl -->
 				<table cellspacing="0" cellpadding="5" border="0">
+					<xsl:for-each select="notification_data/receivers/receiver/user">
+						<tr>
+							<td>
+								<br />
+								<xsl:if test="user_group = '92'">
+									<strong>
+										<xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+											<xsl:with-param name="en" select="'Special user cantonal library'"/>
+											<xsl:with-param name="fr" select="'Utilisateur spécial bibliothèque cantonale'"/>
+											<xsl:with-param name="it" select="'Utente speciale biblioteca cantonale'"/>
+											<xsl:with-param name="de" select="'Spezialnutzende Kantonsbibliothek'"/>
+										</xsl:call-template>
+									</strong><br />
+								</xsl:if>
+								<xsl:value-of select="first_name"/>&#160;<xsl:value-of select="last_name"/><br /><br />
+							</td>
+						</tr>
+					</xsl:for-each>
 					<tr>
 						<td>
 					<xsl:call-template name="SLSP-multilingual">
