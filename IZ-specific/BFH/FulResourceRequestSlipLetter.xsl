@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP Customized 11/2021 -->
+<!-- SLSP Customized 11/2021
+	05/2022 - Added inventory number and storage ID (SUPPORT-6810) -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:include href="header.xsl" />

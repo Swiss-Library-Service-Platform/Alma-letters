@@ -60,17 +60,22 @@ and (substring(notification_data/request/delivery_address,1,9) != 'Livraison') "
 			</td></tr>
 		</xsl:when>
 		<xsl:otherwise>
-			<xsl:if test="count(str:tokenize(notification_data/request/delivery_address,'&#10;'))>=4">
-			<tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[2]"/></td></tr>													
+			<xsl:if test="count(str:tokenize(notification_data/request/delivery_address,'&#10;'))=5">
+			    <tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[2]"/></td></tr>													
 			</xsl:if>
-			<xsl:if test="count(str:tokenize(notification_data/request/delivery_address,'&#10;'))>5">
-			<tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[3]"/></td></tr>													
+			<xsl:if test="count(str:tokenize(notification_data/request/delivery_address,'&#10;'))=6">
+			   <tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[2]"/></td></tr>	
+                           <tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[3]"/></td></tr>													
 			</xsl:if>
-			<xsl:if test="count(str:tokenize(notification_data/request/delivery_address,'&#10;'))>6">
-			<tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/delivery_address,'&#10;')[4]"/></td></tr>													
+			<xsl:if test="count(str:tokenize(notification_data/request/delivery_address,'&#10;'))=7">
+                            <tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[2]"/></td></tr>	
+		            <tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[3]"/></td></tr>
+                            <tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[4]"/></td></tr>														
 			</xsl:if>
-			<xsl:if test="count(str:tokenize(notification_data/request/delivery_address,'&#10;'))>7">
-			<tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[5]"/></td></tr>													
+			<xsl:if test="count(str:tokenize(notification_data/request/delivery_address,'&#10;'))=8">
+			    <tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[4]"/></td></tr>	
+		            <tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[5]"/></td></tr>
+                            <tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[6]"/></td></tr>			                      										
 			</xsl:if>
 	        </xsl:otherwise>		
         	</xsl:choose>
@@ -89,17 +94,16 @@ and (substring(notification_data/request/delivery_address,1,9) != 'Livraison') "
                    </xsl:otherwise>	 
                 </xsl:choose>
 
-<!--
-			<xsl:variable name="number_code" select="count(str:tokenize(notification_data/request/delivery_address,'&#10;'))-1"/>
-			<xsl:variable name="number_city" select="count(str:tokenize(notification_data/request/delivery_address,'&#10;'))-2"/>
-			<tr><td></td><td><xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[$number_code]"/>&#160;
-			<xsl:value-of select="str:tokenize(notification_data/request/delivery_address,'&#10;')[$number_city]"/></td></tr>
--->
+
+<!-- creation_date einblenden - escherer 8.9.2020  / nach oben verschoben 8.9.2021 -->
+<tr><td><br/></td>
+<td><br/><b>@@request_date@@: </b>  <xsl:value-of select="notification_data/request/create_date" />, <xsl:value-of select="substring(/notification_data/request/create_time,1,5)"/></td>
+ </tr>
 		</table>
 		 
 		</xsl:when>
 	</xsl:choose>
-<br/><br/><br/>
+
 
 <!-- brauchts nicht zweimal  escherer 1.9.2020
 			<h1>
@@ -207,9 +211,11 @@ and (substring(notification_data/request/delivery_address,1,9) != 'Livraison') "
 							</xsl:if>
 
 <!-- creation_date einblenden - escherer 8.9.2020 -->
+<!--
 <tr>
 <td align="right"><br/><b>Bestellzeit: </b> <xsl:value-of select="notification_data/request/create_date" />, <xsl:value-of select="notification_data/request/create_time" /></td>
 </tr>
+-->
 
 <!-- print special article/chapter info - escherer 16.09.2020 -->
                                                        <tr><td>
@@ -230,6 +236,18 @@ and (substring(notification_data/request/delivery_address,1,9) != 'Livraison') "
 								<td><b>Seiten:</b> </td><td><xsl:value-of select="notification_data/request/pages"/></td>
 								</tr>
 							</xsl:if>
+<!-- *** enhanced with part and volume - for staff user requests (15.03.2021, escherer) -->
+							<xsl:if test="notification_data/request/part != ''">
+								<tr>
+								<td>Teil/Part: </td><td><xsl:value-of select="notification_data/request/part"/></td>
+								</tr>
+							</xsl:if> 
+							<xsl:if test="notification_data/request/volume != ''">
+								<tr>
+								<td>Band/Volume: </td><td><xsl:value-of select="notification_data/request/volume"/></td>
+								</tr>
+							</xsl:if> 
+<!-- *** end - enhanced with part and volume - for staff user requests -->
 							<xsl:if test="notification_data/request/full_chapter = 'true'">
 								<tr>
 								<td><b>Umfang:</b> </td><td> ganzes Kapitel</td>

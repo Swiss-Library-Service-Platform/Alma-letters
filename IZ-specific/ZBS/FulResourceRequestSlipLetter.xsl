@@ -2,6 +2,7 @@
 <!-- SLSP Customized 05/2022
         05/2022 Deleted duplicit fields ISSN, ISBN, Imprint
 		05/2022 Added rapido request note, rapido volume, rapido pages 
+		08/2022 Added anonymization to print existing Hold Shelf slips
     Dependancy:
         recordTitle - recordTitle, SLSP-Rapido-request-note, SLSP-Rapido-extract-volume, SLSP-Rapido-extract-pages
         style - generalStyle
@@ -33,11 +34,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		</head>
 
 			<body>
-			<h1>
+			<!-- <h1>
 				<strong>@@requested_for@@ :
 							<xsl:value-of select="notification_data/user_for_printing/name"/>
 				</strong>
-			</h1>
+			</h1> -->
 
 
 				<xsl:call-template name="head" /> <!-- header.xsl -->
@@ -71,7 +72,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							</tr>
 						</xsl:if>
 
-						<xsl:if test="notification_data/user_for_printing/name">
+						<!-- <xsl:if test="notification_data/user_for_printing/name">
 
 						<tr>
 							<td>
@@ -79,7 +80,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<xsl:value-of select="notification_data/user_for_printing/name"/></td>
 						</tr>
 
-						</xsl:if>
+						</xsl:if> -->
 						
 						<xsl:if test="notification_data/proxy_requester/name">
 							<tr>
@@ -224,6 +225,39 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<tr>
 								<td colspan="3">
 									<strong>@@request_note@@: </strong><xsl:value-of select="$requestNote"/>
+								</td>
+							</tr>
+						</xsl:if>
+						<xsl:if test="notification_data/user_for_printing/name">
+							<tr>
+								<td>
+									<br />
+									<h1>@@requested_for@@: 
+										<!-- SLSP: Anonymization based on last 3 digits of Barcode NZ or Barcode IZ -->
+										<!-- set the Barcode NZ, if there are more then only first one is returned -->
+										<xsl:variable name="NZ_barcode">
+											<xsl:value-of select="notification_data/user_for_printing/identifiers/code_value[code='02']/value"/>
+										</xsl:variable>
+										<!-- set the Barcode edu-ID, if there are more then only first one is returned -->
+										<xsl:variable name="edu-id_barcode">
+											<xsl:value-of select="notification_data/user_for_printing/identifiers/code_value[code='01']/value"/>
+										</xsl:variable>
+										<!-- set the Barcode edu-ID, if there are more then only first one is returned -->
+										<xsl:variable name="IZ_barcode">
+											<xsl:value-of select="notification_data/user_for_printing/identifiers/code_value[code='03']/value"/>
+										</xsl:variable>
+										<xsl:choose>
+											<xsl:when test="$NZ_barcode != ''">
+												<xsl:value-of select="$NZ_barcode"/>
+											</xsl:when>
+											<xsl:when test="$IZ_barcode != ''">
+												<xsl:value-of select="$IZ_barcode"/>
+											</xsl:when>
+											<xsl:when test="$edu-id_barcode != ''">
+												<xsl:value-of select="$edu-id_barcode"/>
+											</xsl:when>
+										</xsl:choose>
+									</h1>
 								</td>
 							</tr>
 						</xsl:if>

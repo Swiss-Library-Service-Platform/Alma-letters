@@ -3,7 +3,6 @@
 10/2021	added template userAccount; removed labels for author and imprint
 01/2022	SLSP-multilingual option for IZ with disabled languages
 05/2022	added templates for extraction of volume, pages and request note in Resource Request Slip Letter
-09/2022 Added templates SLSP-greeting and SLSP-sincerely
 -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -46,7 +45,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-
 	<!-- template to show link to user account
 	for link to swisscovery uses system variable @@email_my_account@@ in Configuration -> General -> Other Settings
 	one link per IZ is possible, therefore the default view is used.
@@ -80,7 +78,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			</xsl:call-template>
 		</a>
 	</xsl:template>
-
 	<!-- Template to extract request note from Rapido request
 	Usage:
 		<xsl:variable name="requestNote">
@@ -101,7 +98,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
-
 	<!-- Template to extract volume from the encoded XML metadata provided in letter XML
 	Usage: 
 		<xsl:variable name="requestVolume">
@@ -125,7 +121,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		</xsl:variable>
 		<xsl:value-of select="substring-before($user-volume-temp, '&lt;/dc:volume')"/>
 	</xsl:template>
-
 	<!-- Template to extract pages from the encoded XML metadata provided in letter XML
 	Usage: 
 		<xsl:variable name="requestPages">
@@ -149,26 +144,35 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		</xsl:variable>
 		<xsl:value-of select="substring-before($user-pages-temp, '&lt;/dc:rlterms_pages')"/>
 	</xsl:template>
+	<!-- Template to add contact us link using the system variable
+	email_contact_us - system variable in Configuration -> General -> Other Settings -->
+	<xsl:template name="SLSP-contactUs">
+		<table align="left">
+			<tr>
+				<td align="left">
+					<a>
+						<xsl:attribute name="href">
+                          @@email_contact_us@@
+                        </xsl:attribute>
+						<xsl:call-template name="SLSP-multilingual">
+							<xsl:with-param name="en" select="'Contact the '"/>
+							<xsl:with-param name="fr" select="'Mon compte'"/>
+							<xsl:with-param name="it" select="'Il mio conto'"/>
+							<xsl:with-param name="de" select="'Mein Konto'"/>
+						</xsl:call-template>
+					</a>
+				</td>
+			</tr>
+		</table>
+	</xsl:template>
 
-	<!-- Template to add greeting to letters in case the label is missing in configuration
-	USAGE: <xsl:call-template name="SLSP-greeting" /> -->
+	<!-- Template to add greeting to letters in case the label is missing in configuration -->
 	<xsl:template name="SLSP-greeting">
 		<xsl:call-template name="SLSP-multilingual">
 			<xsl:with-param name="en" select="'Hello,'"/>
 			<xsl:with-param name="fr" select="'Bonjour,'"/>
 			<xsl:with-param name="it" select="'Buongiorno,'"/>
 			<xsl:with-param name="de" select="'Guten Tag'"/>
-		</xsl:call-template>
-	</xsl:template>
-
-	<!-- Template to add sincerely paragraph to letters in case the label is missing in configuration
-	USAGE: <xsl:call-template name="SLSP-sincerely" /> -->
-	<xsl:template name="SLSP-sincerely">
-		<xsl:call-template name="SLSP-multilingual">
-			<xsl:with-param name="en" select="'Sincerely,'"/>
-			<xsl:with-param name="fr" select="'Meilleures salutations,'"/>
-			<xsl:with-param name="it" select="'Cordiali saluti,'"/>
-			<xsl:with-param name="de" select="'Freundliche Grüsse'"/>
 		</xsl:call-template>
 	</xsl:template>
 
