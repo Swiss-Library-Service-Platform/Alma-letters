@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP WG: Letters version 05/2022
-      05/2022 Rapido: request metadata, info about providing library, max views message -->
+      05/2022 Rapido: request metadata, info about providing library, max views message
+      10/2022 Rapido: adjusted the providing library part; unified greeting -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount
 		style - generalStyle, bodyStyleCss
@@ -79,7 +80,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <tr>
                 <td>
                   <xsl:call-template name="SLSP-multilingual">
-                    <xsl:with-param name="en" select="'Hello'"/>
+                    <xsl:with-param name="en" select="'Hello,'"/>
                     <xsl:with-param name="fr" select="'Bonjour,'"/>
                     <xsl:with-param name="it" select="'Buongiorno,'"/>
                     <xsl:with-param name="de" select="'Guten Tag'"/>
@@ -186,7 +187,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         <xsl:with-param name="fr" select="'La version numérique est fournie par '"/>
                         <xsl:with-param name="it" select="'La versione digitale è fornita da'"/>
                         <xsl:with-param name="de" select="'Die digitale Version wird bereitgestellt von'"/>
-                    </xsl:call-template>: <xsl:value-of select="notification_data/resource_sharing_request/additional_lender_information"/>
+                    </xsl:call-template>: <xsl:value-of select="notification_data/resource_sharing_request/lending_institution"/>
                     (<xsl:call-template name="SLSP-multilingual">
                         <xsl:with-param name="en" select="'Please note that digitization fees, if applicable, will be charged by this library.'"/>
                         <xsl:with-param name="fr" select="'Veuillez noter que les frais de numérisation, le cas échéant, seront facturés par cette bibliothèque.'"/>
