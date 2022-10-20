@@ -3,7 +3,9 @@
 10/2021	added template userAccount; removed labels for author and imprint
 01/2022	SLSP-multilingual option for IZ with disabled languages
 05/2022	added templates for extraction of volume, pages and request note in Resource Request Slip Letter
+06/2022 added personal delivery field extraction
 09/2022 Added templates SLSP-greeting and SLSP-sincerely
+10/2022 Added templates SLSP-greeting-ILL; updated SLSP-multilingual
 -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -29,20 +31,45 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		<xsl:param name="de" />
 		<xsl:param name="it" />
 		<xsl:choose>
-			<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'fr'">
-				<xsl:value-of select="$fr"/>
+			<xsl:when test="/notification_data/receivers/receiver/preferred_language">
+				<xsl:choose>
+					<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'fr'">
+						<xsl:value-of select="$fr"/>
+					</xsl:when>
+					<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'en'">
+						<xsl:value-of select="$en"/>
+					</xsl:when>
+					<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'it'">
+						<xsl:value-of select="$it"/>
+					</xsl:when>
+					<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'de'">
+						<xsl:value-of select="$de"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$en"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
-			<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'en'">
-				<xsl:value-of select="$en"/>
-			</xsl:when>
-			<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'it'">
-				<xsl:value-of select="$it"/>
-			</xsl:when>
-			<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'de'">
-				<xsl:value-of select="$de"/>
-			</xsl:when>
+			<!-- Added for letters where the recipient's preferred language is not specified.
+			Grabs the language of the letter. -->
 			<xsl:otherwise>
-				<xsl:value-of select="$en"/>
+				<xsl:choose>
+					<xsl:when test="notification_data/languages/string[1] = 'fr'">
+						<xsl:value-of select="$fr"/>
+					</xsl:when>
+					<xsl:when test="notification_data/languages/string[1] = 'en'">
+						<xsl:value-of select="$en"/>
+					</xsl:when>
+					<xsl:when test="notification_data/languages/string[1] = 'it'">
+						<xsl:value-of select="$it"/>
+					</xsl:when>
+					<xsl:when test="notification_data/languages/string[1] = 'de'">
+						<xsl:value-of select="$de"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$en"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -150,6 +177,23 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		<xsl:value-of select="substring-before($user-pages-temp, '&lt;/dc:rlterms_pages')"/>
 	</xsl:template>
 
+	<!-- Template to print the home / office delivery information
+        Usage:
+            <xsl:variable name="personalDelivery">
+                <xsl:call-template name="SLSP-Rapido-persDel" />
+            </xsl:variable>
+            ...
+            <xsl:value-of select="notification_data/request_type"/>
+            <xsl:if test="$personalDelivery != ''">
+                - <xsl:value-of select="$personalDelivery"/>
+            </xsl:if>
+            -->
+	<xsl:template name="SLSP-Rapido-persDel">
+		<xsl:if test="/notification_data/incoming_request/rapido_delivery_option != ''">
+			<xsl:value-of select="/notification_data/incoming_request/rapido_delivery_option"/>
+		</xsl:if>
+	</xsl:template>
+
 	<!-- Template to add greeting to letters in case the label is missing in configuration
 	USAGE: <xsl:call-template name="SLSP-greeting" /> -->
 	<xsl:template name="SLSP-greeting">
@@ -158,6 +202,17 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			<xsl:with-param name="fr" select="'Bonjour,'"/>
 			<xsl:with-param name="it" select="'Buongiorno,'"/>
 			<xsl:with-param name="de" select="'Guten Tag'"/>
+		</xsl:call-template>
+	</xsl:template>
+	
+	<!-- Template to add greeting to ILL letters in case the label is missing in configuration
+	USAGE: <xsl:call-template name="SLSP-greeting-ILL" /> -->
+	<xsl:template name="SLSP-greeting-ILL">
+		<xsl:call-template name="SLSP-multilingual">
+			<xsl:with-param name="en" select="'Dear Colleagues,'"/>
+			<xsl:with-param name="fr" select="'Cher(e)s collègues,'"/>
+			<xsl:with-param name="it" select="'Care colleghe e cari colleghi,'"/>
+			<xsl:with-param name="de" select="'Liebe Kolleginen und Kollegen'"/>
 		</xsl:call-template>
 	</xsl:template>
 
