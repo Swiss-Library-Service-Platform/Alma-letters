@@ -3,10 +3,12 @@
 		01/2022 - Added user Barcode (SUPPORT-8376)
 		01/2022 - Fix for item non-readable barcodes with 11 chars (SUPPORT-5303)
 		05/2022 Added rapido request note, rapido volume, rapido pages
+		06/2022 added personal delivery field extraction
 	Dependance:
 		header - head
 		style - generalStyle
-		recordTitle - recordTitle, SLSP-multilingual, SLSP-Rapido-request-note, SLSP-Rapido-extract-volume, SLSP-Rapido-extract-pages -->
+		recordTitle - recordTitle, SLSP-multilingual, SLSP-Rapido-request-note, SLSP-Rapido-extract-volume, SLSP-Rapido-extract-pages, SLSP-Rapido-persDel
+	-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:include href="header.xsl" />
@@ -329,10 +331,17 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 									<xsl:value-of select="notification_data/destination"/>
 								</td>
 							</tr>
+							<!-- SLSP: Add personal delivery field to request type -->
+							<xsl:variable name="personalDelivery">
+								<xsl:call-template name="SLSP-Rapido-persDel" />
+							</xsl:variable>
 							<tr>
-								<td>
+								<td colspan="3">
 									<strong>@@request_type@@: </strong>
 									<xsl:value-of select="notification_data/request_type"/>
+									<xsl:if test="$personalDelivery != ''">
+										- <xsl:value-of select="$personalDelivery"/>
+									</xsl:if>
 								</td>
 							</tr>
 							<xsl:if test="notification_data/request/system_notes != ''">

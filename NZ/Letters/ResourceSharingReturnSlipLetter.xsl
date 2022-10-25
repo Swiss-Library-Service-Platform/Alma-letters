@@ -170,7 +170,7 @@
                             <xsl:if test="postal_code != '' or city != ''">
                                 <tr><td>
                                     <xsl:if test="postal_code != ''">
-                                        <xsl:value-of select="postal_code"/>
+                                        <xsl:value-of select="postal_code"/>&#160;
                                     </xsl:if>
                                     <xsl:if test="city != ''">
                                         <xsl:value-of select="city"/>

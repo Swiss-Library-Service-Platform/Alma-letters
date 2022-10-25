@@ -2,8 +2,9 @@
 <!-- SLSP Customized 05/2022
         05/2022 Deleted duplicit fields ISSN, ISBN, Imprint
 		05/2022 Added rapido request note, rapido volume, rapido pages 
+		06/2022 added personal delivery field extraction
     Dependancy:
-        recordTitle - recordTitle, SLSP-Rapido-request-note, SLSP-Rapido-extract-volume, SLSP-Rapido-extract-pages
+        recordTitle - recordTitle, SLSP-Rapido-request-note, SLSP-Rapido-extract-volume, SLSP-Rapido-extract-pages, SLSP-Rapido-persDel
         style - generalStyle
         header - head -->
 <xsl:stylesheet version="1.0"
@@ -208,8 +209,18 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<tr>
 							<td><strong>@@move_to_library@@: </strong><xsl:value-of select="notification_data/destination"/></td>
 						</tr>
+						<!-- SLSP: Add personal delivery field to request type -->
+						<xsl:variable name="personalDelivery">
+							<xsl:call-template name="SLSP-Rapido-persDel" />
+						</xsl:variable>
 						<tr>
-							<td><strong>@@request_type@@: </strong><xsl:value-of select="notification_data/request_type"/></td>
+							<td colspan="3">
+								<strong>@@request_type@@: </strong>
+								<xsl:value-of select="notification_data/request_type"/>
+								<xsl:if test="$personalDelivery != ''">
+									- <xsl:value-of select="$personalDelivery"/>
+								</xsl:if>
+							</td>
 						</tr>
 						<xsl:if test="notification_data/request/system_notes != ''">
 							<tr>

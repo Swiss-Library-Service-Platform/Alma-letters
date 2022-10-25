@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP Customized 11/2021
-	05/2022 - Added inventory number and storage ID (SUPPORT-6810) -->
+	05/2022 - Added inventory number and storage ID (SUPPORT-6810)
+	06/2022 Added rapido request note, rapido volume extraction
+	06/2022 added personal delivery field extraction
+	Dependancy:
+        recordTitle - recordTitle, SLSP-Rapido-request-note, SLSP-Rapido-extract-volume, SLSP-Rapido-extract-pages, SLSP-Rapido-persDel
+        style - generalStyle
+        header - head -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:include href="header.xsl" />
@@ -54,6 +60,15 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 									<img src="cid:request_id_barcode.png" alt="Request Barcode"/>
 								</td>
 							</tr>
+							<xsl:if test="/notification_data/incoming_request != ''">
+                            <tr>
+                                <td>
+									<strong>Rapido request ID: </strong>
+                                    <br />
+                                    <img src="externalId.png" alt="externalId" />
+                                </td>
+                            </tr>
+							</xsl:if>
 							<xsl:if  test="notification_data/request/selected_inventory_type='ITEM'" >
 								<tr>
 									<td>
@@ -83,28 +98,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 									<xsl:call-template name="recordTitle" />
 								</td>
 							</tr>
-							<!-- DBL (4. 6. 2021): Hidden isbn since it is comming from recordTitle -->
-							<!-- <xsl:if test="notification_data/phys_item_display/isbn != ''">
-								<tr>
-								<td>@@isbn@@: <xsl:value-of select="notification_data/phys_item_display/isbn"/></td>
-								</tr>
-							</xsl:if> -->
-							<!-- <xsl:if test="notification_data/phys_item_display/issn != ''">
-								<tr>
-								<td>@@issn@@: <xsl:value-of select="notification_data/phys_item_display/issn"/></td>
-								</tr>
-							</xsl:if> -->
 							<xsl:if test="notification_data/phys_item_display/edition != ''">
 								<tr>
 									<td><strong>@@edition@@: </strong><xsl:value-of select="notification_data/phys_item_display/edition"/>
 									</td>
 								</tr>
 							</xsl:if>
-							<!-- <xsl:if test="notification_data/phys_item_display/imprint != ''">
-								<tr>
-								<td>@@imprint@@: <xsl:value-of select="notification_data/phys_item_display/imprint"/></td>
-								</tr>
-							</xsl:if> -->
 							<!-- DBL (4. 6. 2021): Added Series field to better localize norms 
 								Reused Bcc for Series label -->
 							<xsl:if test="notification_data/request/record_display_section/series_small != ''">
@@ -123,7 +122,74 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								</tr>
 							</xsl:if>
 							<!-- DBL -->
-							<strong></strong>
+							<!-- SLSP Add volume from Rapido request if available -->
+                            <xsl:variable name="requestVolume">
+                                <xsl:call-template name="SLSP-Rapido-extract-volume" />
+                            </xsl:variable>
+                            <xsl:if test="$requestVolume != ''">
+                                <tr>
+                                    <td colspan="3">
+                                        <strong>
+                                            <xsl:call-template name="SLSP-multilingual">
+                                                <xsl:with-param name="en" select="'Volume'"/>
+                                                <xsl:with-param name="fr" select="'Volume'"/>
+                                                <xsl:with-param name="it" select="'Volume'"/>
+                                                <xsl:with-param name="de" select="'Band'"/>
+                                            </xsl:call-template>:
+                                        </strong>
+                                        <xsl:value-of select="$requestVolume"/>
+                                    </td>
+                                </tr>
+                            </xsl:if>
+                            <!-- SLSP Add chapter/article title from request if available -->
+                            <xsl:if test="notification_data/request/chapter_article_title != ''">
+                                <tr>
+                                    <td colspan="3">
+                                        <strong>
+                                            <xsl:call-template name="SLSP-multilingual">
+                                                <xsl:with-param name="en" select="'Chapter / Article'"/>
+                                                <xsl:with-param name="fr" select="'Chapitre / Article'"/>
+                                                <xsl:with-param name="it" select="'Capitolo / Articolo'"/>
+                                                <xsl:with-param name="de" select="'Kapitel / Artikel'"/>
+                                            </xsl:call-template>:
+                                        </strong>
+                                        <xsl:value-of select="notification_data/request/chapter_article_title"/>
+                                    </td>
+                                </tr>
+                            </xsl:if>
+                            <!-- SLSP Add chapter/article author from request if available -->
+                            <xsl:if test="notification_data/request/chapter_article_author != ''">
+                                <tr>
+                                    <td colspan="3">
+                                        <strong>
+                                            <xsl:call-template name="SLSP-multilingual">
+                                                <xsl:with-param name="en" select="'Author'"/>
+                                                <xsl:with-param name="fr" select="'Auteur'"/>
+                                                <xsl:with-param name="it" select="'Autore'"/>
+                                                <xsl:with-param name="de" select="'Autor'"/>
+                                            </xsl:call-template>:
+                                        </strong>
+                                        <xsl:value-of select="notification_data/request/chapter_article_author"/>
+                                    </td>
+                                </tr>
+                            </xsl:if>
+                            <!-- SLSP Add pages from request if available -->
+                            <xsl:if test="notification_data/request/pages != ''">
+                                <tr>
+                                    <td colspan="3">
+                                        <strong>
+                                            <xsl:call-template name="SLSP-multilingual">
+                                                <xsl:with-param name="en" select="'Pages'"/>
+                                                <xsl:with-param name="fr" select="'Pages'"/>
+                                                <xsl:with-param name="it" select="'Pagine'"/>
+                                                <xsl:with-param name="de" select="'Seiten'"/>
+                                            </xsl:call-template>:
+                                        </strong>
+                                        <xsl:value-of select="notification_data/request/pages"/>
+                                    </td>
+                                </tr>
+                            </xsl:if>
+                            <!-- SLSP -->
 							<tr>
 								<td>
 									<h2>
@@ -225,12 +291,19 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 									<xsl:value-of select="notification_data/destination"/>
 								</td>
 							</tr>
-							<tr>
-								<td>
-									<strong>@@request_type@@: </strong>
-									<xsl:value-of select="notification_data/request_type"/>
-								</td>
-							</tr>
+							<!-- SLSP: Add personal delivery field to request type -->
+                            <xsl:variable name="personalDelivery">
+                                <xsl:call-template name="SLSP-Rapido-persDel" />
+                            </xsl:variable>
+                            <tr>
+                                <td colspan="3">
+                                    <strong>@@request_type@@: </strong>
+                                    <xsl:value-of select="notification_data/request_type"/>
+                                    <xsl:if test="$personalDelivery != ''">
+                                        - <xsl:value-of select="$personalDelivery"/>
+                                    </xsl:if>
+                                </td>
+                            </tr>
 							<xsl:if test="notification_data/request/system_notes != ''">
 								<tr>
 									<td>

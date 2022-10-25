@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP Customized 11/2021
+<!-- SLSP Main version 11/2021
 		02/2022 Added chapter title, author and pages; hidden second requested for; colspan 3
         05/2022 Added rapido request note, rapido volume extraction
         06/2022 added personal delivery field extraction-->
@@ -11,67 +11,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:include href="footer.xsl" />
     <xsl:include href="style.xsl" />
     <xsl:include href="recordTitle.xsl" />
-    
-    <!-- Template to print the home / office delivery information
-        Usage:
-            <xsl:variable name="personalDelivery">
-                <xsl:call-template name="SLSP-Rapido-persDel" />
-            </xsl:variable>
-            ...
-            <xsl:value-of select="notification_data/request_type"/>
-            <xsl:if test="$personalDelivery != ''">
-                - <xsl:value-of select="$personalDelivery"/>
-            </xsl:if>
-            -->
-    <xsl:template name="SLSP-Rapido-persDel">
-        <xsl:if test="/notification_data/incoming_request/rapido_delivery_option != ''">
-            <xsl:value-of select="/notification_data/incoming_request/rapido_delivery_option"/>
-        </xsl:if>
-    </xsl:template>
-
-    <!-- Template to extract request note from Rapido request
-        Usage:
-            <xsl:variable name="requestVolume">
-                <xsl:call-template name="SLSP-Rapido-extract-volume" />
-            </xsl:variable>
-            <xsl:if test="$requestVolume != ''">
-            ...
-            </xsl:if>
-            -->
-    <xsl:template name="SLSP-Rapido-request-note">
-        <xsl:choose>
-            <xsl:when test="/notification_data/incoming_request/note != ''">
-                <xsl:value-of select="/notification_data/incoming_request/note"/>
-            </xsl:when>
-            <xsl:when test="/notification_data/request/note != ''">
-                <xsl:value-of select="/notification_data/request/note"/>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:template>
-
-    <!-- Template to extract volume from the encoded XML metadata provided in letter XML
-        Usage: 
-        <xsl:variable name="requestNote">
-            <xsl:call-template name="SLSP-Rapido-request-note" />
-        </xsl:variable>
-        <xsl:if test="$requestNote != ''">
-        ...
-        </xsl:if>
-        -->
-    <xsl:template name="SLSP-Rapido-extract-volume">
-        <!-- Loading of the righthand part of metadata field based on XML layout -->
-        <xsl:variable name="user-volume-temp">
-            <xsl:choose>
-                <xsl:when test="/notification_data/incoming_request/request_metadata != ''">
-                    <xsl:value-of select="substring-after(/notification_data/incoming_request/request_metadata, 'dc:volume&gt;')"/>
-                </xsl:when>
-                <xsl:when test="/notification_data/resource_sharing_request/request_metadata != ''">
-                    <xsl:value-of select="substring-after(/notification_data/resource_sharing_request/request_metadata, 'dc:volume&gt;')"/>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:value-of select="substring-before($user-volume-temp, '&lt;/dc:volume')"/>
-    </xsl:template>
 
     <xsl:template match="/">
         <html>
@@ -470,11 +409,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                     </div>
                 </div>
                 <table>
-                    <tr>
-                        <td>
-                            <xsl:value-of select="notification_data/organization_unit/name" />
-                        </td>
-                    </tr>
                     <tr>
                         <td>
                             <br/>

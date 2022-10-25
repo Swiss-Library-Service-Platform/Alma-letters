@@ -31,7 +31,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		<xsl:param name="de" />
 		<xsl:param name="it" />
 		<xsl:choose>
-			<xsl:when test="/notification_data/receivers/receiver/preferred_language">
+			<xsl:when test="/notification_data/receivers/receiver/preferred_language != ''">
 				<xsl:choose>
 					<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'fr'">
 						<xsl:value-of select="$fr"/>
