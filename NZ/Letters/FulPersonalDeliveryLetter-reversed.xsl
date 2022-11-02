@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 12/2021 - delivery on left -->
+<!-- SLSP WG: Letters version 12/2021 - delivery on left
+	10/2022 - replaced greeting template -->
 <!-- Dependance:
-		recordTitle - SLSP-multilingual, SLSP-userAccount
+		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
 		style - bodyStyleCss, listStyleCss
 		header - head
 		-->
@@ -340,12 +341,7 @@
 						<table cellspacing="0" cellpadding="5" border="0">
 							<tr>
 								<td>
-									<xsl:call-template name="SLSP-multilingual">
-										<xsl:with-param name="en" select="'Hello'"/>
-										<xsl:with-param name="fr" select="'Bonjour'"/>
-										<xsl:with-param name="it" select="'Buongiorno,'"/>
-										<xsl:with-param name="de" select="'Guten Tag'"/>
-									</xsl:call-template>
+									<xsl:call-template name="SLSP-greeting" />
 								</td>
 							</tr>
 							<tr>

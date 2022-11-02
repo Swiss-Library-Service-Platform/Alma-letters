@@ -112,12 +112,7 @@
 							<tr>
 								<td>
 									<br />
-									<xsl:call-template name="SLSP-multilingual">
-										<xsl:with-param name="en" select="'Hello,'"/>
-										<xsl:with-param name="fr" select="'Bonjour,'"/>
-										<xsl:with-param name="it" select="'Buongiorno,'"/>
-										<xsl:with-param name="de" select="'Guten Tag'"/>
-									</xsl:call-template>
+									<xsl:call-template name="SLSP-greeting" />
 								</td>
 							</tr>
 							<tr>

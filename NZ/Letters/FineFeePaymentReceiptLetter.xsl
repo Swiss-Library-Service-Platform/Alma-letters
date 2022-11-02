@@ -2,9 +2,10 @@
 <!-- SLSP customized 02/2021
 		02/2022 - Added SLSP greeting; vertical fee info
 		07/2022 - added fee comment and owning library
-		08/2022 - one column fee info layout; added user name -->
+		08/2022 - one column fee info layout; added user name
+		10/2022 - added template for SLSP greeting -->
 <!-- Dependance: 
-		recordTitle - SLSP-multilingual
+		recordTitle - SLSP-multilingual, SLSP-greeting
 		style - bodyStyleCss, generalStyle, mainTableStyleCss
 		senderReceiver - senderReceiver
 		header - head -->
@@ -91,12 +92,7 @@ Adds CHF string
 					</xsl:for-each>
 					<tr>
 						<td>
-					<xsl:call-template name="SLSP-multilingual">
-						<xsl:with-param name="en" select="'Hello'"/>
-						<xsl:with-param name="fr" select="'Bonjour'"/>
-						<xsl:with-param name="it" select="'Buongiorno,'"/>
-						<xsl:with-param name="de" select="'Guten Tag'"/>
-					</xsl:call-template>
+							<xsl:call-template name="SLSP-greeting" />
 						</td>
 					</tr>
 					<xsl:if  test="notification_data/transaction_id != ''" >

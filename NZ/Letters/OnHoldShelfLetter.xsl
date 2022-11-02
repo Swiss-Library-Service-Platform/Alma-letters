@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP WG: Letters version 12/2021
-		01/2022 - Fixed FR version of librariesURL template -->
+		01/2022 - Fixed FR version of librariesURL template
+		10/2022 - replaced greeting template -->
 <!-- Dependance:
-		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle
+		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle, SLSP-greeting
 		style - generalStyle, bodyStyleCss
 		header - head
 		-->
@@ -102,12 +103,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 							<tr>
 								<td>
 									<br />
-									<xsl:call-template name="SLSP-multilingual">
-										<xsl:with-param name="en" select="'Hello'"/>
-										<xsl:with-param name="fr" select="'Bonjour'"/>
-										<xsl:with-param name="it" select="'Buongiorno,'"/>
-										<xsl:with-param name="de" select="'Guten Tag'"/>
-									</xsl:call-template>
+									<xsl:call-template name="SLSP-greeting" />
 								</td>
 							</tr>
 							<tr>

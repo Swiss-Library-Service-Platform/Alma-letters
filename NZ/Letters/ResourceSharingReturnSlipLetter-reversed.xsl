@@ -9,7 +9,7 @@
     04/2022 - hide sincerely
     05/2022 - sender address as one line; formatted receiver address position with div
     06/2022 - letter types; logo, address and texts shown only for ILL
-    07/2022 - removed hello section in ILL
+    10/2022 - added template SLSP-greeting-ILL
     -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:include href="header.xsl"/>
@@ -316,6 +316,11 @@
                             <xsl:if test="$requestType = 'ILL'">
                                 <tr>
                                     <td>
+                                        <xsl:call-template name="SLSP-greeting-ILL" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         @@returned@@
                                     </td>
                                 </tr>
@@ -412,6 +417,9 @@
                                     <td>
                                         <xsl:value-of select="notification_data/library/name"/>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td><br/><i>powered by SLSP</i></td>
                                 </tr>
                             </xsl:if>                            
 						</table>

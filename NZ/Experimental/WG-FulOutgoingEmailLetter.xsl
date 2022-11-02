@@ -460,7 +460,6 @@
 								<tr>
 									<td>
 										<xsl:value-of select="/notification_data/library/name"/><br />
-										<xsl:value-of select="/notification_data/organization_unit/name"/>
 									</td>
 								</tr>
 								<tr>

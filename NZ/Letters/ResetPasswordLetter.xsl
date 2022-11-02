@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP customized; 26.5.2021-->
+<!-- SLSP customized; 26.5.2021
+	10/2022 Added SLSP greeting template
+Dependance:
+	header - head
+	style - generalStyle, bodyStyleCss
+	recordTitle - SLSP-greeting-->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:include href="header.xsl" />
 <xsl:include href="senderReceiver.xsl" />
@@ -44,6 +49,11 @@
 					<table cellspacing="0" cellpadding="5" border="0">
 						<tr>
 							<td>
+								<xsl:call-template name="SLSP-greeting" />
+							</td>
+						</tr>
+						<tr>
+							<td>
 						@@bodyTextBeforeLink@@
 								<a>
 									<xsl:attribute name="href">
@@ -55,11 +65,13 @@
 								<br/>
 							</td>
 						</tr>
-					</table>
-					<table>
 						<tr>
-							<td>@@signature@@
-								<br/>
+							<td>
+								@@signature@@
+							</td>
+						</tr>
+						<tr>
+							<td>
 								<xsl:value-of select="notification_data/organization_unit/name" />
 							</td>
 						</tr>

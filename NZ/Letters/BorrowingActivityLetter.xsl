@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP customized -->
+<!-- SLSP customized
+	10/2022 Added SLSP greeting template; removed bold tags from paragraphs
+Dependance:
+	header - head
+	senderReceiver - senderReceiver
+	style - generalStyle, bodyStyleCss, mainTableStyleCss
+	recordTitle - SLSP-greeting -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 xmlns:date="http://exslt.org/dates-and-times"
@@ -93,12 +99,18 @@ xmlns:str="http://exslt.org/strings">
 
             <xsl:if test="notification_data/item_loans/item_loan or notification_data/overdue_item_loans/item_loan">
 
-	              <tr>
-	              	<td>
-						<b>@@reminder_message@@</b>
+				<tr>
+					<td>
+						<xsl:call-template name="SLSP-greeting" />
+					</td>
+				</tr>
+			
+				<tr>
+					<td>
+						@@reminder_message@@
 						<br/><br/>
-	                </td>
-	              </tr>
+					</td>
+				</tr>
 
                 <!-- duplicit, the overdue items are also in notification_data/loans_by_library/library_loans_for_display
 
@@ -228,7 +240,7 @@ xmlns:str="http://exslt.org/strings">
 					<td>
 						<br/>
 						<br/>
-						<b>@@debt_message@@</b>
+						@@debt_message@@
 					</td>
 				</tr>
 

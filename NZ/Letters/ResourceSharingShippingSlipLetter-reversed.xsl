@@ -10,7 +10,8 @@
 	05/2022 rapido: Added shipping cost for Personal Delivery
 	05/2022 rapido: Added notice for Reading room Pod
 	06/2022 rapido: fix receiver address country
-	07/2022 rapido: add support for multiple scanned barcodes -->
+	07/2022 rapido: add support for multiple scanned barcodes
+	10/2022 rapido: added pod IDs for reading rooms -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -358,14 +359,23 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								<xsl:value-of select="notification_data/organization_unit/name"/> - <xsl:value-of select="notification_data/item/library_name"/><br />
 								<xsl:value-of select="notification_data/incoming_request/format"/> - <xsl:value-of select="$requestType"/>
 								<!-- SLSP: Add reading room note if reading room pod id -->
-								<!-- <xsl:if test="/notification_data/incoming_request/pod_id = '377067383680000041'">
+								<!-- 452167832730000041 Courier UGE - Salle de lecture
+								452167827350000041 Berner Kurier - Lesesaal
+								452497325370000041 Battelle/Jura - Salle de lecture
+								452497929300000041 HSG - Lesesaal
+								452084165700000041 SLSP Courier - Reading Room -->
+								<xsl:if test="/notification_data/incoming_request/pod_id = '452167832730000041' or
+								/notification_data/incoming_request/pod_id = '452167827350000041' or
+								/notification_data/incoming_request/pod_id = '452497325370000041' or
+								/notification_data/incoming_request/pod_id = '452497929300000041' or
+								/notification_data/incoming_request/pod_id = '452084165700000041'">
 									<br /><strong><xsl:call-template name="SLSP-multilingual">
 										<xsl:with-param name="en" select="'Only for reading room'"/>
 										<xsl:with-param name="fr" select="'Seulement en salle de lecture'"/>
 										<xsl:with-param name="it" select="'Solo in sala lettura'"/>
 										<xsl:with-param name="de" select="'Nur im Lesesaal'"/>
 									</xsl:call-template></strong>
-								</xsl:if> -->
+								</xsl:if>
 							</td>
 						</tr>
 						<!-- Show externalID in ILL requests -->
