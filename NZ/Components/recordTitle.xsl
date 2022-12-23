@@ -6,6 +6,7 @@
 06/2022 added personal delivery field extraction
 09/2022 Added templates SLSP-greeting and SLSP-sincerely
 10/2022 Added templates SLSP-greeting-ILL; updated SLSP-multilingual
+11/2022	Added template SLSP-Rapido-destination
 -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -90,7 +91,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<![CDATA[Pour consulter vos prêts en cours et les frais qui n'ont pas encore été facturés, veuillez vous connecter à swisscovery: ]]>
 			</xsl:with-param>
 			<xsl:with-param name="it" select="'Per controllare i suoi prestiti attuali e i costi non ancora fatturati, effettui il login su swisscovery: '"/>
-			<xsl:with-param name="de" select="'Um Ihre aktuellen Ausleihen und noch nicht in Rechnung gestellten Gebühren zu überprüfen, loggen Sie sich bitte bei swisscovery ein: '"/>
+			<xsl:with-param name="de" select="'Um Ihre aktuellen Ausleihen und noch nicht in Rechnung gestellte Gebühren zu überprüfen, loggen Sie sich bitte bei swisscovery ein: '"/>
 		</xsl:call-template>
 		<a>
 			<xsl:attribute name="href">@@email_my_account@@&#38;lang=
@@ -108,7 +109,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		</a>
 	</xsl:template>
 
-	<!-- Template to extract request note from Rapido request
+	<!-- Template for Resource Sharing Request Slip to extract request note from Rapido request
 	Usage:
 		<xsl:variable name="requestNote">
 			<xsl:call-template name="SLSP-Rapido-request-note" />
@@ -129,7 +130,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		</xsl:choose>
 	</xsl:template>
 
-	<!-- Template to extract volume from the encoded XML metadata provided in letter XML
+	<!-- Template for Resource Sharing Request Slip to extract volume from the encoded XML metadata provided in letter XML
 	Usage: 
 		<xsl:variable name="requestVolume">
 			<xsl:call-template name="SLSP-Rapido-extract-volume" />
@@ -153,7 +154,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		<xsl:value-of select="substring-before($user-volume-temp, '&lt;/dc:volume')"/>
 	</xsl:template>
 
-	<!-- Template to extract pages from the encoded XML metadata provided in letter XML
+	<!-- Template for Resource Sharing Request Slip to extract pages from the encoded XML metadata provided in letter XML
 	Usage: 
 		<xsl:variable name="requestPages">
 			<xsl:call-template name="SLSP-Rapido-extract-pages" />
@@ -177,7 +178,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		<xsl:value-of select="substring-before($user-pages-temp, '&lt;/dc:rlterms_pages')"/>
 	</xsl:template>
 
-	<!-- Template to print the home / office delivery information
+	<!-- Template for Resource Sharing Request Slip to print the home / office delivery information
         Usage:
             <xsl:variable name="personalDelivery">
                 <xsl:call-template name="SLSP-Rapido-persDel" />
@@ -193,6 +194,26 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			<xsl:value-of select="/notification_data/incoming_request/rapido_delivery_option"/>
 		</xsl:if>
 	</xsl:template>
+
+	<!-- Template for Resource Sharing Request Slip to extract destination from Rapido request.
+        Returns either Rapido partner name or request destination
+	Usage:
+		<xsl:variable name="destination">
+			<xsl:call-template name="SLSP-Rapido-destination" />
+		</xsl:variable>
+		<xsl:value-of select="$destination"/>
+    -->
+    <xsl:template name="SLSP-Rapido-destination">
+        <xsl:choose>
+            <xsl:when test="/notification_data/incoming_request/partner_name != ''
+			and /notification_data/incoming_request/rapido_request = 'true'">
+                <xsl:value-of select="/notification_data/incoming_request/partner_name"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="/notification_data/destination"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 
 	<!-- Template to add greeting to letters in case the label is missing in configuration
 	USAGE: <xsl:call-template name="SLSP-greeting" /> -->
