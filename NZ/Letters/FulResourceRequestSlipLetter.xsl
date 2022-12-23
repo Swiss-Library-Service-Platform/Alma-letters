@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP Main version 11/2021
 		02/2022 Added chapter title, author and pages; hidden second requested for; colspan 3
-        05/2022 Added rapido request note, rapido volume extraction
-        06/2022 added personal delivery field extraction-->
+        05/2022 Added rapido request note, rapido volume extraction, rapido pages
+        06/2022 added personal delivery field extraction
+        11/2022 added extraction of rapido destination-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:include href="header.xsl" />
@@ -167,22 +168,23 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     </td>
                                 </tr>
                             </xsl:if>
-                            <!-- SLSP Add pages from request if available -->
-                            <xsl:if test="notification_data/request/pages != ''">
-                                <tr>
-                                    <td colspan="3">
-                                        <strong>
-                                            <xsl:call-template name="SLSP-multilingual">
-                                                <xsl:with-param name="en" select="'Pages'"/>
-                                                <xsl:with-param name="fr" select="'Pages'"/>
-                                                <xsl:with-param name="it" select="'Pagine'"/>
-                                                <xsl:with-param name="de" select="'Seiten'"/>
-                                            </xsl:call-template>:
-                                        </strong>
-                                        <xsl:value-of select="notification_data/request/pages"/>
-                                    </td>
-                                </tr>
-                            </xsl:if>
+							<!-- SLSP Add pages from Rapido request if available -->
+							<xsl:variable name="requestPages">
+								<xsl:call-template name="SLSP-Rapido-extract-pages" />
+							</xsl:variable>
+							<xsl:if test="$requestPages != ''">
+								<tr>
+									<td colspan="3">
+										<strong>
+										<xsl:call-template name="SLSP-multilingual">
+											<xsl:with-param name="en" select="'Pages'"/>
+											<xsl:with-param name="fr" select="'Pages'"/>
+											<xsl:with-param name="it" select="'Pagine'"/>
+											<xsl:with-param name="de" select="'Seiten'"/>
+										</xsl:call-template>: </strong><xsl:value-of select="$requestPages"/>
+									</td>
+								</tr>
+							</xsl:if>
                             <!-- SLSP -->
                             <tr>
                                 <td>
@@ -279,43 +281,38 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 </xsl:if>
                             </xsl:if>
                             <tr>
-                                <td colspan="3">
-                                    <strong>@@move_to_library@@: </strong>
-                                    <xsl:value-of select="notification_data/destination"/>
-                                </td>
-                            </tr>
-                            <!-- SLSP: Add personal delivery field to request type -->
-                            <xsl:variable name="personalDelivery">
-                                <xsl:call-template name="SLSP-Rapido-persDel" />
-                            </xsl:variable>
-                            <tr>
-                                <td colspan="3">
-                                    <strong>@@request_type@@: </strong>
-                                    <xsl:value-of select="notification_data/request_type"/>
-                                    <xsl:if test="$personalDelivery != ''">
-                                        - <xsl:value-of select="$personalDelivery"/>
-                                    </xsl:if>
-                                </td>
-                            </tr>
-                            <xsl:if test="notification_data/request/system_notes != ''">
-                                <tr>
-                                    <td colspan="3">
-                                        <strong>@@system_notes@@:</strong>
-                                        <xsl:value-of select="notification_data/request/system_notes"/>
-                                    </td>
-                                </tr>
-                            </xsl:if>
-                            <!-- SLSP: Add request note from the Rapido request or normal request -->
-                            <xsl:variable name="requestNote">
-                                <xsl:call-template name="SLSP-Rapido-request-note" />
-                            </xsl:variable>
-                            <xsl:if test="$requestNote != ''">
-                                <tr>
-                                    <td colspan="3">
-                                        <strong>@@request_note@@: </strong><xsl:value-of select="$requestNote"/>
-                                    </td>
-                                </tr>
-                            </xsl:if>
+								<td colspan="3">
+									<strong>@@move_to_library@@: </strong>
+									<!-- SLSP: extract destination for Rapido requests -->
+									<xsl:variable name="destination">
+										<xsl:call-template name="SLSP-Rapido-destination" />
+									</xsl:variable>
+									<xsl:value-of select="$destination"/>
+									<br />
+									<!-- SLSP: Add personal delivery field to request type -->
+									<xsl:variable name="personalDelivery">
+										<xsl:call-template name="SLSP-Rapido-persDel" />
+									</xsl:variable>
+									<strong>@@request_type@@: </strong>
+									<xsl:value-of select="notification_data/request_type"/>
+									<xsl:if test="$personalDelivery != ''">
+										- <xsl:value-of select="$personalDelivery"/>
+									</xsl:if>
+									<xsl:if test="notification_data/request/system_notes != ''">
+										<br />
+										<strong>@@system_notes@@: </strong>
+										<xsl:value-of select="notification_data/request/system_notes"/>
+									</xsl:if>
+									<!-- SLSP: Add request note from the Rapido request or normal request -->
+									<xsl:variable name="requestNote">
+										<xsl:call-template name="SLSP-Rapido-request-note" />
+									</xsl:variable>
+									<xsl:if test="$requestNote != ''">
+										<br />
+										<strong>@@request_note@@: </strong><xsl:value-of select="$requestNote"/>
+									</xsl:if>
+								</td>
+							</tr>
                         </table>
                         <!-- Adapted code from ETH (escherer) -->
                         <xsl:if test="notification_data/request/selected_inventory_type!='ITEM'">

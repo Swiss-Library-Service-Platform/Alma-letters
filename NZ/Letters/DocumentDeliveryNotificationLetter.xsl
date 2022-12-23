@@ -176,6 +176,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               </tr>
               <!-- RapidILL library that scanned the item -->
               <xsl:if test="notification_data/resource_sharing_request != '' and notification_data/resource_sharing_request/self_ownership = 'false'">
+              <!-- add another condition for the notification_data/resource_sharing_request/lending_institution != '' -->
               <tr>
                 <td>
                     <xsl:call-template name="SLSP-multilingual">

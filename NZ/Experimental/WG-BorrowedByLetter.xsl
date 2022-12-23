@@ -4,7 +4,7 @@
 		header - head
 		style - generalStyle, bodyStyleCss, listStyleCss
 		recordTitle - SLSP-multilingual
-		10/2022 -->
+-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/strings">
 
@@ -129,15 +129,15 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 				<tr>
 					<td>
 						<xsl:variable name="label_raw">
-								@@the_item@@
-							</xsl:variable>
-							<xsl:variable name="proxy">
-								<xsl:value-of select="notification_data/borrower/first_name" />&#160;<xsl:value-of select="notification_data/borrower/last_name" />
-							</xsl:variable>
-							<xsl:call-template name="printLabel">
-								<xsl:with-param name="label" select="$label_raw"/>
-								<xsl:with-param name="var" select="$proxy"/>
-							</xsl:call-template>
+							@@the_item@@
+						</xsl:variable>
+						<xsl:variable name="proxy">
+							<xsl:value-of select="notification_data/borrower/first_name" />&#160;<xsl:value-of select="notification_data/borrower/last_name" />
+						</xsl:variable>
+						<xsl:call-template name="printLabel">
+							<xsl:with-param name="label" select="$label_raw"/>
+							<xsl:with-param name="var" select="$proxy"/>
+						</xsl:call-template>
 					</td>
 				</tr>
 				<xsl:variable name="callNo">
