@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP Customized 05/2022
+<!-- IZ specific: anonymization
+	
+	SLSP Customized 05/2022
         05/2022 Deleted duplicit fields ISSN, ISBN, Imprint
 		05/2022 Added rapido request note, rapido volume, rapido pages 
 		08/2022 Added anonymization to print existing Hold Shelf slips
 		10/2022 added personal delivery field extraction
+		11/2022 add extraction for destination of Rapido requests
     Dependancy:
         recordTitle - recordTitle, SLSP-Rapido-request-note, SLSP-Rapido-extract-volume, SLSP-Rapido-extract-pages
         style - generalStyle
@@ -206,9 +209,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							</tr>
 							</xsl:if>
 						</xsl:if>
-
+						<!-- SLSP: extract destination for Rapido requests -->
+						<xsl:variable name="destination">
+							<xsl:call-template name="SLSP-Rapido-destination" />
+						</xsl:variable>
 						<tr>
-							<td><strong>@@move_to_library@@: </strong><xsl:value-of select="notification_data/destination"/></td>
+							<td><strong>@@move_to_library@@: </strong><xsl:value-of select="$destination"/></td>
 						</tr>
 						<!-- SLSP: Add personal delivery field to request type -->
 						<xsl:variable name="personalDelivery">
@@ -241,7 +247,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						</xsl:if>
 						<xsl:if test="notification_data/user_for_printing/name">
 							<tr>
-								<td>
+								<td colspan="3">
 									<br />
 									<h1>@@requested_for@@: 
 										<!-- SLSP: Anonymization based on last 3 digits of Barcode NZ or Barcode IZ -->

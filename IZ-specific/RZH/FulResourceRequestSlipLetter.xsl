@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP Customized 11/2021
+<!-- IZ specific: fix for barcode printing in Schweizerisches Nationalmuseum
+	
+	SLSP Customized 11/2021
 		01/2022 - Added user Barcode (SUPPORT-8376)
 		01/2022 - Fix for item non-readable barcodes with 11 chars (SUPPORT-5303)
 		05/2022 Added rapido request note, rapido volume, rapido pages
 		06/2022 added personal delivery field extraction
+		11/2022 format adjustments to fit A4 (SUPPORT-19945)
+		11/2022 add extraction for destination of Rapido requests
 	Dependance:
 		header - head
 		style - generalStyle
@@ -59,11 +63,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<xsl:call-template name="generalStyle" />
 			</head>
 			<body>
-				<h1>
+				<h2>
 					<strong>@@requested_for@@ :
 						<xsl:value-of select="notification_data/user_for_printing/name"/>
 					</strong>
-				</h1>
+				</h2>
 				<xsl:call-template name="head" />
 				<!-- header.xsl -->
 				<div class="messageArea">
@@ -159,28 +163,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 									<xsl:call-template name="recordTitle" />
 								</td>
 							</tr>
-							<!-- DBL (4. 6. 2021): Hidden isbn since it is comming from recordTitle -->
-							<!-- <xsl:if test="notification_data/phys_item_display/isbn != ''">
-								<tr>
-								<td>@@isbn@@: <xsl:value-of select="notification_data/phys_item_display/isbn"/></td>
-								</tr>
-							</xsl:if> -->
-							<!-- <xsl:if test="notification_data/phys_item_display/issn != ''">
-								<tr>
-								<td>@@issn@@: <xsl:value-of select="notification_data/phys_item_display/issn"/></td>
-								</tr>
-							</xsl:if> -->
 							<xsl:if test="notification_data/phys_item_display/edition != ''">
 								<tr>
 									<td><strong>@@edition@@: </strong><xsl:value-of select="notification_data/phys_item_display/edition"/>
 									</td>
 								</tr>
 							</xsl:if>
-							<!-- <xsl:if test="notification_data/phys_item_display/imprint != ''">
-								<tr>
-								<td>@@imprint@@: <xsl:value-of select="notification_data/phys_item_display/imprint"/></td>
-								</tr>
-							</xsl:if> -->
 							<!-- DBL (4. 6. 2021): Added Series field to better localize norms -->
 							<xsl:if test="notification_data/request/record_display_section/series_small != ''">
 								<tr>
@@ -232,27 +220,33 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							</xsl:if>
 							<tr>
 								<td>
-									<h2>
-										<strong>@@location@@: </strong>
-										<xsl:value-of select="notification_data/phys_item_display/location_name"/>
-									</h2>
+									<table>
+										<tr>
+											<td>
+												<h3>
+													<strong>@@location@@: </strong>
+													<xsl:value-of select="notification_data/phys_item_display/location_name"/>
+												</h3>
+											</td>
+											<xsl:if test="notification_data/phys_item_display/call_number != ''">
+												<td>
+													<h3>
+														| <strong>@@call_number@@: </strong>
+														<xsl:value-of select="notification_data/phys_item_display/call_number"/>
+													</h3>
+												</td>
+											</xsl:if>
+											<xsl:if test="notification_data/phys_item_display/accession_number != ''">
+												<td>
+													<h3>
+														| <strong>@@accession_number@@: </strong>
+														<xsl:value-of select="notification_data/phys_item_display/accession_number"/>
+													</h3>
+												</td>
+											</xsl:if>
+										</tr>	
+									</table>
 								</td>
-								<xsl:if test="notification_data/phys_item_display/call_number != ''">
-									<td>
-										<h2>
-											<strong>@@call_number@@: </strong>
-											<xsl:value-of select="notification_data/phys_item_display/call_number"/>
-										</h2>
-									</td>
-								</xsl:if>
-								<xsl:if test="notification_data/phys_item_display/accession_number != ''">
-									<td>
-										<h2>
-											<strong>@@accession_number@@: </strong>
-											<xsl:value-of select="notification_data/phys_item_display/accession_number"/>
-										</h2>
-									</td>
-								</xsl:if>
 							</tr>
 							<xsl:if  test="notification_data/phys_item_display/shelving_location/string" >
 								<xsl:if  test="notification_data/request/selected_inventory_type='ITEM'" >
@@ -326,43 +320,38 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							</xsl:if>
 							<strong></strong>
 							<tr>
-								<td>
-									<strong>@@move_to_library@@: </strong>
-									<xsl:value-of select="notification_data/destination"/>
-								</td>
-							</tr>
-							<!-- SLSP: Add personal delivery field to request type -->
-							<xsl:variable name="personalDelivery">
-								<xsl:call-template name="SLSP-Rapido-persDel" />
-							</xsl:variable>
-							<tr>
 								<td colspan="3">
+									<strong>@@move_to_library@@: </strong>
+									<!-- SLSP: extract destination for Rapido requests -->
+									<xsl:variable name="destination">
+										<xsl:call-template name="SLSP-Rapido-destination" />
+									</xsl:variable>
+									<xsl:value-of select="$destination"/>
+									<br />
+									<!-- SLSP: Add personal delivery field to request type -->
+									<xsl:variable name="personalDelivery">
+										<xsl:call-template name="SLSP-Rapido-persDel" />
+									</xsl:variable>
 									<strong>@@request_type@@: </strong>
 									<xsl:value-of select="notification_data/request_type"/>
 									<xsl:if test="$personalDelivery != ''">
 										- <xsl:value-of select="$personalDelivery"/>
 									</xsl:if>
+									<xsl:if test="notification_data/request/system_notes != ''">
+										<br />
+										<strong>@@system_notes@@: </strong>
+										<xsl:value-of select="notification_data/request/system_notes"/>
+									</xsl:if>
+									<!-- SLSP: Add request note from the Rapido request or normal request -->
+									<xsl:variable name="requestNote">
+										<xsl:call-template name="SLSP-Rapido-request-note" />
+									</xsl:variable>
+									<xsl:if test="$requestNote != ''">
+										<br />
+										<strong>@@request_note@@: </strong><xsl:value-of select="$requestNote"/>
+									</xsl:if>
 								</td>
 							</tr>
-							<xsl:if test="notification_data/request/system_notes != ''">
-								<tr>
-									<td>
-										<strong>@@system_notes@@:</strong>
-										<xsl:value-of select="notification_data/request/system_notes"/>
-									</td>
-								</tr>
-							</xsl:if>
-							<!-- SLSP: Add request note from the Rapido request or normal request -->
-							<xsl:variable name="requestNote">
-								<xsl:call-template name="SLSP-Rapido-request-note" />
-							</xsl:variable>
-							<xsl:if test="$requestNote != ''">
-								<tr>
-									<td colspan="3">
-										<strong>@@request_note@@: </strong><xsl:value-of select="$requestNote"/>
-									</td>
-								</tr>
-							</xsl:if>
 						</table>
 						<!-- Adapted code from ETH (escherer) -->
 						<xsl:if test="notification_data/request/selected_inventory_type!='ITEM'">

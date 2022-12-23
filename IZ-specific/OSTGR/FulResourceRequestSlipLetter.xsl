@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP Customized 11/2021
+<!--SLSP Customized 11/2021
 	11/2021 - hidden second imprint
 	11/2021 - adjusted series output so all 830 fields get printed
 	05/2022 - Added rapido request note, rapido volume, rapido pages

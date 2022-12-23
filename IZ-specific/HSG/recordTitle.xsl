@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 08/2021
+<!-- IZ specific: disabled fr, it languages in SLSP-multilingual
+	
+SLSP WG: Letters version 08/2021
 10/2021 - added template userAccount; removed labels for author and imprint
 01/2022 - SLSP-multilingual option for IZ with disabled languages
 		- Disabled FR and IT
@@ -7,6 +9,7 @@
 06/2022 added personal delivery field extraction
 09/2022 Added templates SLSP-greeting and SLSP-sincerely
 10/2022 Added templates SLSP-greeting-ILL; updated SLSP-multilingual
+11/2022	Added template SLSP-Rapido-destination
 -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -184,6 +187,26 @@ Usage:
 	<xsl:if test="/notification_data/incoming_request/rapido_delivery_option != ''">
 		<xsl:value-of select="/notification_data/incoming_request/rapido_delivery_option"/>
 	</xsl:if>
+</xsl:template>
+
+<!-- Template for Resource Sharing Request Slip to extract destination from Rapido request.
+	Returns either Rapido partner name or request destination
+Usage:
+	<xsl:variable name="destination">
+		<xsl:call-template name="SLSP-Rapido-destination" />
+	</xsl:variable>
+	<xsl:value-of select="$destination"/>	
+-->
+<xsl:template name="SLSP-Rapido-destination">
+	<xsl:choose>
+		<xsl:when test="/notification_data/incoming_request/partner_name != ''
+		and /notification_data/incoming_request/rapido_request = 'true'">
+			<xsl:value-of select="/notification_data/incoming_request/partner_name"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="/notification_data/destination"/>
+		</xsl:otherwise>
+	</xsl:choose>
 </xsl:template>
 
 <!-- Template to add greeting to letters in case the label is missing in configuration

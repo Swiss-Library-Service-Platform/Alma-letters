@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 10/2021
+<!-- IZ adaptation: reversed senderReceiver address field
+	
+	SLSP WG: Letters version 10/2021
 		10/2021 - fix date in header
 		11/2021 - senderReceiver-receiver-only: added 1cm margin on the left side to better fit envelope window
-		11/2021 - body style: font-size: 100% -->
-<!-- Customized: reversed senderReceiver address field -->
+		11/2021 - body style: font-size: 100%
+		02/2022 - added greeting to all languages 
+		05/2022 - synced adaptations of header and senderReceiver to local templates
+		12/2022	- added SLSP greeting template -->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
-        recordTitle - SLSP-multilingual, SLSP-userAccount
+        recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
          -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/strings">
@@ -31,29 +35,35 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 	insert logo & header
 -->
 <xsl:template name="head-overdue-letter">
-	<table cellspacing="0" cellpadding="5" border="0" style="background-color:#e9e9e9;  width:100%; text-shadow:1px 1px 1px #fff; height:35mm">
+	<table cellspacing="0" cellpadding="5" border="0">
+		<!-- SLSP: overloading the height parameter to overwrite the style -->
+			<xsl:attribute name="style">
+			<xsl:call-template name="headerTableStyleCss" />; height: 35mm;
+		</xsl:attribute>
 		<!-- LOGO INSERT -->
 		<tr>
-			<xsl:attribute name="style">
-				<xsl:call-template name="headerLogoStyleCss" />
-				<!-- style.xsl -->
-			</xsl:attribute>
+		<xsl:attribute name="style">
+			<xsl:call-template name="headerLogoStyleCss" /> <!-- style.xsl -->
+		</xsl:attribute>
 			<td colspan="2">
 				<div id="mailHeader">
 					<div id="logoContainer" class="alignLeft">
-						<img src="cid:logo.jpg" alt="logo" style="max-height:20mm"/>
+						<!-- SLSP: fixed height of logo -->
+						<img onerror="this.src='/infra/branding/logo/logo-email.png'" src="cid:logo.jpg" alt="logo" style="height:20mm"/>
 					</div>
 				</div>
 			</td>
 		</tr>
 		<!-- END OF LOGO INSERT -->
 		<tr>
-			<td>
-				<h1>@@letterName@@&#160;-&#160;<xsl:call-template name="recall-type" /></h1>
-			</td>
-			<td align="right">
-				<xsl:value-of select="/notification_data/general_data/current_date"/>
-			</td>
+			<xsl:for-each select="notification_data/general_data">
+				<td>
+					<h1><xsl:value-of select="subject"/>&#160;-&#160;<xsl:call-template name="recall-type" /></h1>
+				</td>
+				<td align="right">
+					<xsl:value-of select="current_date"/>
+				</td>
+			</xsl:for-each>
 		</tr>
 	</table>
 </xsl:template>
@@ -98,6 +108,7 @@ If overdue profiles are changed then the text bellow has to be adapted.
 			<td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm;">
 				<table cellspacing="0" cellpadding="0" border="0">
 					<xsl:attribute name="style">
+						font-weight: 600;
 						<xsl:call-template name="listStyleCss" />
 						<!-- style.xsl -->
 					</xsl:attribute>
@@ -165,9 +176,10 @@ If overdue profiles are changed then the text bellow has to be adapted.
 <xsl:template name="senderReceiver-receiver-only-reversed">
 	<table cellspacing="0" border="0" width="100%">
 		<tr>
-			<td width="50%"  align="left" style="padding: 10mm 5mm 10mm 10mm;">
+			<td width="50%"  align="left" style="padding: 10mm 10mm 10mm 10mm;">
 				<table cellspacing="0" cellpadding="0" border="0">
 					<xsl:attribute name="style">
+						font-weight: 600;
 						<xsl:call-template name="listStyleCss" />
 						<!-- style.xsl -->
 					</xsl:attribute>
@@ -279,11 +291,10 @@ If overdue profiles are changed then the text bellow has to be adapted.
 					<br/>
 				</p>
 			</div>
-			<xsl:if test="/notification_data/receivers/receiver/preferred_language = 'fr'">
-				<p>
-					@@dear@@
-				</p>
-			</xsl:if>
+			<p>
+				<!-- Workaround for deleted label dear by Ex Libris in December 2022 -->
+				<xsl:call-template name="SLSP-greeting" />
+			</p>
 			<p>
 				<xsl:choose>
 					<xsl:when test="/notification_data/notification_type = 'OverdueNotificationType1'">
