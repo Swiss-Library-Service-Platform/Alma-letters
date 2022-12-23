@@ -8,6 +8,7 @@
     06/2022 - letter types; logo, address and texts shown only for ILL
     07/2022 - request type does not print if pod_id is empty
     10/2022 - added template SLSP-greeting-ILL
+    11/2022 - added cid prefix for barcode image
     -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:include href="header.xsl"/>
@@ -345,7 +346,11 @@
                             <tr>
 								<td style="padding-bottom: 10px">
                                     <strong>@@request_id@@:</strong><br />
-                                    <img src="externalId.png" alt="externalId"/>
+                                    <img>
+                                        <xsl:attribute name="src">cid:externalId.png</xsl:attribute>
+										<xsl:attribute name="alt"><xsl:value-of select="notification_data/request/external_request_id"/></xsl:attribute>
+                                    </img>
+                                    <!-- <img src="externalId.png" alt="externalId"/> -->
                                 </td>
 							</tr>
                             <tr>

@@ -4,7 +4,8 @@
 		11/2021 - senderReceiver-receiver-only: added 1cm margin on the left side to better fit envelope window
 		11/2021 - body style: font-size: 100%
 		02/2022 - added greeting to all languages
-		05/2022 - synced adaptations of header and senderReceiver to local templates -->
+		05/2022 - synced adaptations of header and senderReceiver to local templates
+		12/2022 - added SLSP greeting template -->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
         recordTitle - SLSP-multilingual, SLSP-userAccount
@@ -288,7 +289,8 @@ If overdue profiles are changed then the text bellow has to be adapted.
 				</p>
 			</div>
 			<p>
-				@@dear@@
+				<!-- Workaround for deleted label dear by Ex Libris in December 2022 -->
+				<xsl:call-template name="SLSP-greeting" />
 			</p>
 			<p>
 				<xsl:choose>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- WG: Letters 05/2022 -->
+<!-- WG: Letters 05/2022
+	12/2022 Added SLSP greeting template -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount
 		style - generalStyle, bodyStyleCss, mainTableStyleCss
@@ -77,7 +78,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<tr>
 					<td>
 						<br />
-						@@dear@@
+						<xsl:call-template name="SLSP-greeting" />
 					</td>
 				</tr>
 				<tr>
