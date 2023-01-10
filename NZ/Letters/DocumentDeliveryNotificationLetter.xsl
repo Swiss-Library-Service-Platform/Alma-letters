@@ -2,7 +2,8 @@
 <!-- SLSP WG: Letters version 05/2022
       05/2022 Rapido: request metadata, info about providing library, max views message
       10/2022 Rapido: adjusted the providing library part; unified greeting
-      10/2022 Added template for SLSP greeting -->
+      10/2022 Added template for SLSP greeting
+      01/2023 Rapido: hide digitizing library row if lender library is empty -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
 		style - generalStyle, bodyStyleCss
@@ -175,8 +176,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                 </td> 
               </tr>
               <!-- RapidILL library that scanned the item -->
-              <xsl:if test="notification_data/resource_sharing_request != '' and notification_data/resource_sharing_request/self_ownership = 'false'">
-              <!-- add another condition for the notification_data/resource_sharing_request/lending_institution != '' -->
+              <xsl:if test="notification_data/resource_sharing_request != ''
+                          and notification_data/resource_sharing_request/self_ownership = 'false'
+                          and notification_data/resource_sharing_request/lending_institution != ''">
               <tr>
                 <td>
                     <xsl:call-template name="SLSP-multilingual">
