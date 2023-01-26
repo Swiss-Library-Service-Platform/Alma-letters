@@ -2,16 +2,19 @@
 <!--
 	IZ customization: Delivery address on left side
 
-	SLSP version 04/2022
+	SLSP version 05/2022
 	04/2022 rapido: Added due date for requests other then Personal delivery
-	04/2022 rapido: request barcode without 1//
 	04/2022 rapido: Request types
 	05/2022 rapido: formatting as transit letter - address and logo shows up only for ILL and Personal delivery
 	05/2022 rapido: Added note to partner and author
 	05/2022 rapido: Added shipping cost for Personal Delivery
 	05/2022 rapido: Added notice for Reading room Pod
 	06/2022 rapido: fix receiver address country
-	07/2022 rapido: add support for multiple scanned barcodes -->
+	07/2022 rapido: add support for multiple scanned barcodes
+	10/2022 rapido: added pod IDs for reading rooms
+	11/2022 rapido: removed shipping cost for Personal delivery
+ 			rapido: fixed barcode issue with img-src prefix cid: and img-alt with barcode text
+	12/2022 rapido: changed the condition node for personal delivery; fixed the borrower reference e-mail for personal delivery-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -316,7 +319,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<!-- Courier / Local Courier -->
 				<xsl:if test="rapido_delivery_option=''">SLSP Courier / Local Courier</xsl:if>
 				<!-- Rapido personal deliery -->
-				<xsl:if test="rapido_delivery_option='homeDelivery' or rapido_delivery_option='officeDelivery'">Personal Delivery</xsl:if>
+				<!-- <xsl:if test="rapido_delivery_option='homeDelivery' or rapido_delivery_option='officeDelivery'">Personal Delivery</xsl:if> -->
+				<xsl:if test="/notification_data/personal_delivery = 'true'">Personal Delivery</xsl:if>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:for-each>
@@ -359,7 +363,16 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								<xsl:value-of select="notification_data/organization_unit/name"/> - <xsl:value-of select="notification_data/item/library_name"/><br />
 								<xsl:value-of select="notification_data/incoming_request/format"/> - <xsl:value-of select="$requestType"/>
 								<!-- SLSP: Add reading room note if reading room pod id -->
-								<xsl:if test="/notification_data/incoming_request/pod_id = '377067383680000041'">
+								<!-- 452167832730000041 Courier UGE - Salle de lecture
+								452167827350000041 Berner Kurier - Lesesaal
+								452497325370000041 Battelle/Jura - Salle de lecture
+								452497929300000041 HSG - Lesesaal
+								452084165700000041 SLSP Courier - Reading Room -->
+								<xsl:if test="/notification_data/incoming_request/pod_id = '452167832730000041' or
+								/notification_data/incoming_request/pod_id = '452167827350000041' or
+								/notification_data/incoming_request/pod_id = '452497325370000041' or
+								/notification_data/incoming_request/pod_id = '452497929300000041' or
+								/notification_data/incoming_request/pod_id = '452084165700000041'">
 									<br /><strong><xsl:call-template name="SLSP-multilingual">
 										<xsl:with-param name="en" select="'Only for reading room'"/>
 										<xsl:with-param name="fr" select="'Seulement en salle de lecture'"/>
@@ -374,15 +387,24 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<tr>
 								<td>
 									<strong>@@my_id@@:</strong><br/>
-									<img src="externalId.png" alt="externalId" />
+									<img>
+										<xsl:attribute name="src">cid:externalId.png</xsl:attribute>
+										<xsl:attribute name="alt"><xsl:value-of select="notification_data/incoming_request/external_request_id"/></xsl:attribute>
+									</img>
+									<!-- <img src="cid:externalId.png" alt="externalId" /> -->
 								</td>
 							</tr>
 						</xsl:if>
+						<!-- SLSP: fix with prefix cid: and request ID in src alt -->
 						<xsl:if test="notification_data/group_qualifier != ''" >
 							<tr>
 								<td>
 									<strong>@@group_qualifier@@: </strong><br/>
-									<img src="group_qualifier.png" alt="group_qualifier" />
+									<img>
+                                        <xsl:attribute name="src">cid:group_qualifier.png</xsl:attribute>
+                                        <xsl:attribute name="alt"><xsl:value-of select="notification_data/group_qualifier"/></xsl:attribute>
+                                    </img>
+									<!-- <img src="group_qualifier.png" alt="group_qualifier" /> -->
 								</td>
 							</tr>
 						</xsl:if>
@@ -400,12 +422,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 										<xsl:variable name="barcode" select="concat('Barcode', $index)"/>
 										<!-- <xsl:value-of select="$barcode"/><br/> -->
 										<img>
-											<xsl:attribute name="alt">
-												<xsl:value-of select="$barcode"/>
-											</xsl:attribute>
-											<xsl:attribute name="src">
-												<xsl:value-of select="concat($barcode, '.png')"/>
-											</xsl:attribute>
+											<xsl:attribute name="alt"><xsl:value-of select="."/></xsl:attribute>
+											<xsl:attribute name="src"><xsl:value-of select="concat('cid:', $barcode, '.png')"/></xsl:attribute>
 										</img>
 									</xsl:for-each>
 								</td>
@@ -515,7 +533,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								</xsl:if>
 								<xsl:value-of select="notification_data/item/owning_library_name"/> | 
 								<xsl:value-of select="notification_data/item/call_number"/>
-								<xsl:if test="$requestType = 'Personal Delivery' and notification_data/incoming_request/shipping_cost/sum != ''">
+								<!-- SLSP hidden shipping cost 
+									<xsl:if test="$requestType = 'Personal Delivery' and notification_data/incoming_request/shipping_cost/sum != ''">
 									<br /><strong>
 										<xsl:call-template name="SLSP-multilingual">
 											<xsl:with-param name="en" select="'Shipping cost'"/>
@@ -525,7 +544,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 											<xsl:with-param name="it" select="'Costo di spedizione'"/>
 											<xsl:with-param name="de" select="'Versandkosten'"/>
 										</xsl:call-template>: </strong><xsl:value-of select="/notification_data/incoming_request/shipping_cost/currency"/>&#160;<xsl:value-of select="/notification_data/incoming_request/shipping_cost/sum"/>
-								</xsl:if>
+								</xsl:if> -->
 							</td>
 						</tr>
 						<!-- <tr>
@@ -554,67 +573,14 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<span style="font-size: 120%; font-weight: bold">@@borrower_reference@@</span>
 							</td>
 						</tr>
-						<xsl:if test="notification_data/incoming_request/requester_email" >
+						<xsl:if test="/notification_data/email" >
 							<tr>
 								<td>
 									<xsl:value-of select="/notification_data/partner_name"/><br />
-									<xsl:value-of select="notification_data/incoming_request/requester_email"/>
+									<xsl:value-of select="/notification_data/email"/>
 								</td>
 							</tr>
 						</xsl:if>
-						<!-- <xsl:if test="notification_data/assignee != ''" >
-							<tr>
-								<td>
-									<b>@@assignee@@: </b>
-									<xsl:value-of select="notification_data/assignee"/>
-								</td>
-							</tr>
-						</xsl:if> -->
-						<!-- <xsl:if test="notification_data/item">
-							<br></br>
-							<tr>
-								<td>
-									<b>@@item_barcode@@: </b>
-									<img src="Barcode1.png" alt="Barcode1" />
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<xsl:value-of select="notification_data/item/title"/>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<b>@@library@@: </b>
-									<xsl:value-of select="notification_data/item/library_name"/>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<b>@@location@@: </b>
-									<xsl:value-of select="notification_data/item/location_name"/>
-								</td>
-							</tr>
-							<xsl:if  test="call_number" >
-								<tr>
-									<td>
-										<b>@@call_number@@: </b>
-										<xsl:value-of select="notification_data/item/call_number"/>
-									</td>
-								</tr>
-							</xsl:if>
-							<xsl:if test="shelving_location/string" >
-								<tr>
-									<td>
-										<b>@@shelving_location_for_item@@: </b>
-										<xsl:for-each select="shelving_location/string">
-											<xsl:value-of select="."/>
-									&#160;
-										</xsl:for-each>
-									</td>
-								</tr>
-							</xsl:if>
-						</xsl:if> -->
 					</table>
 				</div>
 			</div>
