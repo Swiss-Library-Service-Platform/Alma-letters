@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- WG:Letters 12/2022 -->
+<!-- WG:Letters 1/2023 -->
 <!-- Dependance:
     header - head
     senderReceiver - senderReceiver
@@ -36,11 +36,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
             <xsl:call-template name="head" /> <!-- header.xsl -->
             <xsl:call-template name="senderReceiver" /> <!-- SenderReceiver.xsl -->
-            <p>
+            <span>
                 @@dear@@
-            </p>
+            </span>
             <p>
-                @@we_would_like@@ <xsl:value-of select="notification_data/organization_unit/name"/> @@debt_of@@ <strong><xsl:value-of select="notification_data/total_fines_currency"/>&#160;<xsl:value-of select="notification_data/total_fines_amount"/></strong>
+                @@we_would_like@@<strong></strong>
             </p>
 
             <table role='presentation' cellpadding="5" class="listing">
@@ -67,7 +67,16 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                     <td><xsl:value-of select="fine_fee_ammount/currency"/>&#160;<xsl:value-of select="fine_fee_ammount/normalized_sum"/></td>
                 </tr>
                 </xsl:for-each>
-                <xsl:if test="notification_data/fine_fee_notification_fee_amount/sum !=''">
+                <tr>
+                    <td colspan="3">
+                        <strong>@@debt_of@@</strong>
+                    </td>
+                    <td>
+                        <xsl:value-of select="notification_data/total_fines_currency"/>&#160;<xsl:value-of select="notification_data/total_fines_amount"/>
+                    </td>
+                </tr>
+                <!-- SLSP does not use notification fees 
+                    <xsl:if test="notification_data/fine_fee_notification_fee_amount/sum !=''">
                     <tr>
                         <td>
                             <strong>@@fine_fee_notification_fee@@ </strong>
@@ -76,10 +85,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             <xsl:value-of select="notification_data/fine_fee_notification_fee_amount/normalized_sum"/>&#160;<xsl:value-of select="notification_data/fine_fee_notification_fee_amount/currency"/>&#160;<xsl:value-of select="ff"/>
                         </td>
                     </tr>
-                </xsl:if>
+                </xsl:if> -->
             </table>
             <p>
-                @@please_settle@@
+                <xsl:call-template name="SLSP-userAccount"/>
             </p>
             <p>@@sincerely@@</p>
             <p><xsl:value-of select="notification_data/organization_unit/name"/></p>
