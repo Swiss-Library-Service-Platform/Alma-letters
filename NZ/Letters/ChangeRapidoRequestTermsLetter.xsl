@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP version 11/2022
+<!-- WG version 02/2022
 Dependancy:
 	header - head
-	style - generalStyle, bodyStyleCss, listStyleCss -->
+	style - generalStyle, bodyStyleCss, listStyleCss
+	recordTitle - SLSP-userAccount -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:include href="header.xsl" />
@@ -203,7 +204,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					</tr>
 					<tr>
 						<td>
-							<br />
+							<xsl:call-template name="SLSP-userAccount"/>
+						</td>
+					</tr>
+					<tr>
+						<td>
 							@@end@@
 						</td>
 					</tr>
@@ -215,9 +220,14 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					</tr>
 					<tr>
 						<td>
-							<xsl:if test="notification_data/organization_unit/address/line1 !=''">
-								<xsl:value-of select="notification_data/organization_unit/address/line1" />
-							</xsl:if>
+							<xsl:choose>
+								<xsl:when test="notification_data/organization_unit/address/line1 !=''">
+									<xsl:value-of select="notification_data/organization_unit/address/line1" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="notification_data/organization_unit/name" />
+								</xsl:otherwise>
+							</xsl:choose>
 							<xsl:if test="notification_data/organization_unit/address/line2 !=''">
 								<br />
 								<xsl:value-of select="notification_data/organization_unit/address/line2" />

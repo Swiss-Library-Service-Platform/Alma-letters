@@ -9,6 +9,7 @@
     07/2022 - request type does not print if pod_id is empty
     10/2022 - added template SLSP-greeting-ILL
     11/2022 - added cid prefix for barcode image
+    02/2023 - added pod name
     -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:include href="header.xsl"/>
@@ -47,9 +48,8 @@
 	Possible request types:
 		- ILL
 		- Rapido
-            - SLSP Courier
 			- Personal Delivery
-			- <local courier pod name> -->
+			- SLSP or local courier-->
     <xsl:template name="request-type">
         <xsl:for-each select="/notification_data/request">
             <!-- app_indicator = <xsl:value-of select="app_indicator"/><br/>
@@ -57,14 +57,19 @@
             <xsl:choose>
                 <xsl:when test="app_indicator = 'ALMA' and pod_name = ''">ILL</xsl:when><!-- ILL -->
                 <xsl:when test="app_indicator = 'NGRS'"><!-- Rapido -->
-                    <xsl:choose>
+                    <xsl:choose>    
+                        <!-- Rapido personal delivery -->
+                        <xsl:when test="contains(/notification_data/pod_name, 'Home Delivery')">Personal Delivery</xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="normalize-space(/notification_data/pod_name)"/>
+                        </xsl:otherwise>
                         <!-- SLSP Courier -->
-                        <xsl:when test="pod_name = 'SLSP Courier'">SLSP Courier</xsl:when>
+                        <!-- <xsl:when test="pod_name = 'SLSP Courier'">SLSP Courier</xsl:when> -->
                         <!-- Rapido personal deliery
                             Not possible to distinguish a clear state when pod name empty -> do not print -->
                         <!-- <xsl:when test="pod_name = ''">Personal Delivery</xsl:when> -->
                         <!-- Local Courier -->
-                        <xsl:when test="pod_name != ''"><xsl:value-of select="pod_name"/></xsl:when>
+                        <!-- <xsl:when test="pod_name != ''"><xsl:value-of select="pod_name"/></xsl:when> -->
                     </xsl:choose>
                 </xsl:when>
             </xsl:choose>
