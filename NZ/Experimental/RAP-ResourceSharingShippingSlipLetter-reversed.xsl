@@ -15,7 +15,7 @@
 	11/2022 rapido: removed shipping cost for Personal delivery
  			rapido: fixed barcode issue with img-src prefix cid: and img-alt with barcode text
 	12/2022 rapido: changed the condition node for personal delivery; fixed the borrower reference e-mail for personal delivery
-	02/2023 rapido: added pod name-->
+	02/2023 rapido: added pod name; added template for personal delivery-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -352,245 +352,351 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<!-- ILL and Personal delivery -->
 						<xsl:when test="$requestType = 'ILL' or $requestType = 'Personal Delivery'">
 							<xsl:call-template name="head-letterName-logo" />
-							<xsl:call-template name="senderReceiver-shippingSlip" />
+							<xsl:call-template name="senderReceiver-shippingSlip-reversed" />
 						</xsl:when>
 						<!-- Couriers and Document delivery -->
 						<xsl:otherwise>
 							<xsl:call-template name="head-letterName-only" />
 						</xsl:otherwise>
 					</xsl:choose>
-					<table cellspacing="0" cellpadding="5" border="0">
-						<tr>
-							<td>
-								<strong>
-									<xsl:call-template name="SLSP-multilingual">
-										<xsl:with-param name="en" select="'From'"/>
-										<xsl:with-param name="fr" select="'De'"/>
-										<xsl:with-param name="it" select="'Da'"/>
-										<xsl:with-param name="de" select="'Von'"/>
-									</xsl:call-template>: </strong>
-								<xsl:value-of select="notification_data/organization_unit/name"/> - <xsl:value-of select="notification_data/item/library_name"/><br />
-								<xsl:value-of select="notification_data/incoming_request/format"/> - <xsl:value-of select="$requestType"/>
-								<!-- SLSP: Add reading room note if reading room pod id -->
-								<!-- 452167832730000041 Courier UGE - Salle de lecture
-								452167827350000041 Berner Kurier - Lesesaal
-								452497325370000041 Battelle/Jura - Salle de lecture
-								452497929300000041 HSG - Lesesaal
-								452084165700000041 SLSP Courier - Reading Room -->
-								<xsl:if test="/notification_data/incoming_request/pod_id = '452167832730000041' or
-								/notification_data/incoming_request/pod_id = '452167827350000041' or
-								/notification_data/incoming_request/pod_id = '452497325370000041' or
-								/notification_data/incoming_request/pod_id = '452497929300000041' or
-								/notification_data/incoming_request/pod_id = '452084165700000041'">
-									<br /><strong><xsl:call-template name="SLSP-multilingual">
-										<xsl:with-param name="en" select="'Only for reading room'"/>
-										<xsl:with-param name="fr" select="'Seulement en salle de lecture'"/>
-										<xsl:with-param name="it" select="'Solo in sala lettura'"/>
-										<xsl:with-param name="de" select="'Nur im Lesesaal'"/>
-									</xsl:call-template></strong>
-								</xsl:if>
-							</td>
-						</tr>
-						<!-- Show externalID in ILL requests -->
-						<xsl:if test="$requestType = 'ILL'">
-							<tr>
-								<td>
-									<strong>@@my_id@@:</strong><br/>
-									<img>
-										<xsl:attribute name="src">cid:externalId.png</xsl:attribute>
-										<xsl:attribute name="alt"><xsl:value-of select="notification_data/incoming_request/external_request_id"/></xsl:attribute>
-									</img>
-									<!-- <img src="cid:externalId.png" alt="externalId" /> -->
-								</td>
-							</tr>
-						</xsl:if>
-						<!-- SLSP: fix with prefix cid: and request ID in src alt -->
-						<xsl:if test="notification_data/group_qualifier != ''" >
-							<tr>
-								<td>
-									<strong>@@group_qualifier@@: </strong><br/>
-									<img>
-                                        <xsl:attribute name="src">cid:group_qualifier.png</xsl:attribute>
-                                        <xsl:attribute name="alt"><xsl:value-of select="notification_data/group_qualifier"/></xsl:attribute>
-                                    </img>
-									<!-- <img src="group_qualifier.png" alt="group_qualifier" /> -->
-								</td>
-							</tr>
-						</xsl:if>
-						<!-- SLSP: print all available barcode images for multiple barcodes scanned -->
-						<xsl:if test="notification_data/item">
-							<tr>
-								<td>
-									<strong>@@item_barcode@@:</strong>
-									<xsl:for-each select="notification_data/multi_barcodes/string">
-										<xsl:variable name="index" select="position()"/>
-										<xsl:if test="$index != '1'">
-											<br/>
+					<xsl:choose>
+						<xsl:when test="$requestType = 'Personal Delivery'">
+							<table cellspacing="0" cellpadding="5" border="0">
+								<tr>
+									<td>
+										<br />
+										<xsl:call-template name="SLSP-greeting" />
+									</td>
+								</tr>
+								<tr>
+									<td>
+										@@supplied_to@@
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<span style="font-size: 120%; font-weight: bold">
+											<xsl:value-of select="substring(notification_data/metadata/title, 0, 100)" disable-output-escaping="yes"/>
+											<xsl:if test="string-length(notification_data/metadata/title) > 100">...</xsl:if></span><br />
+										<xsl:choose>
+											<xsl:when test="notification_data/metadata/author != ''">
+												<xsl:value-of select="notification_data/metadata/author"/><br />
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="notification_data/metadata/additional_person_name"/><br />
+											</xsl:otherwise>
+										</xsl:choose>
+										<xsl:if test="notification_data/item/material_type != ''">
+											<xsl:call-template name="SLSP-multilingual">
+													<xsl:with-param name="en" select="'Material Type'"/>
+													<xsl:with-param name="fr">
+													<![CDATA[Type de matériel]]>
+													</xsl:with-param>
+													<xsl:with-param name="it" select="'Tipo di materiale'"/>
+													<xsl:with-param name="de" select="'Materialart'"/>
+												</xsl:call-template>: <xsl:value-of select="notification_data/item/material_type" /> <br />
 										</xsl:if>
+										<xsl:if test="notification_data/metadata/volume != ''">
+											@@volume@@: <xsl:value-of select="notification_data/metadata/volume"/><br />
+										</xsl:if>
+										<xsl:if test="notification_data/metadata/issue != ''">
+											@@issue@@: <xsl:value-of select="notification_data/metadata/issue"/><br />
+										</xsl:if>
+										<xsl:value-of select="notification_data/item/owning_library_name"/> | 
+										<xsl:value-of select="notification_data/item/call_number"/>
+										<!-- SLSP hidden shipping cost 
+											<xsl:if test="$requestType = 'Personal Delivery' and notification_data/incoming_request/shipping_cost/sum != ''">
+											<br /><strong>
+												<xsl:call-template name="SLSP-multilingual">
+													<xsl:with-param name="en" select="'Shipping cost'"/>
+													<xsl:with-param name="fr">
+													<![CDATA[Frais d'expédition]]>
+													</xsl:with-param>
+													<xsl:with-param name="it" select="'Costo di spedizione'"/>
+													<xsl:with-param name="de" select="'Versandkosten'"/>
+												</xsl:call-template>: </strong><xsl:value-of select="/notification_data/incoming_request/shipping_cost/currency"/>&#160;<xsl:value-of select="/notification_data/incoming_request/shipping_cost/sum"/>
+										</xsl:if> -->
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<strong>@@library@@: </strong><xsl:value-of select="notification_data/organization_unit/name"/> - <xsl:value-of select="notification_data/item/library_name"/><br />
+										<xsl:variable name="callNumber">
+											<xsl:choose>
+												<xsl:when test="/notification_data/item/display_alt_call_numbers != ''">
+													<xsl:value-of select="/notification_data/item/display_alt_call_numbers"/>
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:value-of select="/notification_data/item/call_number"/>
+												</xsl:otherwise>
+											</xsl:choose>
+										</xsl:variable>
+										<xsl:if test="$callNumber != ''">
+											<br />
+											<strong>@@call_number@@: </strong><xsl:value-of select="$callNumber"/>
+										</xsl:if>
+										<br />
+										<strong>@@item_barcode@@: </strong>
+										<xsl:for-each select="notification_data/multi_barcodes/string">
+											<xsl:variable name="index" select="position()"/>
+											<xsl:if test="$index != '1'">, </xsl:if>
+											<xsl:variable name="barcode" select="concat('Barcode', $index)"/>
+											<!-- <xsl:value-of select="$barcode"/><br/> -->
+											<xsl:value-of select="."/>
+										</xsl:for-each>
 										<br/>
-										<xsl:variable name="barcode" select="concat('Barcode', $index)"/>
-										<!-- <xsl:value-of select="$barcode"/><br/> -->
-										<img>
-											<xsl:attribute name="alt"><xsl:value-of select="."/></xsl:attribute>
-											<xsl:attribute name="src"><xsl:value-of select="concat('cid:', $barcode, '.png')"/></xsl:attribute>
-										</img>
-									</xsl:for-each>
-								</td>
-							</tr>
-						</xsl:if>
-						<!-- Original Ex Libris code
-						<xsl:if test="notification_data/item">
-							<tr>
-								<td>
-									<strong>@@item_barcode@@:</strong><br/>
-									<img src="Barcode1.png" alt="Barcode1" />
-								</td>
-							</tr>
-						</xsl:if> -->
-						<tr>
-							<td>
-								<strong><xsl:call-template name="SLSP-multilingual">
-									<xsl:with-param name="en" select="'Request date'"/>
-									<xsl:with-param name="fr">
-										<![CDATA[Date de la demande]]>
-									</xsl:with-param>
-									<xsl:with-param name="it" select="'Data richiesta'"/>
-									<xsl:with-param name="de" select="'Bestelldatum'"/>
-								</xsl:call-template>: </strong> <xsl:value-of select="notification_data/incoming_request/create_date"/>, <xsl:value-of select="substring(/notification_data/incoming_request/create_date_with_time_str,12,5)"/><br />
-								<strong><xsl:call-template name="SLSP-multilingual">
-									<xsl:with-param name="en" select="'Print date'"/>
-									<xsl:with-param name="fr">
-										<![CDATA[Date d'impression]]>
-									</xsl:with-param>
-									<xsl:with-param name="it" select="'Data stampa'"/>
-									<xsl:with-param name="de" select="'Druckdatum'"/>
-								</xsl:call-template>: </strong><xsl:value-of select="notification_data/general_data/current_date"/>&#160;<xsl:value-of select="substring(/notification_data/general_data/current_time, 1, 5)"/><br />
-								<xsl:if test="$requestType != 'Personal Delivery'">
-									<strong>
-										<xsl:call-template name="SLSP-multilingual">
-											<xsl:with-param name="en" select="'Due date'"/>
-											<xsl:with-param name="fr" select="'Date de retour'"/>
-											<xsl:with-param name="it" select="'Data di scadenza'"/>
-											<xsl:with-param name="de" select="'Fälligkeitsdatum'"/>
-										</xsl:call-template>: </strong>
-									<xsl:choose>
-										<xsl:when test="notification_data/incoming_request/due_date != ''">
-											<xsl:value-of select="notification_data/incoming_request/due_date"/>
-										</xsl:when>
-										<xsl:otherwise>
-											&#8212;
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:if>
-							</td>
-						</tr>
-						<xsl:if test="notification_data/incoming_request/note != ''" >
-							<tr>
-								<td>
-									<b>@@request_note@@: </b>
-									<xsl:value-of select="notification_data/incoming_request/note"/>
-								</td>
-							</tr>
-						</xsl:if>
-						<xsl:variable name="barcodes_count">
-							<xsl:value-of select="count(notification_data/multi_barcodes/string)" />
-						</xsl:variable>
-						<xsl:if test="$barcodes_count > 1">
-							<tr>
-								<td>
-									<b>Multiple barcodes: </b>
-									<xsl:value-of select="$barcodes_count"/>
-								</td>
-							</tr>
-						</xsl:if>
-						<xsl:if test="notification_data/incoming_request/note_to_partner != ''" >
-							<tr>
-								<td>
-									<b>@@note@@: </b>
-									<xsl:value-of select="notification_data/incoming_request/note_to_partner"/>
-								</td>
-							</tr>
-						</xsl:if>
-						<tr>
-							<td>
-								<span style="font-size: 120%; font-weight: bold">
-									<xsl:value-of select="substring(notification_data/metadata/title, 0, 100)" disable-output-escaping="yes"/>
-									<xsl:if test="string-length(notification_data/metadata/title) > 100">...</xsl:if></span><br />
-								<xsl:choose>
-									<xsl:when test="notification_data/metadata/author != ''">
-										<xsl:value-of select="notification_data/metadata/author"/><br />
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="notification_data/metadata/additional_person_name"/><br />
-									</xsl:otherwise>
-								</xsl:choose>
-								<xsl:if test="notification_data/item/material_type != ''">
-									<xsl:call-template name="SLSP-multilingual">
-											<xsl:with-param name="en" select="'Material Type'"/>
+										<strong><xsl:call-template name="SLSP-multilingual">
+											<xsl:with-param name="en" select="'Request date'"/>
 											<xsl:with-param name="fr">
-											<![CDATA[Type de matériel]]>
+												<![CDATA[Date de la demande]]>
 											</xsl:with-param>
-											<xsl:with-param name="it" select="'Tipo di materiale'"/>
-											<xsl:with-param name="de" select="'Materialart'"/>
-										</xsl:call-template>: <xsl:value-of select="notification_data/item/material_type" /> <br />
+											<xsl:with-param name="it" select="'Data richiesta'"/>
+											<xsl:with-param name="de" select="'Bestelldatum'"/>
+										</xsl:call-template>: </strong> <xsl:value-of select="notification_data/incoming_request/create_date"/>, <xsl:value-of select="substring(/notification_data/incoming_request/create_date_with_time_str,12,5)"/><br />
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<br />
+										<xsl:call-template name="SLSP-sincerely" />
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<xsl:value-of select="notification_data/item/library_name"/>
+									</td>
+								</tr>
+								<tr>
+									<td><br /><i>powered by SLSP</i></td>
+								</tr>
+							</table>
+						</xsl:when>
+						<xsl:otherwise>
+							<table cellspacing="0" cellpadding="5" border="0">
+								<tr>
+									<td>
+										<strong>
+											<xsl:call-template name="SLSP-multilingual">
+												<xsl:with-param name="en" select="'From'"/>
+												<xsl:with-param name="fr" select="'De'"/>
+												<xsl:with-param name="it" select="'Da'"/>
+												<xsl:with-param name="de" select="'Von'"/>
+											</xsl:call-template>: </strong>
+										<xsl:value-of select="notification_data/organization_unit/name"/> - <xsl:value-of select="notification_data/item/library_name"/><br />
+										<xsl:value-of select="notification_data/incoming_request/format"/> - <xsl:value-of select="$requestType"/>
+										<!-- SLSP: Add reading room note if reading room pod id -->
+										<!-- 452167832730000041 Courier UGE - Salle de lecture
+										452167827350000041 Berner Kurier - Lesesaal
+										452497325370000041 Battelle/Jura - Salle de lecture
+										452497929300000041 HSG - Lesesaal
+										452084165700000041 SLSP Courier - Reading Room -->
+										<xsl:if test="/notification_data/incoming_request/pod_id = '452167832730000041' or
+										/notification_data/incoming_request/pod_id = '452167827350000041' or
+										/notification_data/incoming_request/pod_id = '452497325370000041' or
+										/notification_data/incoming_request/pod_id = '452497929300000041' or
+										/notification_data/incoming_request/pod_id = '452084165700000041'">
+											<br /><strong><xsl:call-template name="SLSP-multilingual">
+												<xsl:with-param name="en" select="'Only for reading room'"/>
+												<xsl:with-param name="fr" select="'Seulement en salle de lecture'"/>
+												<xsl:with-param name="it" select="'Solo in sala lettura'"/>
+												<xsl:with-param name="de" select="'Nur im Lesesaal'"/>
+											</xsl:call-template></strong>
+										</xsl:if>
+									</td>
+								</tr>
+								<!-- Show externalID in ILL requests -->
+								<xsl:if test="$requestType = 'ILL'">
+									<tr>
+										<td>
+											<strong>@@my_id@@:</strong><br/>
+											<img>
+												<xsl:attribute name="src">cid:externalId.png</xsl:attribute>
+												<xsl:attribute name="alt"><xsl:value-of select="notification_data/incoming_request/external_request_id"/></xsl:attribute>
+											</img>
+											<!-- <img src="externalId.png" alt="externalId" /> -->
+										</td>
+									</tr>
 								</xsl:if>
-								<xsl:if test="notification_data/metadata/volume != ''">
-									@@volume@@: <xsl:value-of select="notification_data/metadata/volume"/><br />
+								<!-- SLSP: fix with prefix cid: and request ID in src alt -->
+								<xsl:if test="notification_data/group_qualifier != ''" >
+									<tr>
+										<td>
+											<strong>@@group_qualifier@@: </strong><br/>
+											<img>
+												<xsl:attribute name="src">cid:group_qualifier.png</xsl:attribute>
+												<xsl:attribute name="alt"><xsl:value-of select="notification_data/group_qualifier"/></xsl:attribute>
+											</img>
+											<!-- <img src="group_qualifier.png" alt="group_qualifier" /> -->
+										</td>
+									</tr>
 								</xsl:if>
-								<xsl:if test="notification_data/metadata/issue != ''">
-									@@issue@@: <xsl:value-of select="notification_data/metadata/issue"/><br />
+								<!-- SLSP: print all available barcode images for multiple barcodes scanned -->
+								<xsl:if test="notification_data/item">
+									<tr>
+										<td>
+											<strong>@@item_barcode@@:</strong>
+											<xsl:for-each select="notification_data/multi_barcodes/string">
+												<xsl:variable name="index" select="position()"/>
+												<xsl:if test="$index != '1'">
+													<br/>
+												</xsl:if>
+												<br/>
+												<xsl:variable name="barcode" select="concat('Barcode', $index)"/>
+												<!-- <xsl:value-of select="$barcode"/><br/> -->
+												<img>
+													<xsl:attribute name="alt"><xsl:value-of select="."/></xsl:attribute>
+													<xsl:attribute name="src"><xsl:value-of select="concat('cid:', $barcode, '.png')"/></xsl:attribute>
+												</img>
+											</xsl:for-each>
+										</td>
+									</tr>
 								</xsl:if>
-								<xsl:value-of select="notification_data/item/owning_library_name"/> | 
-								<xsl:value-of select="notification_data/item/call_number"/>
-								<!-- SLSP hidden shipping cost 
-									<xsl:if test="$requestType = 'Personal Delivery' and notification_data/incoming_request/shipping_cost/sum != ''">
-									<br /><strong>
-										<xsl:call-template name="SLSP-multilingual">
-											<xsl:with-param name="en" select="'Shipping cost'"/>
+								<tr>
+									<td>
+										<strong><xsl:call-template name="SLSP-multilingual">
+											<xsl:with-param name="en" select="'Request date'"/>
 											<xsl:with-param name="fr">
-											<![CDATA[Frais d'expédition]]>
+												<![CDATA[Date de la demande]]>
 											</xsl:with-param>
-											<xsl:with-param name="it" select="'Costo di spedizione'"/>
-											<xsl:with-param name="de" select="'Versandkosten'"/>
-										</xsl:call-template>: </strong><xsl:value-of select="/notification_data/incoming_request/shipping_cost/currency"/>&#160;<xsl:value-of select="/notification_data/incoming_request/shipping_cost/sum"/>
+											<xsl:with-param name="it" select="'Data richiesta'"/>
+											<xsl:with-param name="de" select="'Bestelldatum'"/>
+										</xsl:call-template>: </strong> <xsl:value-of select="notification_data/incoming_request/create_date"/>, <xsl:value-of select="substring(/notification_data/incoming_request/create_date_with_time_str,12,5)"/><br />
+										<strong><xsl:call-template name="SLSP-multilingual">
+											<xsl:with-param name="en" select="'Print date'"/>
+											<xsl:with-param name="fr">
+												<![CDATA[Date d'impression]]>
+											</xsl:with-param>
+											<xsl:with-param name="it" select="'Data stampa'"/>
+											<xsl:with-param name="de" select="'Druckdatum'"/>
+										</xsl:call-template>: </strong><xsl:value-of select="notification_data/general_data/current_date"/>&#160;<xsl:value-of select="substring(/notification_data/general_data/current_time, 1, 5)"/><br />
+										<xsl:if test="$requestType != 'Personal Delivery'">
+											<strong>
+												<xsl:call-template name="SLSP-multilingual">
+													<xsl:with-param name="en" select="'Due date'"/>
+													<xsl:with-param name="fr" select="'Date de retour'"/>
+													<xsl:with-param name="it" select="'Data di scadenza'"/>
+													<xsl:with-param name="de" select="'Fälligkeitsdatum'"/>
+												</xsl:call-template>: </strong>
+											<xsl:choose>
+												<xsl:when test="notification_data/incoming_request/due_date != ''">
+													<xsl:value-of select="notification_data/incoming_request/due_date"/>
+												</xsl:when>
+												<xsl:otherwise>
+													&#8212;
+												</xsl:otherwise>
+											</xsl:choose>
+										</xsl:if>
+									</td>
+								</tr>
+								<xsl:if test="notification_data/incoming_request/note != ''" >
+									<tr>
+										<td>
+											<b>@@request_note@@: </b>
+											<xsl:value-of select="notification_data/incoming_request/note"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:variable name="barcodes_count">
+									<xsl:value-of select="count(notification_data/multi_barcodes/string)" />
+								</xsl:variable>
+								<xsl:if test="$barcodes_count > 1">
+									<tr>
+										<td>
+											<b>Multiple barcodes: </b>
+											<xsl:value-of select="$barcodes_count"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="notification_data/incoming_request/note_to_partner != ''" >
+									<tr>
+										<td>
+											<b>@@note@@: </b>
+											<xsl:value-of select="notification_data/incoming_request/note_to_partner"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<tr>
+									<td>
+										<span style="font-size: 120%; font-weight: bold">
+											<xsl:value-of select="substring(notification_data/metadata/title, 0, 100)" disable-output-escaping="yes"/>
+											<xsl:if test="string-length(notification_data/metadata/title) > 100">...</xsl:if></span><br />
+										<xsl:choose>
+											<xsl:when test="notification_data/metadata/author != ''">
+												<xsl:value-of select="notification_data/metadata/author"/><br />
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="notification_data/metadata/additional_person_name"/><br />
+											</xsl:otherwise>
+										</xsl:choose>
+										<xsl:if test="notification_data/item/material_type != ''">
+											<xsl:call-template name="SLSP-multilingual">
+													<xsl:with-param name="en" select="'Material Type'"/>
+													<xsl:with-param name="fr">
+													<![CDATA[Type de matériel]]>
+													</xsl:with-param>
+													<xsl:with-param name="it" select="'Tipo di materiale'"/>
+													<xsl:with-param name="de" select="'Materialart'"/>
+												</xsl:call-template>: <xsl:value-of select="notification_data/item/material_type" /> <br />
+										</xsl:if>
+										<xsl:if test="notification_data/metadata/volume != ''">
+											@@volume@@: <xsl:value-of select="notification_data/metadata/volume"/><br />
+										</xsl:if>
+										<xsl:if test="notification_data/metadata/issue != ''">
+											@@issue@@: <xsl:value-of select="notification_data/metadata/issue"/><br />
+										</xsl:if>
+										<xsl:value-of select="notification_data/item/owning_library_name"/> | 
+										<xsl:value-of select="notification_data/item/call_number"/>
+										<!-- SLSP hidden shipping cost 
+											<xsl:if test="$requestType = 'Personal Delivery' and notification_data/incoming_request/shipping_cost/sum != ''">
+											<br /><strong>
+												<xsl:call-template name="SLSP-multilingual">
+													<xsl:with-param name="en" select="'Shipping cost'"/>
+													<xsl:with-param name="fr">
+													<![CDATA[Frais d'expédition]]>
+													</xsl:with-param>
+													<xsl:with-param name="it" select="'Costo di spedizione'"/>
+													<xsl:with-param name="de" select="'Versandkosten'"/>
+												</xsl:call-template>: </strong><xsl:value-of select="/notification_data/incoming_request/shipping_cost/currency"/>&#160;<xsl:value-of select="/notification_data/incoming_request/shipping_cost/sum"/>
+										</xsl:if> -->
+									</td>
+								</tr>
+								<!-- <tr>
+									<td>
+										<b>@@borrower_reference@@: </b>
+										<xsl:call-template name="id-info-hdr"/>
+									</td>
+								</tr> -->
+								<!-- <xsl:if test="notification_data/qualifier != ''" >
+									<tr>
+										<td>
+											<b>@@qualifier@@: </b>
+											<img src="qualifier.png" alt="qualifier" />
+										</td>
+									</tr>
 								</xsl:if> -->
-							</td>
-						</tr>
-						<!-- <tr>
-							<td>
-								<b>@@borrower_reference@@: </b>
-								<xsl:call-template name="id-info-hdr"/>
-							</td>
-						</tr> -->
-						<!-- <xsl:if test="notification_data/qualifier != ''" >
-							<tr>
-								<td>
-									<b>@@qualifier@@: </b>
-									<img src="qualifier.png" alt="qualifier" />
-								</td>
-							</tr>
-						</xsl:if> -->
-						
-						<!-- <tr>
-							<td>
-								<b>@@format@@: </b>
-								<xsl:value-of select="notification_data/incoming_request/format"/>
-							</td>
-						</tr> -->
-						<tr>
-							<td>
-							<span style="font-size: 120%; font-weight: bold">@@borrower_reference@@</span>
-							</td>
-						</tr>
-						<xsl:if test="/notification_data/email" >
-							<tr>
-								<td>
-									<xsl:value-of select="/notification_data/partner_name"/><br />
-									<xsl:value-of select="/notification_data/email"/>
-								</td>
-							</tr>
-						</xsl:if>
-					</table>
+								
+								<!-- <tr>
+									<td>
+										<b>@@format@@: </b>
+										<xsl:value-of select="notification_data/incoming_request/format"/>
+									</td>
+								</tr> -->
+								<tr>
+									<td>
+									<span style="font-size: 120%; font-weight: bold">@@borrower_reference@@</span>
+									</td>
+								</tr>
+								<xsl:if test="/notification_data/email" >
+									<tr>
+										<td>
+											<xsl:value-of select="/notification_data/partner_name"/><br />
+											<xsl:value-of select="/notification_data/email"/>
+										</td>
+									</tr>
+								</xsl:if>
+							</table>
+						</xsl:otherwise>
+					</xsl:choose>
 				</div>
 			</div>
 			<!-- <xsl:call-template name="lastFooter" /> -->

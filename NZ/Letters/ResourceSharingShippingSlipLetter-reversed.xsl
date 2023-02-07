@@ -347,7 +347,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<!-- ILL and Personal delivery -->
 						<xsl:when test="$requestType = 'ILL' or $requestType = 'Personal Delivery'">
 							<xsl:call-template name="head-letterName-logo" />
-							<xsl:call-template name="senderReceiver-shippingSlip" />
+							<xsl:call-template name="senderReceiver-shippingSlip-reversed" />
 						</xsl:when>
 						<!-- Couriers and Document delivery -->
 						<xsl:otherwise>
