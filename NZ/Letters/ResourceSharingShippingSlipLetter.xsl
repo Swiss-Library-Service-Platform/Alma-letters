@@ -12,7 +12,8 @@
 	10/2022 rapido: added pod IDs for reading rooms
 	11/2022 rapido: removed shipping cost for Personal delivery
 			rapido: fixed barcode issue with img-src prefix cid: and img-alt with barcode text
-	12/2022 rapido: changed the condition node for personal delivery; fixed the borrower reference e-mail for personal delivery-->
+	12/2022 rapido: changed the condition node for personal delivery; fixed the borrower reference e-mail for personal delivery
+	02/2023 rapido: added pod name-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -314,11 +315,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		<xsl:choose>
 			<xsl:when test="rapido_request='false'">ILL</xsl:when><!-- ILL -->
 			<xsl:when test="rapido_request='true'"><!-- Rapido-->
-				<!-- Courier / Local Courier -->
-				<xsl:if test="rapido_delivery_option=''">SLSP Courier / Local Courier</xsl:if>
-				<!-- Rapido personal deliery -->
-				<!-- <xsl:if test="rapido_delivery_option='homeDelivery' or rapido_delivery_option='officeDelivery'">Personal Delivery</xsl:if> -->
-				<xsl:if test="/notification_data/personal_delivery = 'true'">Personal Delivery</xsl:if>
+				<xsl:choose>
+					<!-- Rapido personal delivery -->
+					<xsl:when test="/notification_data/personal_delivery = 'true'">Personal Delivery</xsl:when>
+					<!-- Any courier pod and document delivery -->
+					<xsl:otherwise><xsl:value-of select="normalize-space(/notification_data/pod_name)"/></xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:for-each>
@@ -340,12 +342,14 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<xsl:call-template name="request-type" />
 					</xsl:variable>
 					<xsl:choose>
-						<xsl:when test="$requestType = 'SLSP Courier / Local Courier'">
-							<xsl:call-template name="head-letterName-only" />
-						</xsl:when>
-						<xsl:otherwise><!-- ILL and Personal delivery -->
+						<!-- ILL and Personal delivery -->
+						<xsl:when test="$requestType = 'ILL' or $requestType = 'Personal Delivery'">
 							<xsl:call-template name="head-letterName-logo" />
 							<xsl:call-template name="senderReceiver-shippingSlip" />
+						</xsl:when>
+						<!-- Couriers and Document delivery -->
+						<xsl:otherwise>
+							<xsl:call-template name="head-letterName-only" />
 						</xsl:otherwise>
 					</xsl:choose>
 					<table cellspacing="0" cellpadding="5" border="0">
