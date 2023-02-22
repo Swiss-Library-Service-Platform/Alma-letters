@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP version 04/2022
 	04/2022 rapido: Added due date for requests other then Personal delivery
-	04/2022 rapido: request barcode without 1//
-	04/2022 rapido: Request types
+	04/2022 rapido: request barcode without 1//; Request types
 	05/2022 rapido: formatting as transit letter - address and logo shows up only for ILL and Personal delivery
-	05/2022 rapido: Added note to partner and author
-	05/2022 rapido: Added shipping cost for Personal Delivery
+	05/2022 rapido: Added note to partner and author; Added shipping cost for Personal Delivery
 	05/2022 rapido: Added notice for Reading room Pod
 	06/2022 rapido: fix receiver address country
 	07/2022 rapido: add support for multiple scanned barcodes
@@ -94,35 +92,35 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	</span> -->
 </xsl:template>
 
-<!-- Transit header with logo and without print date-->
-<xsl:template name="head-letterName-logo">
-	<xsl:variable name="requestType">
-		<xsl:call-template name="request-type" />
-	</xsl:variable>
+<!-- Header similar to default but with different label for the heading-->
+<xsl:template name="head-letterName-home-delivery">
 	<table cellspacing="0" cellpadding="5" border="0">
-        <!-- overloading the height parameter to overwrite the style -->
+        <!-- SLSP: overloading the height parameter to overwrite the style -->
 		<xsl:attribute name="style">
 			<xsl:call-template name="headerTableStyleCss" />; height: 35mm;
 		</xsl:attribute>
+		<!-- LOGO INSERT -->
 		<tr>
 		<xsl:attribute name="style">
 			<xsl:call-template name="headerLogoStyleCss" /> <!-- style.xsl -->
 		</xsl:attribute>
-			<td>
-				<div id="mailHeader">
-					<div id="logoContainer" class="alignLeft">
-						<!-- SLSP: fixed height of logo -->
-						<img onerror="this.src='/infra/branding/logo/logo-email.png'" src="cid:logo.jpg" alt="logo" style="height:20mm"/>
-					</div>
+			<td colspan="2">
+			<div id="mailHeader">
+				<div id="logoContainer" class="alignLeft">
+					<!-- SLSP: fixed height of logo -->
+					<img onerror="this.src='/infra/branding/logo/logo-email.png'" src="cid:logo.jpg" alt="logo" style="height:20mm"/>
 				</div>
+			</div>
 			</td>
 		</tr>
+	<!-- END OF LOGO INSERT -->
 		<tr>
-			<xsl:for-each select="notification_data/general_data">
-				<td>
-					<h1><xsl:value-of select="subject"/></h1>
-				</td>
-			</xsl:for-each>
+			<td>
+				<h1>@@title@@</h1>
+			</td>
+			<td align="right">
+				<xsl:value-of select="/notification_data/general_data/current_date"/>
+			</td>
 		</tr>
 	</table>
 	
@@ -343,8 +341,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					</xsl:variable>
 					<xsl:choose>
 						<!-- ILL and Personal delivery -->
-						<xsl:when test="$requestType = 'ILL' or $requestType = 'Personal Delivery'">
-							<xsl:call-template name="head-letterName-logo" />
+						<xsl:when test="$requestType = 'ILL'">
+							<xsl:call-template name="head" />
+							<xsl:call-template name="senderReceiver-shippingSlip" />
+						</xsl:when>
+						<xsl:when test="$requestType = 'Personal Delivery'">
+							<xsl:call-template name="head-letterName-home-delivery" />
 							<xsl:call-template name="senderReceiver-shippingSlip" />
 						</xsl:when>
 						<!-- Couriers and Document delivery -->
@@ -380,7 +382,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 												<xsl:value-of select="notification_data/metadata/additional_person_name"/><br />
 											</xsl:otherwise>
 										</xsl:choose>
-										<xsl:if test="notification_data/item/material_type != ''">
+										<!-- <xsl:if test="notification_data/item/material_type != ''">
 											<xsl:call-template name="SLSP-multilingual">
 													<xsl:with-param name="en" select="'Material Type'"/>
 													<xsl:with-param name="fr">
@@ -389,7 +391,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 													<xsl:with-param name="it" select="'Tipo di materiale'"/>
 													<xsl:with-param name="de" select="'Materialart'"/>
 												</xsl:call-template>: <xsl:value-of select="notification_data/item/material_type" /> <br />
-										</xsl:if>
+										</xsl:if> -->
 										<xsl:if test="notification_data/metadata/volume != ''">
 											@@volume@@: <xsl:value-of select="notification_data/metadata/volume"/><br />
 										</xsl:if>
@@ -414,7 +416,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								</tr>
 								<tr>
 									<td>
-										<strong>@@library@@: </strong><xsl:value-of select="notification_data/organization_unit/name"/> - <xsl:value-of select="notification_data/item/library_name"/><br />
+										<strong>@@library@@: </strong><xsl:value-of select="notification_data/organization_unit/name"/> - <xsl:value-of select="notification_data/item/library_name"/>
 										<xsl:variable name="callNumber">
 											<xsl:choose>
 												<xsl:when test="/notification_data/item/display_alt_call_numbers != ''">
@@ -446,7 +448,21 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 											</xsl:with-param>
 											<xsl:with-param name="it" select="'Data richiesta'"/>
 											<xsl:with-param name="de" select="'Bestelldatum'"/>
-										</xsl:call-template>: </strong> <xsl:value-of select="notification_data/incoming_request/create_date"/>, <xsl:value-of select="substring(/notification_data/incoming_request/create_date_with_time_str,12,5)"/><br />
+										</xsl:call-template>: </strong> <xsl:value-of select="notification_data/incoming_request/create_date"/>, <xsl:value-of select="substring(/notification_data/incoming_request/create_date_with_time_str,12,5)"/>
+										<xsl:if test="notification_data/incoming_request/note != ''" >
+											<br />
+											<b>@@request_note@@: </b><xsl:value-of select="notification_data/incoming_request/note"/>
+										</xsl:if>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										@@source@@
+									</td>
+								</tr>
+								<tr>
+									<td>
+										@@part@@
 									</td>
 								</tr>
 								<tr>
@@ -555,31 +571,31 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 											<xsl:with-param name="it" select="'Data richiesta'"/>
 											<xsl:with-param name="de" select="'Bestelldatum'"/>
 										</xsl:call-template>: </strong> <xsl:value-of select="notification_data/incoming_request/create_date"/>, <xsl:value-of select="substring(/notification_data/incoming_request/create_date_with_time_str,12,5)"/><br />
-										<strong><xsl:call-template name="SLSP-multilingual">
-											<xsl:with-param name="en" select="'Print date'"/>
-											<xsl:with-param name="fr">
-												<![CDATA[Date d'impression]]>
-											</xsl:with-param>
-											<xsl:with-param name="it" select="'Data stampa'"/>
-											<xsl:with-param name="de" select="'Druckdatum'"/>
-										</xsl:call-template>: </strong><xsl:value-of select="notification_data/general_data/current_date"/>&#160;<xsl:value-of select="substring(/notification_data/general_data/current_time, 1, 5)"/><br />
-										<xsl:if test="$requestType != 'Personal Delivery'">
-											<strong>
-												<xsl:call-template name="SLSP-multilingual">
-													<xsl:with-param name="en" select="'Due date'"/>
-													<xsl:with-param name="fr" select="'Date de retour'"/>
-													<xsl:with-param name="it" select="'Data di scadenza'"/>
-													<xsl:with-param name="de" select="'Fälligkeitsdatum'"/>
-												</xsl:call-template>: </strong>
-											<xsl:choose>
-												<xsl:when test="notification_data/incoming_request/due_date != ''">
-													<xsl:value-of select="notification_data/incoming_request/due_date"/>
-												</xsl:when>
-												<xsl:otherwise>
-													&#8212;
-												</xsl:otherwise>
-											</xsl:choose>
+										<xsl:if test="$requestType != 'ILL'">
+											<strong><xsl:call-template name="SLSP-multilingual">
+												<xsl:with-param name="en" select="'Print date'"/>
+												<xsl:with-param name="fr">
+													<![CDATA[Date d'impression]]>
+												</xsl:with-param>
+												<xsl:with-param name="it" select="'Data stampa'"/>
+												<xsl:with-param name="de" select="'Druckdatum'"/>
+											</xsl:call-template>: </strong><xsl:value-of select="notification_data/general_data/current_date"/>&#160;<xsl:value-of select="substring(/notification_data/general_data/current_time, 1, 5)"/><br />
 										</xsl:if>
+										<strong>
+											<xsl:call-template name="SLSP-multilingual">
+												<xsl:with-param name="en" select="'Due date'"/>
+												<xsl:with-param name="fr" select="'Date de retour'"/>
+												<xsl:with-param name="it" select="'Data di scadenza'"/>
+												<xsl:with-param name="de" select="'Fälligkeitsdatum'"/>
+											</xsl:call-template>: </strong>
+										<xsl:choose>
+											<xsl:when test="notification_data/incoming_request/due_date != ''">
+												<xsl:value-of select="notification_data/incoming_request/due_date"/>
+											</xsl:when>
+											<xsl:otherwise>
+												&#8212;
+											</xsl:otherwise>
+										</xsl:choose>
 									</td>
 								</tr>
 								<xsl:if test="notification_data/incoming_request/note != ''" >
