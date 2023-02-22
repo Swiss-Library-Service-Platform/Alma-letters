@@ -3,7 +3,8 @@
 		02/2022 - Added SLSP greeting; vertical fee info
 		07/2022 - added fee comment and owning library
 		08/2022 - one column fee info layout; added user name
-		10/2022 - added template for SLSP greeting -->
+		10/2022 - added template for SLSP greeting
+		02/2023 - hardcoded label for library with SLSP-multilingual -->
 <!-- Dependance: 
 		recordTitle - SLSP-multilingual, SLSP-greeting
 		style - bodyStyleCss, generalStyle, mainTableStyleCss
@@ -126,7 +127,12 @@ Adds CHF string
 								<xsl:if test="string-length(item_title) > 100">...</xsl:if>
 							</xsl:if>
 							<br />
-							@@department@@: <xsl:value-of select="fine_owner/name"/>
+							<xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+								<xsl:with-param name="en" select="'Library'"/>
+								<xsl:with-param name="fr" select="'Bibliothèque'"/>
+								<xsl:with-param name="it" select="'Biblioteca'"/>
+								<xsl:with-param name="de" select="'Bibliothek'"/>
+							</xsl:call-template>: <xsl:value-of select="fine_owner/name"/>
 							<xsl:if test="fine_comment != ''">
 								<br />
 								@@note@@:

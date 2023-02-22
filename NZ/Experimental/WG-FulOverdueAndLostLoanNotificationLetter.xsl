@@ -2,7 +2,8 @@
 <!-- SLSP WG: Letters version 10/2021
 		10/2021 - fix date in header
 		11/2021 - senderReceiver-receiver-only: added 1cm margin on the left side to better fit envelope window
-		11/2021 - body style: font-size: 100% -->
+		11/2021 - body style: font-size: 100%
+		02/2023 - added template for IZ message; hide call number if not available -->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
         recordTitle - SLSP-multilingual, SLSP-userAccount
@@ -24,6 +25,21 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 		<xsl:when test="/notification_data/notification_type='OverdueNotificationType3'">@@additional_info_2_type3@@</xsl:when>
 		<xsl:when test="/notification_data/notification_type='OverdueNotificationType4'">@@additional_info_2_type4@@</xsl:when>
 	</xsl:choose>
+</xsl:template>
+
+<!-- Prints the IZ message stored in label department if not empty or "blank"
+The label can contain also HTML markup such as links or formatting. 
+Usage: <xsl:call-template name="IZMessage"/> -->
+<xsl:template name="IZMessage-dev">
+	<xsl:variable name="notice">@@department@@</xsl:variable>
+	<xsl:if test="$notice != '' and $notice != 'blank'">
+		<strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+			<xsl:with-param name="en" select="'Notice of the library'"/>
+			<xsl:with-param name="fr" select="'Avis de la bibliothèque'"/>
+			<xsl:with-param name="it" select="'Comunicazione della biblioteca'"/>
+			<xsl:with-param name="de" select="'Notiz der Bibliothek'"/>
+		</xsl:call-template>:</strong>&#160;<xsl:value-of select="$notice" disable-output-escaping="yes" />
+	</xsl:if>
 </xsl:template>
 
 <!--
@@ -364,6 +380,16 @@ If overdue profiles are changed then the text bellow has to be adapted.
 								</thead>
 								<tbody>
 									<xsl:for-each select="item_loans/overdue_and_lost_loan_notification_display">
+										<xsl:variable name="callNumber">
+											<xsl:choose>
+												<xsl:when test="physical_item_display_for_printing/display_alt_call_numbers != ''">
+													<xsl:value-of select="physical_item_display_for_printing/display_alt_call_numbers"/>
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:value-of select="physical_item_display_for_printing/call_number"/>
+												</xsl:otherwise>
+											</xsl:choose>
+										</xsl:variable>
 										<tr>
 											<td>
 												<xsl:value-of select="substring(item_loan/title, 0, 70)"/>
@@ -371,18 +397,12 @@ If overdue profiles are changed then the text bellow has to be adapted.
 												<br />
 												<strong>@@barcode@@: </strong>
 												<xsl:value-of select="item_loan/barcode"/>
-												<br />
-												<strong>@@call_number@@: </strong>
-												<xsl:choose>
-													<xsl:when test="physical_item_display_for_printing/display_alt_call_numbers != ''">
-														<xsl:value-of select="physical_item_display_for_printing/display_alt_call_numbers"/>
-													</xsl:when>
-													<xsl:otherwise>
-														<xsl:value-of select="physical_item_display_for_printing/call_number"/>
-													</xsl:otherwise>
-												</xsl:choose>
-												<br />
+												<xsl:if test="$callNumber != ''">
+													<br />
+													<strong>@@call_number@@: </strong><xsl:value-of select="$callNumber"/>
+												</xsl:if>
 												<xsl:if test="physical_item_display_for_printing/issue_level_description !='' and physical_item_display_for_printing/issue_level_description != 'Vol.' and physical_item_display_for_printing/issue_level_description != '_'">
+													<br />
 													<strong>@@description@@: </strong>
 													<xsl:value-of select="physical_item_display_for_printing/issue_level_description"/>
 												</xsl:if>
@@ -432,6 +452,7 @@ If overdue profiles are changed then the text bellow has to be adapted.
 					</xsl:otherwise>
 				</xsl:choose>
 			</p>
+			<p><xsl:call-template name="IZMessage"/></p>
 			<p>@@sincerely@@</p>
 			<p>
 				<xsl:value-of select="notification_data/organization_unit/name" />

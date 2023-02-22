@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 12/2021 -->
+<!-- SLSP WG: Letters version 12/2021
+		01/2022 - Fixed FR version of librariesURL template
+		10/2022 - replaced greeting template -->
 <!-- Dependance:
-		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle
+		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle, SLSP-greeting
 		style - generalStyle, bodyStyleCss
 		header - head
 		-->
@@ -24,7 +26,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 		</xsl:attribute>
 		<xsl:call-template name="SLSP-multilingual">
 			<xsl:with-param name="en" select="'Further information on library location'"/>
-			<xsl:with-param name="fr" select="'Plus des informations sur la localisation des bibliothèques'"/>
+			<xsl:with-param name="fr"><![CDATA[Plus d’informations sur la localisation des bibliothèques]]></xsl:with-param>
 			<xsl:with-param name="it" select="'Ulteriori informazioni sulla biblioteca'"/>
 			<xsl:with-param name="de" select="'Weitere Informationen zum Bibliotheksstandort'"/>
 		</xsl:call-template>
@@ -101,12 +103,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 							<tr>
 								<td>
 									<br />
-									<xsl:call-template name="SLSP-multilingual">
-										<xsl:with-param name="en" select="'Hello'"/>
-										<xsl:with-param name="fr" select="'Bonjour'"/>
-										<xsl:with-param name="it" select="'Buongiorno,'"/>
-										<xsl:with-param name="de" select="'Guten Tag'"/>
-									</xsl:call-template>
+									<xsl:call-template name="SLSP-greeting" />
 								</td>
 							</tr>
 							<tr>
@@ -151,23 +148,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 								</td>
 							</tr>
 							<tr>
-								<td>
-									<!-- reusing the label additional_id for IZ specific information within the letter 
-										the text may contain HTML markup, i.e. links
-									-->
-									<xsl:variable name="notice">@@additional_id@@</xsl:variable>
-
-									<xsl:if test="$notice != '' and $notice != 'blank'">
-										<br /><strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
-											<xsl:with-param name="en" select="'Notice of the library'"/>
-											<xsl:with-param name="fr" select="'Avis de la bibliothèque'"/>
-											<xsl:with-param name="it" select="'Comunicazione della biblioteca'"/>
-											<xsl:with-param name="de" select="'Notiz der Bibliothek'"/>
-										</xsl:call-template>:</strong>&#160;<xsl:value-of select="$notice" disable-output-escaping="yes" />
-									</xsl:if>
-								</td>
+								<td><xsl:call-template name="IZMessage"/></td>
 							</tr>
-							
 							<tr>
 								<td>
 									<xsl:call-template name="SLSP-userAccount"/>

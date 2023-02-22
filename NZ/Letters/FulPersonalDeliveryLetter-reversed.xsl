@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 12/2021 - delivery on left
+<!-- 
+	IZ Customization: Delivery on left
+
+	SLSP WG: Letters version 12/2021
 	10/2022 - replaced greeting template -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
