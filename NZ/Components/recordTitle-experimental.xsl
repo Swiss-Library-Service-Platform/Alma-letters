@@ -3,6 +3,11 @@
 10/2021	added template userAccount; removed labels for author and imprint
 01/2022	SLSP-multilingual option for IZ with disabled languages
 05/2022	added templates for extraction of volume, pages and request note in Resource Request Slip Letter
+06/2022 added personal delivery field extraction
+09/2022 Added templates SLSP-greeting and SLSP-sincerely
+10/2022 Added templates SLSP-greeting-ILL; updated SLSP-multilingual
+11/2022	Added template SLSP-Rapido-destination
+02/2023 Added template for IZ message
 -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -28,23 +33,49 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		<xsl:param name="de" />
 		<xsl:param name="it" />
 		<xsl:choose>
-			<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'fr'">
-				<xsl:value-of select="$fr"/>
+			<xsl:when test="/notification_data/receivers/receiver/preferred_language != ''">
+				<xsl:choose>
+					<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'fr'">
+						<xsl:value-of select="$fr"/>
+					</xsl:when>
+					<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'en'">
+						<xsl:value-of select="$en"/>
+					</xsl:when>
+					<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'it'">
+						<xsl:value-of select="$it"/>
+					</xsl:when>
+					<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'de'">
+						<xsl:value-of select="$de"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$en"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
-			<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'en'">
-				<xsl:value-of select="$en"/>
-			</xsl:when>
-			<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'it'">
-				<xsl:value-of select="$it"/>
-			</xsl:when>
-			<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'de'">
-				<xsl:value-of select="$de"/>
-			</xsl:when>
+			<!-- Added for letters where the recipient's preferred language is not specified.
+			Grabs the language of the letter. -->
 			<xsl:otherwise>
-				<xsl:value-of select="$en"/>
+				<xsl:choose>
+					<xsl:when test="notification_data/languages/string[1] = 'fr'">
+						<xsl:value-of select="$fr"/>
+					</xsl:when>
+					<xsl:when test="notification_data/languages/string[1] = 'en'">
+						<xsl:value-of select="$en"/>
+					</xsl:when>
+					<xsl:when test="notification_data/languages/string[1] = 'it'">
+						<xsl:value-of select="$it"/>
+					</xsl:when>
+					<xsl:when test="notification_data/languages/string[1] = 'de'">
+						<xsl:value-of select="$de"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$en"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+
 	<!-- template to show link to user account
 	for link to swisscovery uses system variable @@email_my_account@@ in Configuration -> General -> Other Settings
 	one link per IZ is possible, therefore the default view is used.
@@ -61,7 +92,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<![CDATA[Pour consulter vos prêts en cours et les frais qui n'ont pas encore été facturés, veuillez vous connecter à swisscovery: ]]>
 			</xsl:with-param>
 			<xsl:with-param name="it" select="'Per controllare i suoi prestiti attuali e i costi non ancora fatturati, effettui il login su swisscovery: '"/>
-			<xsl:with-param name="de" select="'Um Ihre aktuellen Ausleihen und noch nicht in Rechnung gestellten Gebühren zu überprüfen, loggen Sie sich bitte bei swisscovery ein: '"/>
+			<xsl:with-param name="de" select="'Um Ihre aktuellen Ausleihen und noch nicht in Rechnung gestellte Gebühren zu überprüfen, loggen Sie sich bitte bei swisscovery ein: '"/>
 		</xsl:call-template>
 		<a>
 			<xsl:attribute name="href">@@email_my_account@@&#38;lang=
@@ -78,7 +109,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			</xsl:call-template>
 		</a>
 	</xsl:template>
-	<!-- Template to extract request note from Rapido request
+
+	<!-- Template for Resource Sharing Request Slip to extract request note from Rapido request
 	Usage:
 		<xsl:variable name="requestNote">
 			<xsl:call-template name="SLSP-Rapido-request-note" />
@@ -98,7 +130,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
-	<!-- Template to extract volume from the encoded XML metadata provided in letter XML
+
+	<!-- Template for Resource Sharing Request Slip to extract volume from the encoded XML metadata provided in letter XML
 	Usage: 
 		<xsl:variable name="requestVolume">
 			<xsl:call-template name="SLSP-Rapido-extract-volume" />
@@ -121,7 +154,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		</xsl:variable>
 		<xsl:value-of select="substring-before($user-volume-temp, '&lt;/dc:volume')"/>
 	</xsl:template>
-	<!-- Template to extract pages from the encoded XML metadata provided in letter XML
+
+	<!-- Template for Resource Sharing Request Slip to extract pages from the encoded XML metadata provided in letter XML
 	Usage: 
 		<xsl:variable name="requestPages">
 			<xsl:call-template name="SLSP-Rapido-extract-pages" />
@@ -144,29 +178,46 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		</xsl:variable>
 		<xsl:value-of select="substring-before($user-pages-temp, '&lt;/dc:rlterms_pages')"/>
 	</xsl:template>
-	<!-- Template to add contact us link using the system variable
-	email_contact_us - system variable in Configuration -> General -> Other Settings -->
-	<xsl:template name="SLSP-contactUs">
-		<table align="left">
-			<tr>
-				<td align="left">
-					<a>
-						<xsl:attribute name="href">
-                          @@email_contact_us@@
-                        </xsl:attribute>
-						<xsl:call-template name="SLSP-multilingual">
-							<xsl:with-param name="en" select="'Contact the '"/>
-							<xsl:with-param name="fr" select="'Mon compte'"/>
-							<xsl:with-param name="it" select="'Il mio conto'"/>
-							<xsl:with-param name="de" select="'Mein Konto'"/>
-						</xsl:call-template>
-					</a>
-				</td>
-			</tr>
-		</table>
+
+	<!-- Template for Resource Sharing Request Slip to print the home / office delivery information
+        Usage:
+            <xsl:variable name="personalDelivery">
+                <xsl:call-template name="SLSP-Rapido-persDel" />
+            </xsl:variable>
+            ...
+            <xsl:value-of select="notification_data/request_type"/>
+            <xsl:if test="$personalDelivery != ''">
+                - <xsl:value-of select="$personalDelivery"/>
+            </xsl:if>
+            -->
+	<xsl:template name="SLSP-Rapido-persDel">
+		<xsl:if test="/notification_data/incoming_request/rapido_delivery_option != ''">
+			<xsl:value-of select="/notification_data/incoming_request/rapido_delivery_option"/>
+		</xsl:if>
 	</xsl:template>
 
-	<!-- Template to add greeting to letters in case the label is missing in configuration -->
+	<!-- Template for Resource Sharing Request Slip to extract destination from Rapido request.
+        Returns either Rapido partner name or request destination
+	Usage:
+		<xsl:variable name="destination">
+			<xsl:call-template name="SLSP-Rapido-destination" />
+		</xsl:variable>
+		<xsl:value-of select="$destination"/>
+    -->
+    <xsl:template name="SLSP-Rapido-destination">
+        <xsl:choose>
+            <xsl:when test="/notification_data/incoming_request/partner_name != ''
+			and /notification_data/incoming_request/rapido_request = 'true'">
+                <xsl:value-of select="/notification_data/incoming_request/partner_name"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="/notification_data/destination"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+	<!-- Template to add greeting to letters in case the label is missing in configuration
+	USAGE: <xsl:call-template name="SLSP-greeting" /> -->
 	<xsl:template name="SLSP-greeting">
 		<xsl:call-template name="SLSP-multilingual">
 			<xsl:with-param name="en" select="'Hello,'"/>
@@ -174,6 +225,47 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			<xsl:with-param name="it" select="'Buongiorno,'"/>
 			<xsl:with-param name="de" select="'Guten Tag'"/>
 		</xsl:call-template>
+	</xsl:template>
+	
+	<!-- Template to add greeting to ILL letters in case the label is missing in configuration
+	USAGE: <xsl:call-template name="SLSP-greeting-ILL" /> -->
+	<xsl:template name="SLSP-greeting-ILL">
+		<xsl:call-template name="SLSP-multilingual">
+			<xsl:with-param name="en" select="'Dear Colleagues,'"/>
+			<xsl:with-param name="fr" select="'Cher(e)s collègues,'"/>
+			<xsl:with-param name="it" select="'Care colleghe e cari colleghi,'"/>
+			<xsl:with-param name="de" select="'Liebe Kolleginen und Kollegen'"/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<!-- Template to add sincerely paragraph to letters in case the label is missing in configuration
+	USAGE: <xsl:call-template name="SLSP-sincerely" /> -->
+	<xsl:template name="SLSP-sincerely">
+		<xsl:call-template name="SLSP-multilingual">
+			<xsl:with-param name="en" select="'Sincerely,'"/>
+			<xsl:with-param name="fr" select="'Meilleures salutations,'"/>
+			<xsl:with-param name="it" select="'Cordiali saluti,'"/>
+			<xsl:with-param name="de" select="'Freundliche Grüsse'"/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<!-- Prints the IZ message stored in label 'department' for the language of the letter.
+		If value in the label is empty or with value "blank" does not print anything.
+		The label can contain also HTML markup such as links or formatting.
+		Warning: the label 'department' has to be available in the letter for this template to work	
+		Usage:
+			1. Configure the label department with text in all languages.
+			2. Insert the template: <xsl:call-template name="IZMessage"/> -->
+	<xsl:template name="IZMessage">
+		<xsl:variable name="notice">@@department@@</xsl:variable>
+		<xsl:if test="$notice != '' and $notice != 'blank'">
+			<strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+				<xsl:with-param name="en" select="'Notice of the library'"/>
+				<xsl:with-param name="fr" select="'Avis de la bibliothèque'"/>
+				<xsl:with-param name="it" select="'Comunicazione della biblioteca'"/>
+				<xsl:with-param name="de" select="'Notiz der Bibliothek'"/>
+			</xsl:call-template>:</strong>&#160;<xsl:value-of select="$notice" disable-output-escaping="yes" />
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template name="recordTitle">
