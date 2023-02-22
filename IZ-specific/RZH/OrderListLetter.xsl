@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP customized -->
+<!-- SLSP customized
+    02/2023 - fixed shipping address; removed lib name from address -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -8,32 +9,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:include href="mailReason.xsl" />
 <xsl:include href="footer.xsl" />
 <xsl:include href="style.xsl" />
-
-<!-- Source code from https://github.com/uio-library/alma-letters-ubo -->
-	<!--
-	Template to make it easier to insert multilingual text.
-	Depends on: (none)
-	USAGE:
-		<xsl:call-template name="multilingual">
-			<xsl:with-param name="en" select="'Testing multilingual text.'"/>
-			<xsl:with-param name="fr" select="'Test de texte multilingue.'"/>
-			<xsl:with-param name="it" select="'Test di testi multilingue.'"/>
-			<xsl:with-param name="de" select="'Testen von mehrsprachigem Text.'"/>
-		</xsl:call-template>
-	-->
-	<xsl:template name="multilingual">
-	<xsl:param name="en" />
-	<xsl:param name="fr" />
-	<xsl:param name="de" />
-	<xsl:param name="it" />
-	<xsl:choose>
-		<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'fr'"><xsl:value-of select="$fr"/></xsl:when>
-		<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'en'"><xsl:value-of select="$en"/></xsl:when>
-		<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'it'"><xsl:value-of select="$it"/></xsl:when>
-		<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'de'"><xsl:value-of select="$de"/></xsl:when>
-		<xsl:otherwise><xsl:value-of select="$en"/></xsl:otherwise>
-	</xsl:choose>
-	</xsl:template>
+<xsl:include href="recordTitle.xsl" />
 
 <xsl:template match="/">
 	<html>
@@ -49,8 +25,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<xsl:call-template name="head" /> <!-- header.xsl -->
 				<xsl:call-template name="senderReceiver" /> <!-- SenderReceiver.xsl -->
 
-				<!-- <xsl:call-template name="toWhomIsConcerned" /> --> <!-- mailReason.xsl -->
-
 				<xsl:for-each select="notification_data">
 				<table>
 					<tr>
@@ -61,7 +35,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					</tr>
                     <tr>
                         <td>
-                            <strong><xsl:call-template name="multilingual">
+                            <strong><xsl:call-template name="SLSP-multilingual">
                                 <xsl:with-param name="en" select="'PO number'"/>
                                 <xsl:with-param name="fr" select="'Nombre de commande'"/>
                                 <xsl:with-param name="it" select="'Numero PO'"/>
@@ -85,9 +59,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                     <tr>
                         <td width="50%">
                             <b>@@shipping_address@@: </b><br />
-                            <xsl:if test="/notification_data/organization_unit/name != ''">
+                            <!-- <xsl:if test="/notification_data/organization_unit/name != ''">
                                 <xsl:value-of select="/notification_data/organization_unit/name"/><br />
-                            </xsl:if>
+                            </xsl:if> -->
                             <xsl:if test="po/ship_to_address/line1 != ''">
                                 <xsl:value-of select="po/ship_to_address/line1"/><br />
                             </xsl:if>
@@ -104,7 +78,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 <xsl:value-of select="po/ship_to_address/line5"/><br />
                             </xsl:if>
                             <xsl:if test="po/ship_to_address/city != ''">
-                                <xsl:value-of select="po/bill_to_address/postal_code"/>&#160;<xsl:value-of select="po/ship_to_address/city"/><br />
+                                <xsl:value-of select="po/ship_to_address/postal_code"/>&#160;<xsl:value-of select="po/ship_to_address/city"/><br />
                             </xsl:if>
                             <xsl:if test="po/ship_to_address/country != ''">
                                 <xsl:value-of select="po/ship_to_address/country"/>
@@ -112,9 +86,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         </td>
                         <td width="50%">
                             <b>@@billing_address@@: </b><br />
-                            <xsl:if test="/notification_data/organization_unit/name != ''">
+                            <!-- <xsl:if test="/notification_data/organization_unit/name != ''">
                                 <xsl:value-of select="/notification_data/organization_unit/name"/><br />
-                            </xsl:if>
+                            </xsl:if> -->
                             <xsl:if test="po/bill_to_address/line1 != ''">
                                 <xsl:value-of select="po/bill_to_address/line1"/><br />
                             </xsl:if>
@@ -174,7 +148,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         <td align="center">
                             <xsl:value-of select="total_quantity"/><br />
                             <xsl:if test="rush = 'true'">
-                                <strong><xsl:call-template name="multilingual">
+                                <strong><xsl:call-template name="SLSP-multilingual">
                                     <xsl:with-param name="en" select="'Rush order'"/>
                                     <xsl:with-param name="fr" select="'Commande urgente'"/>
                                     <xsl:with-param name="it" select="'Ordine urgente'"/>
@@ -197,7 +171,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<td align="right">
                             <xsl:value-of select="total_price_compose/currency"/>&#160;<xsl:value-of select="total_price_compose_with_normalized_sum/normalized_sum"/>
                         </td>
-						
 					</tr>
 					</xsl:for-each>
 				</table>

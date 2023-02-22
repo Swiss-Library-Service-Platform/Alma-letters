@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- IZ adaptation: Different e-mail for overdue letters in the library info
+<!-- IZ adaptation: Different e-mail in the library info; additional condition in description display
 
 	SLSP WG: Letters version 10/2021
 		10/2021 - fix date in header
