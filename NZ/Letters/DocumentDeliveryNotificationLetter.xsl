@@ -3,7 +3,8 @@
       05/2022 Rapido: request metadata, info about providing library, max views message
       10/2022 Rapido: adjusted the providing library part; unified greeting
       10/2022 Added template for SLSP greeting
-      01/2023 Rapido: hide digitizing library row if lender library is empty -->
+      01/2023 Rapido: hide digitizing library row if lender library is empty
+      03/2023 Fixed linking for docDel with URL -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
 		style - generalStyle, bodyStyleCss
@@ -196,28 +197,58 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                 </td>
               </tr>
               </xsl:if>
-              <tr>
-                <td><br />@@to_see_the_resource@@</td>
-              </tr>
-              <tr>
-                <td>@@for_local_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_local" /></xsl:attribute>@@click_here@@</a></td>
-              </tr>
-              <tr>
-                <td>@@for_saml_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_saml" /></xsl:attribute>@@click_here@@</a></td>
-              </tr>
               <xsl:choose>
-                  <!-- non-rapido request -->
-                  <xsl:when test="notification_data/request/document_delivery_max_num_of_view != ''">
-                    <tr>
-                      <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/request/document_delivery_max_num_of_views"/>.</td>
-                    </tr>
-                  </xsl:when>
-                  <!-- Rapido request -->
-                  <xsl:when test="notification_data/borrowing_document_delivery_max_num_of_views != ''">
-                    <tr>
-                      <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/borrowing_document_delivery_max_num_of_views"/>.</td>
-                    </tr>
-                  </xsl:when>
+                <xsl:when test="/notification_data/url_list != ''">
+                  <tr>
+                    <td><br />@@attached_are_the_urls@@:</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <xsl:for-each select="/notification_data/url_list/string">
+                        <xsl:variable name="index" select="position()"/>
+                        <xsl:if test="$index != '1'">
+                          <br/>
+                        </xsl:if>
+                        <!-- <br/> -->
+                        <xsl:variable name="linkText" select="concat('Link ', $index)"/>
+                        <xsl:variable name="linkNoHttps" select="substring-after(.,'//')"/>
+                        <xsl:variable name="linkDomain" select="substring-before($linkNoHttps,'/')"/>
+                        <a>
+                          <xsl:attribute name="href"><xsl:value-of select="."/></xsl:attribute>
+                          <xsl:attribute name="alt"><xsl:value-of select="concat($linkText, ': ', $linkDomain)"/></xsl:attribute>
+                          <xsl:attribute name="title"><xsl:value-of select="$linkDomain"/></xsl:attribute>
+                          <xsl:attribute name="target"><xsl:value-of select="_blank"/></xsl:attribute>
+                          <xsl:value-of select="$linkText"/>
+                        </a>
+                      </xsl:for-each>
+                    </td>
+                  </tr>
+                </xsl:when>
+                <xsl:otherwise>
+                  <tr>
+                    <td><br />@@to_see_the_resource@@</td>
+                  </tr>
+                  <tr>
+                    <td>@@for_local_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_local" /></xsl:attribute>@@click_here@@</a></td>
+                  </tr>
+                  <tr>
+                    <td>@@for_saml_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_saml" /></xsl:attribute>@@click_here@@</a></td>
+                  </tr>
+                  <xsl:choose>
+                      <!-- non-rapido request -->
+                      <xsl:when test="notification_data/request/document_delivery_max_num_of_view != ''">
+                        <tr>
+                          <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/request/document_delivery_max_num_of_views"/>.</td>
+                        </tr>
+                      </xsl:when>
+                      <!-- Rapido request -->
+                      <xsl:when test="notification_data/borrowing_document_delivery_max_num_of_views != ''">
+                        <tr>
+                          <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/borrowing_document_delivery_max_num_of_views"/>.</td>
+                        </tr>
+                      </xsl:when>
+                  </xsl:choose>
+                </xsl:otherwise>
               </xsl:choose>
               <tr>
                 <td>
