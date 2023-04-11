@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 08/2021 -->
+<!-- SLSP WG: Letters version 08/2021
+	03/2023 Added template to keep the formatting of the message to patron
+	03/2023 Added SLSP greeting -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:include href="header.xsl" />
@@ -8,6 +10,31 @@
 	<xsl:include href="footer.xsl" />
 	<xsl:include href="style.xsl" />
 	<xsl:include href="recordTitle.xsl" />
+
+	<!--Fix to transform the note coming from Alma UI to insert new lines
+		Takes the parameter text and replaces new lines with <br/> 
+	Source: https://stackoverflow.com/questions/561235/xslt-replace-n-with-br-only-in-one-node
+		@Tomalak, CC-BY-SA 3.0
+	-->
+	<xsl:template name="break">
+		<xsl:param name="text" select="string(.)"/>
+		<xsl:choose>
+			<xsl:when test="contains($text, '&#xa;')">
+			<xsl:value-of select="substring-before($text, '&#xa;')"/>
+			<br/>
+			<xsl:call-template name="break">
+				<xsl:with-param 
+				name="text" 
+				select="substring-after($text, '&#xa;')"
+				/>
+			</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+			<xsl:value-of select="$text"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
 	<xsl:template match="/">
 		<html>
 			<xsl:if test="notification_data/languages/string">
@@ -83,8 +110,7 @@
 						<table role='presentation'  cellspacing="0" cellpadding="5" border="0">
 							<tr>
 								<td>
-									@@request_id@@: <xsl:value-of select="notification_data/request/ful_request_id"/>
-									<br />
+									<xsl:call-template name="SLSP-greeting" />
 								</td>
 							</tr>
 							<tr>
@@ -146,6 +172,11 @@
 									</xsl:if>
 								</td>
 							</tr>
+							<tr>
+								<td>
+									@@request_id@@: <xsl:value-of select="notification_data/request/ful_request_id"/>
+								</td>
+							</tr>
 						</table>
 						<br />
 
@@ -198,7 +229,10 @@
 								<tr>
 									<td>
 										<strong>@@query_note@@</strong>:<br />
-										<xsl:value-of select="notification_data/query_note" />
+										<xsl:call-template name="break">
+											<xsl:with-param name="text" select="notification_data/query_note"/>
+										</xsl:call-template>
+										<!-- <xsl:value-of select="notification_data/query_note" /> -->
 									</td>
 								</tr>
 							</xsl:if>
