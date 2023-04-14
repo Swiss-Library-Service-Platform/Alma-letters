@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- WG: Letters 05/2022
-	12/2022 Added SLSP greeting template -->
+	12/2022 Added SLSP greeting template
+	04/2023 Added IZ message template -->
 <!-- Dependance:
-		recordTitle - SLSP-multilingual, SLSP-userAccount
+		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss, mainTableStyleCss
 		header - head
 		-->
@@ -28,7 +29,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 		<xsl:call-template name="head" /><!-- header.xsl -->
 		<br />
-		<!-- <xsl:call-template name="senderReceiver" />  --><!-- SenderReceiver.xsl -->
 		<div class="messageArea">
 		<div class="messageBody">
 			<table cellspacing="0" cellpadding="5" border="0">
@@ -52,7 +52,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							</xsl:variable>
 							<!-- set the barcode values in variables -->
 
-							<xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+							<xsl:call-template name="SLSP-multilingual">
 								<xsl:with-param name="en" select="'User ID'"/>
 								<xsl:with-param name="fr" select="'ID utilisateur'"/>
 								<xsl:with-param name="it" select="'ID utente'"/>
@@ -98,22 +98,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 										<h3>
 											<xsl:value-of select="organization_unit/name" />
 										</h3>
-										<!-- <xsl:if test="organization_unit/address/line1 != ''">
-											<xsl:value-of select="organization_unit/address/line1"/>,
-										</xsl:if>
-										<xsl:if test="organization_unit/address/line2 != ''">
-											<xsl:value-of select="organization_unit/address/line2"/>,
-										</xsl:if>
-										<xsl:if test="organization_unit/address/line3 != ''">
-											<xsl:value-of select="organization_unit/address/line3"/>,
-										</xsl:if>
-										<xsl:if test="organization_unit/address/line4 != ''">
-											<xsl:value-of select="organization_unit/address/line4"/>,
-										</xsl:if>
-										<xsl:if test="organization_unit/address/postal_code != '' or organization_unit/address/city != ''">
-											<xsl:value-of select="organization_unit/address/postal_code"/>&#160;<xsl:value-of select="organization_unit/address/city"/>
-											<br/>
-										</xsl:if> -->
+										
 										<xsl:if test="organization_unit/phone/phone != ''">
 											<xsl:call-template name="SLSP-multilingual">
 											<xsl:with-param name="en" select="'Tel'"/>
@@ -128,15 +113,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 										</xsl:if>
 									</td>
 								</tr>
-								<!-- <tr>
-									<th>@@title@@</th>
-									<th>@@description@@</th>
-									<th>@@author@@</th>
-									<th>@@due_date@@</th>
-									<th>@@return_date@@</th>
-									<th>@@fine@@</th>
-									<th>@@library@@</th>
-								</tr> -->
 
 								<xsl:for-each select="item_loans/overdue_and_lost_loan_notification_display">
 									<tr>
@@ -171,15 +147,18 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 											<strong>@@due_date@@: </strong><xsl:value-of select="item_loan/due_date"/><br />
 											<strong>@@return_date@@: </strong><xsl:value-of select="item_loan/return_date"/>
 										</td>
-										<!-- <td><xsl:value-of select="item_loan/normalized_fine"/></td> -->
 									</tr>
 								</xsl:for-each>
 							</table>
 							<br />
 						</td>
 					</tr>
-					<!-- <hr/><br/> -->
 				</xsl:for-each>
+				<tr>
+					<td>
+						<xsl:call-template name="SLSP-IZMessage"/>
+					</td>
+				</tr>
 				<tr>
 					<td>
 						<xsl:call-template name="SLSP-userAccount"/><br />
@@ -193,10 +172,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					<td><br/><i>powered by SLSP</i></td>
 				</tr>
 			</table>
-
 			</div>
 		</div>
-
 		</body>
 	</html>
 	</xsl:template>

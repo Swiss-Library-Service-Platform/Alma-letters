@@ -5,7 +5,8 @@
 		11/2021 - body style: font-size: 100%
 		02/2022 - added greeting to all languages
 		05/2022 - synced adaptations of header and senderReceiver to local templates
-		12/2022 - added SLSP greeting template -->
+		12/2022 - added SLSP greeting template
+		04/2023 - Added IZ message template -->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
         recordTitle - SLSP-multilingual, SLSP-userAccount
@@ -428,6 +429,9 @@ If overdue profiles are changed then the text bellow has to be adapted.
 					<hr/><br/>
 				</div>
 			</xsl:if>
+			<p>
+				<xsl:call-template name="SLSP-IZMessage"/>
+			</p>
 			<p>
 				<xsl:call-template name="SLSP-userAccount"/>
 			</p>

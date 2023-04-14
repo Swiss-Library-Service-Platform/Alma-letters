@@ -3,9 +3,10 @@
 	IZ Customization: Delivery on left
 
 	SLSP WG: Letters version 12/2021
-	10/2022 - replaced greeting template -->
+	10/2022 - replaced greeting template
+	04/2023 - Added IZ message template -->
 <!-- Dependance:
-		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
+		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting, SLSP-IZMessage
 		style - bodyStyleCss, listStyleCss
 		header - head
 		-->
@@ -352,11 +353,6 @@
 									@@we_sent@@
 								</td>
 							</tr>
-							<!-- <tr>
-								<td>
-									@@following_details@@ <xsl:value-of select="/notification_data/request/create_date"/>:
-								</td>
-							</tr> -->
 							<tr>
 								<td>
 									<strong><xsl:value-of select="notification_data/phys_item_display/title" disable-output-escaping="yes"/></strong><br />
@@ -382,15 +378,6 @@
 									</xsl:choose>
 								</td>
 							</tr>
-							<!-- <tr>
-								<td>
-									<b>@@delivered_to@@: </b>
-									<xsl:variable name="deliveryAddressRaw" select="substring-after(notification_data/delivery_address,':')"/>
-									<xsl:variable name="length" select="string-length($deliveryAddressRaw)-3"/>
-									<xsl:variable name="deliveryAddressComma" select="translate($deliveryAddressRaw, '&#10;', ', ')" />
-									<xsl:value-of select="substring($deliveryAddressComma, 2, $length)"/>
-								</td>
-							</tr> -->	
 							<tr>
 								<td>
 									<b><xsl:call-template name="SLSP-multilingual">
@@ -419,6 +406,11 @@
 									</td>
 								</tr>
 							</xsl:if>
+							<tr>
+								<td>
+									<xsl:call-template name="SLSP-IZMessage"/>
+								</td>
+							</tr>
 							<tr>
 								<td>
 									<xsl:call-template name="SLSP-userAccount"/>

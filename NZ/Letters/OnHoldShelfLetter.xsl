@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP WG: Letters version 12/2021
 		01/2022 - Fixed FR version of librariesURL template
-		10/2022 - replaced greeting template -->
+		10/2022 - replaced greeting template
+		04/2023 - Added IZ message template; removed previous solution -->
 <!-- Dependance:
-		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle, SLSP-greeting
+		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle, SLSP-greeting, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss
 		header - head
 		-->
@@ -116,13 +117,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 							<tr>
 								<td>
 									<xsl:call-template name="recordTitle" /> <!-- recordTitle.xsl -->
-									<!-- <xsl:call-template name="SLSP-multilingual">
-										<xsl:with-param name="en" select="'Barcode'"/>
-										<xsl:with-param name="fr" select="'Code-barres'"/>
-										<xsl:with-param name="it" select="'Barcode'"/>
-										<xsl:with-param name="de" select="'Strichcode'"/>
-									</xsl:call-template>:&#160;<xsl:value-of select="notification_data/phys_item_display/barcode"/>
-									<br/> -->
 									@@call_number@@
 									<xsl:choose>
 										<xsl:when test="notification_data/phys_item_display/display_alt_call_numbers != ''">
@@ -149,22 +143,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 							</tr>
 							<tr>
 								<td>
-									<!-- reusing the label additional_id for IZ specific information within the letter 
-										the text may contain HTML markup, i.e. links
-									-->
-									<xsl:variable name="notice">@@additional_id@@</xsl:variable>
-
-									<xsl:if test="$notice != '' and $notice != 'blank'">
-										<br /><strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
-											<xsl:with-param name="en" select="'Notice of the library'"/>
-											<xsl:with-param name="fr" select="'Avis de la bibliothèque'"/>
-											<xsl:with-param name="it" select="'Comunicazione della biblioteca'"/>
-											<xsl:with-param name="de" select="'Notiz der Bibliothek'"/>
-										</xsl:call-template>:</strong>&#160;<xsl:value-of select="$notice" disable-output-escaping="yes" />
-									</xsl:if>
+									<xsl:call-template name="SLSP-IZMessage"/>
 								</td>
 							</tr>
-							
 							<tr>
 								<td>
 									<xsl:call-template name="SLSP-userAccount"/>
@@ -172,7 +153,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 							</tr>
 							<tr>
 								<td>
-									<br />@@sincerely@@<!-- <br /><br /> -->
+									<br />@@sincerely@@
 								</td>
 							</tr>
 							<tr>

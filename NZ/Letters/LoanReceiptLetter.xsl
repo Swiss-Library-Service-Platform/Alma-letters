@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- WG: Letters 05/2022
-	12/2022 Added SLSP greeting template -->
+	12/2022 Added SLSP greeting template
+	04/2023 Added IZ message template -->
 <!-- Dependance:
-		recordTitle - SLSP-multilingual, SLSP-userAccount
+		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss, mainTableStyleCss
 		header - head
 		-->
@@ -22,11 +23,10 @@
 		</head>
 		<body>
 		<xsl:attribute name="style">
-			<xsl:call-template name="bodyStyleCss" /><!-- style.xsl -->
+			<xsl:call-template name="bodyStyleCss" />
 		</xsl:attribute>
 
-		<xsl:call-template name="head" /><!-- header.xsl -->
-		<!-- <xsl:call-template name="senderReceiver" />  --><!-- SenderReceiver.xsl -->
+		<xsl:call-template name="head" />
 		<div class="messageArea">
 		<div class="messageBody">
 			<table cellspacing="0" cellpadding="5" border="0">
@@ -96,22 +96,6 @@
 										<h3>
 											<xsl:value-of select="organization_unit/name" />
 										</h3>
-										<!-- <xsl:if test="organization_unit/address/line1 != ''">
-											<xsl:value-of select="organization_unit/address/line1"/>,
-										</xsl:if>
-										<xsl:if test="organization_unit/address/line2 != ''">
-											<xsl:value-of select="organization_unit/address/line2"/>,
-										</xsl:if>
-										<xsl:if test="organization_unit/address/line3 != ''">
-											<xsl:value-of select="organization_unit/address/line3"/>,
-										</xsl:if>
-										<xsl:if test="organization_unit/address/line4 != ''">
-											<xsl:value-of select="organization_unit/address/line4"/>,
-										</xsl:if>
-										<xsl:if test="organization_unit/address/postal_code != '' or organization_unit/address/city != ''">
-											<xsl:value-of select="organization_unit/address/postal_code"/>&#160;<xsl:value-of select="organization_unit/address/city"/>
-											<br/>
-										</xsl:if> -->
 										<xsl:if test="organization_unit/phone/phone != ''">
 											<xsl:call-template name="SLSP-multilingual">
 											<xsl:with-param name="en" select="'Tel'"/>
@@ -126,14 +110,6 @@
 										</xsl:if>
 									</td>
 								</tr>
-								<!-- <tr align="left">
-									<th>@@title@@</th>
-									<th>@@author@@</th>
-									<th>@@loan_date@@</th>
-									<th>@@due_date@@</th>
-									<th>@@library@@</th>
-									<th>@@description@@</th>
-								</tr> -->
 
 								<xsl:for-each select="item_loans/overdue_and_lost_loan_notification_display">
 									<tr>
@@ -168,17 +144,18 @@
 											<strong>@@loan_date@@: </strong><xsl:value-of select="item_loan/loan_date"/><br />
 											<strong>@@due_date@@: </strong><xsl:value-of select="item_loan/due_date"/>
 										</td>
-										<!-- <td><xsl:value-of select="item_loan/loan_date"/></td>
-										<td><xsl:value-of select="item_loan/due_date"/></td> -->
-										<!-- <td><xsl:value-of select="item_loan/new_due_date_str"/></td> -->
 									</tr>
 								</xsl:for-each>
 							</table>
 							<br />
 						</td>
 					</tr>
-					<!-- <hr/><br/> -->
 				</xsl:for-each>
+				<tr>
+					<td>
+						<xsl:call-template name="SLSP-IZMessage"/>
+					</td>
+				</tr>
 				<tr>
 					<td>
 						<xsl:call-template name="SLSP-userAccount"/><br />

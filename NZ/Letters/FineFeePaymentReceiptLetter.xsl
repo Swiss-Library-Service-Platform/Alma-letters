@@ -4,9 +4,10 @@
 		07/2022 - added fee comment and owning library
 		08/2022 - one column fee info layout; added user name
 		10/2022 - added template for SLSP greeting
-		02/2023 - hardcoded label for library with SLSP-multilingual -->
+		02/2023 - hardcoded label for library with SLSP-multilingual
+		04/2023 - add IZ message-->
 <!-- Dependance: 
-		recordTitle - SLSP-multilingual, SLSP-greeting
+		recordTitle - SLSP-multilingual, SLSP-greeting, SLSP-IZMessage
 		style - bodyStyleCss, generalStyle, mainTableStyleCss
 		senderReceiver - senderReceiver
 		header - head -->
@@ -69,9 +70,6 @@ Adds CHF string
 			</xsl:attribute>
 
 				<xsl:call-template name="head" />
-				<!-- <xsl:call-template name="senderReceiver" /> -->
-
-				<!-- <xsl:call-template name="toWhomIsConcerned" />  --><!-- mailReason.xsl -->
 				<table cellspacing="0" cellpadding="5" border="0">
 					<xsl:for-each select="notification_data/receivers/receiver/user">
 						<tr>
@@ -154,10 +152,13 @@ Adds CHF string
 							</xsl:call-template>
 						</td>
 					</tr>
-
 				</table>
-				<br />
+				<br/>
 				<table cellspacing="0" cellpadding="5" border="0">
+					<tr>
+						<td><xsl:call-template name="SLSP-IZMessage"/></td>
+					</tr>
+
 					<tr>
 						<td>@@sincerely@@</td>
 					</tr>

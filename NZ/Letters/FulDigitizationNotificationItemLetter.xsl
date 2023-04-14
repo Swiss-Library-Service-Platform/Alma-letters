@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP WG: Letters version 05/2022
-		10/2022 - replaced greeting template -->
+		10/2022 - replaced greeting template
+		04/2023 Added IZ message template -->
 <!-- Dependance:
-		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
+		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss
 		header - head
 		senderReceiver - senderReceiver
@@ -170,6 +171,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 							</td>
 						</tr>
 					</xsl:if>
+					<tr>
+						<td>
+							<xsl:call-template name="SLSP-IZMessage"/>
+						</td>
+					</tr>
 					<tr>
 						<td>
 							<xsl:call-template name="SLSP-userAccount"/>
