@@ -90,10 +90,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			</xsl:for-each>
 		</tr>
 	</table>
-	
-	<!-- <span style="background-color:#e9e9e9; width:100%; height:30px; line-height: 30px; margin: 0 15 5 0;" id="head-letter-name">
-		<span style="font-size: 170%; vertical-align: middle; text-shadow:1px 1px 1px #fff;">@@letterName@@</span>
-	</span> -->
 </xsl:template>
 
 <!-- Header similar to default but with different label for the heading-->
@@ -127,10 +123,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			</td>
 		</tr>
 	</table>
-	
-	<!-- <span style="background-color:#e9e9e9; width:100%; height:30px; line-height: 30px; margin: 0 15 5 0;" id="head-letter-name">
-		<span style="font-size: 170%; vertical-align: middle; text-shadow:1px 1px 1px #fff;">@@letterName@@</span>
-	</span> -->
 </xsl:template>
 
 <!-- Special senderReceiver to extract the Rapido partner information -->
@@ -209,7 +201,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								</xsl:if>
 							</td></tr>
 						</xsl:if>
-						<!-- <tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr> -->
 						<xsl:if test="country != ''">
 							<tr><td><xsl:value-of select="country"/></td></tr>
 						</xsl:if>
@@ -260,7 +251,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 								</xsl:if>
 							</td></tr>
 						</xsl:if>
-						<!-- <tr><td><xsl:value-of select="postal_code"/>&#160;<xsl:value-of select="city"/></td></tr> -->
 						<xsl:if test="country != ''">
 							<tr><td><xsl:value-of select="country"/></td></tr>
 						</xsl:if>
@@ -386,16 +376,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 												<xsl:value-of select="notification_data/metadata/additional_person_name"/><br />
 											</xsl:otherwise>
 										</xsl:choose>
-										<!-- <xsl:if test="notification_data/item/material_type != ''">
-											<xsl:call-template name="SLSP-multilingual">
-													<xsl:with-param name="en" select="'Material Type'"/>
-													<xsl:with-param name="fr">
-													<![CDATA[Type de matériel]]>
-													</xsl:with-param>
-													<xsl:with-param name="it" select="'Tipo di materiale'"/>
-													<xsl:with-param name="de" select="'Materialart'"/>
-												</xsl:call-template>: <xsl:value-of select="notification_data/item/material_type" /> <br />
-										</xsl:if> -->
 										<xsl:if test="notification_data/metadata/volume != ''">
 											@@volume@@: <xsl:value-of select="notification_data/metadata/volume"/><br />
 										</xsl:if>
@@ -404,18 +384,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 										</xsl:if>
 										<xsl:value-of select="notification_data/item/owning_library_name"/> | 
 										<xsl:value-of select="notification_data/item/call_number"/>
-										<!-- SLSP hidden shipping cost 
-											<xsl:if test="$requestType = 'Personal Delivery' and notification_data/incoming_request/shipping_cost/sum != ''">
-											<br /><strong>
-												<xsl:call-template name="SLSP-multilingual">
-													<xsl:with-param name="en" select="'Shipping cost'"/>
-													<xsl:with-param name="fr">
-													<![CDATA[Frais d'expédition]]>
-													</xsl:with-param>
-													<xsl:with-param name="it" select="'Costo di spedizione'"/>
-													<xsl:with-param name="de" select="'Versandkosten'"/>
-												</xsl:call-template>: </strong><xsl:value-of select="/notification_data/incoming_request/shipping_cost/currency"/>&#160;<xsl:value-of select="/notification_data/incoming_request/shipping_cost/sum"/>
-										</xsl:if> -->
 									</td>
 								</tr>
 								<tr>
@@ -435,14 +403,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 											<br />
 											<strong>@@call_number@@: </strong><xsl:value-of select="$callNumber"/>
 										</xsl:if>
-										<!-- <br />
-										<strong>@@item_barcode@@: </strong>
-										<xsl:for-each select="notification_data/multi_barcodes/string">
-											<xsl:variable name="index" select="position()"/>
-											<xsl:if test="$index != '1'">, </xsl:if>
-											<xsl:variable name="barcode" select="concat('Barcode', $index)"/>
-											<xsl:value-of select="."/>
-										</xsl:for-each> -->
 										<br/>
 										<strong><xsl:call-template name="SLSP-multilingual">
 											<xsl:with-param name="en" select="'Request date'"/>
@@ -526,7 +486,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 												<xsl:attribute name="src">cid:externalId.png</xsl:attribute>
 												<xsl:attribute name="alt"><xsl:value-of select="notification_data/incoming_request/external_request_id"/></xsl:attribute>
 											</img>
-											<!-- <img src="externalId.png" alt="externalId" /> -->
 										</td>
 									</tr>
 								</xsl:if>
@@ -539,7 +498,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 												<xsl:attribute name="src">cid:group_qualifier.png</xsl:attribute>
 												<xsl:attribute name="alt"><xsl:value-of select="notification_data/group_qualifier"/></xsl:attribute>
 											</img>
-											<!-- <img src="group_qualifier.png" alt="group_qualifier" /> -->
 										</td>
 									</tr>
 								</xsl:if>
@@ -555,7 +513,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 												</xsl:if>
 												<br/>
 												<xsl:variable name="barcode" select="concat('Barcode', $index)"/>
-												<!-- <xsl:value-of select="$barcode"/><br/> -->
 												<img>
 													<xsl:attribute name="alt"><xsl:value-of select="."/></xsl:attribute>
 													<xsl:attribute name="src"><xsl:value-of select="concat('cid:', $barcode, '.png')"/></xsl:attribute>
@@ -659,41 +616,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 										</xsl:if>
 										<xsl:value-of select="notification_data/item/owning_library_name"/> | 
 										<xsl:value-of select="notification_data/item/call_number"/>
-										<!-- SLSP hidden shipping cost 
-											<xsl:if test="$requestType = 'Personal Delivery' and notification_data/incoming_request/shipping_cost/sum != ''">
-											<br /><strong>
-												<xsl:call-template name="SLSP-multilingual">
-													<xsl:with-param name="en" select="'Shipping cost'"/>
-													<xsl:with-param name="fr">
-													<![CDATA[Frais d'expédition]]>
-													</xsl:with-param>
-													<xsl:with-param name="it" select="'Costo di spedizione'"/>
-													<xsl:with-param name="de" select="'Versandkosten'"/>
-												</xsl:call-template>: </strong><xsl:value-of select="/notification_data/incoming_request/shipping_cost/currency"/>&#160;<xsl:value-of select="/notification_data/incoming_request/shipping_cost/sum"/>
-										</xsl:if> -->
 									</td>
 								</tr>
-								<!-- <tr>
-									<td>
-										<b>@@borrower_reference@@: </b>
-										<xsl:call-template name="id-info-hdr"/>
-									</td>
-								</tr> -->
-								<!-- <xsl:if test="notification_data/qualifier != ''" >
-									<tr>
-										<td>
-											<b>@@qualifier@@: </b>
-											<img src="qualifier.png" alt="qualifier" />
-										</td>
-									</tr>
-								</xsl:if> -->
-								
-								<!-- <tr>
-									<td>
-										<b>@@format@@: </b>
-										<xsl:value-of select="notification_data/incoming_request/format"/>
-									</td>
-								</tr> -->
 								<tr>
 									<td>
 									<span style="font-size: 120%; font-weight: bold">@@borrower_reference@@</span>
@@ -712,8 +636,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					</xsl:choose>
 				</div>
 			</div>
-			<!-- <xsl:call-template name="lastFooter" /> -->
-			<!-- footer.xsl -->
 		</body>
 	</html>
 </xsl:template>

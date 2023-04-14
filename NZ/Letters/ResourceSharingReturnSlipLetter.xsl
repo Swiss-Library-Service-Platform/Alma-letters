@@ -52,8 +52,6 @@
 			- SLSP or local courier-->
     <xsl:template name="request-type">
         <xsl:for-each select="/notification_data/request">
-            <!-- app_indicator = <xsl:value-of select="app_indicator"/><br/>
-            pod_name = <xsl:value-of select="pod_name"/><br/> -->
             <xsl:choose>
                 <xsl:when test="app_indicator = 'ALMA' and pod_name = ''">ILL</xsl:when><!-- ILL -->
                 <xsl:when test="app_indicator = 'NGRS'"><!-- Rapido -->
@@ -97,10 +95,6 @@
                 </xsl:for-each>
             </tr>
         </table>
-        
-        <!-- <span style="background-color:#e9e9e9; width:100%; height:30px; line-height: 30px; margin: 0 15 5 0;" id="head-letter-name">
-            <span style="font-size: 170%; vertical-align: middle; text-shadow:1px 1px 1px #fff;">@@letterName@@</span>
-        </span> -->
     </xsl:template>
 
     <!-- Special senderReceiver to extract the Rapido partner information -->
@@ -288,7 +282,6 @@
 			<body>
 				<xsl:attribute name="style">
 					<xsl:call-template name="bodyStyleCss"/>
-					<!-- style.xsl -->
 				</xsl:attribute>
 
 				<div class="messageArea" style="clear: both;">
@@ -348,7 +341,6 @@
                                         <xsl:attribute name="src">cid:externalId.png</xsl:attribute>
 										<xsl:attribute name="alt"><xsl:value-of select="notification_data/request/external_request_id"/></xsl:attribute>
                                     </img>
-                                    <!-- <img src="externalId.png" alt="externalId"/> -->
                                 </td>
 							</tr>
                             <tr>
@@ -426,8 +418,6 @@
 						</table>
 					</div>
 				</div>
-				<!-- <xsl:call-template name="lastFooter"/> -->
-				<!-- footer.xsl -->
 			</body>
 		</html>
 	</xsl:template>
