@@ -4,9 +4,10 @@
       10/2022 Rapido: adjusted the providing library part; unified greeting
       10/2022 Added template for SLSP greeting
       01/2023 Rapido: hide digitizing library row if lender library is empty
-      03/2023 Fixed linking for docDel with URL -->
+      03/2023 Fixed linking for docDel with URL
+      04/2023 Added IZ message template-->
 <!-- Dependance:
-		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
+		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss
 		header - head
 		senderReceiver - senderReceiver
@@ -70,12 +71,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <body>
         <xsl:attribute name="style">
           <xsl:call-template name="bodyStyleCss" />
-          <!-- style.xsl -->
         </xsl:attribute>
         <xsl:call-template name="head" />
-        <!-- header.xsl -->
         <xsl:call-template name="senderReceiver" />
-        <!-- SenderReceiver.xsl -->
         <div class="messageArea">
           <div class="messageBody">
 
@@ -123,7 +121,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                           <xsl:with-param name="de" select="'Bestell-Notiz'"/>
                         </xsl:call-template>: <xsl:value-of select="/notification_data/request/note" /><br />
                       </xsl:if>
-                      <!-- <xsl:value-of select="notification_data/phys_item_display/author"/>: <xsl:value-of select="notification_data/phys_item_display/title"/> (Barcode: <xsl:value-of select="notification_data/phys_item_display/barcode"/>)<br/> -->
                     </xsl:when>
                     <!-- Rapido DocDel request -->
                     <xsl:when test="notification_data/resource_sharing_request != ''">
@@ -209,7 +206,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         <xsl:if test="$index != '1'">
                           <br/>
                         </xsl:if>
-                        <!-- <br/> -->
                         <xsl:variable name="linkText" select="concat('Link ', $index)"/>
                         <xsl:variable name="linkNoHttps" select="substring-after(.,'//')"/>
                         <xsl:variable name="linkDomain" select="substring-before($linkNoHttps,'/')"/>
@@ -250,6 +246,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                   </xsl:choose>
                 </xsl:otherwise>
               </xsl:choose>
+              <tr>
+                <td>
+                  <br />
+                  <xsl:call-template name="SLSP-IZMessage"/>
+                </td>
+              </tr>
               <tr>
                 <td>
                   <br />

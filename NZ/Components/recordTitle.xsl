@@ -256,7 +256,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		Usage:
 			1. Configure the label department with text in all languages.
 			2. Insert the template: <xsl:call-template name="IZMessage"/> -->
-	<xsl:template name="IZMessage">
+	<xsl:template name="SLSP-IZMessage">
 		<xsl:variable name="notice">@@department@@</xsl:variable>
 		<xsl:if test="$notice != '' and $notice != 'blank'">
 			<strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
