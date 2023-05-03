@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 10/2021
+<!-- IZ adaptation: reversed senderReceiver address field
+
+	SLSP WG: Letters version 10/2021
 		10/2021 - fix date in header
 		11/2021 - senderReceiver-receiver-only: added 1cm margin on the left side to better fit envelope window
 		11/2021 - body style: font-size: 100%
@@ -7,10 +9,10 @@
 		05/2022 - synced adaptations of header and senderReceiver to local templates
 		12/2022 - added SLSP greeting template
 		05/2023 - Added IZ message template; added 5th line to address;
-			added margin between address and letter content for delivery address on left-->
+					adapted bottom margin and font size of address to better fit envelope window-->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
-        recordTitle - SLSP-multilingual, SLSP-userAccount
+        recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
          -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/strings">
@@ -179,7 +181,7 @@ If overdue profiles are changed then the text bellow has to be adapted.
 	</table>
 </xsl:template>
 
-<!-- Template to print only delivery address only, on right side -->
+<!-- Template to print only delivery address, on right side -->
 <xsl:template name="senderReceiver-receiver-only-reversed">
 	<table cellspacing="0" border="0" width="100%">
 		<tr>
@@ -292,7 +294,7 @@ If overdue profiles are changed then the text bellow has to be adapted.
 			<xsl:call-template name="head-overdue-letter" />
 			<!-- Show patron address only for special cases - user group 92 or 3rd Recall -->
 			<xsl:if test="notification_data/user_for_printing/user_group = '92' or notification_data/notification_type = 'OverdueNotificationType4'">
-				<xsl:call-template name="senderReceiver-receiver-only" />
+				<xsl:call-template name="senderReceiver-receiver-only-reversed" />
 			</xsl:if>
 			<br />
 			<div id="user-additional-info" align="left">

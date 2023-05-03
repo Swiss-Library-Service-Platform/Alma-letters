@@ -5,7 +5,7 @@
 		08/2022 - one column fee info layout; added user name
 		10/2022 - added template for SLSP greeting
 		02/2023 - hardcoded label for library with SLSP-multilingual
-		04/2023 - add IZ message-->
+		05/2023 - add IZ message-->
 <!-- Dependance: 
 		recordTitle - SLSP-multilingual, SLSP-greeting, SLSP-IZMessage
 		style - bodyStyleCss, generalStyle, mainTableStyleCss
@@ -47,6 +47,25 @@ Adds CHF string
 
 	<xsl:decimal-format name="chf" decimal-separator="." grouping-separator="&#160;"/>
 	<xsl:value-of select="format-number($numeric_value, '###&#160;###.00', 'chf')"/>
+</xsl:template>
+
+<!-- Prints the IZ message stored in label 'department' for the language of the letter.
+		If value in the label is empty or with value "blank" does not print anything.
+		The label can contain also HTML markup such as links or formatting.
+		Warning: the label 'department' has to be available in the letter for this template to work	
+		Usage:
+			1. Configure the label department with text in all languages.
+			2. Insert the template: <xsl:call-template name="IZMessage"/> -->
+<xsl:template name="SLSP-IZMessage">
+	<xsl:variable name="notice">@@department@@</xsl:variable>
+	<xsl:if test="$notice != '' and $notice != 'blank'">
+		<strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+			<xsl:with-param name="en" select="'Notice of the library'"/>
+			<xsl:with-param name="fr" select="'Avis de la bibliothèque'"/>
+			<xsl:with-param name="it" select="'Comunicazione della biblioteca'"/>
+			<xsl:with-param name="de" select="'Notiz der Bibliothek'"/>
+		</xsl:call-template>:</strong>&#160;<xsl:value-of select="$notice" disable-output-escaping="yes" />
+	</xsl:if>
 </xsl:template>
 
 <xsl:template match="/">
