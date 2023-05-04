@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP WG: Letters version 05/2022
 		10/2022 - replaced greeting template
-		04/2023 Added IZ message template -->
+		05/2023 Added IZ message template -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss
@@ -52,6 +52,24 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 			</xsl:call-template>
 		</a>
 	</xsl:template>
+
+<!-- Prints the IZ message stored in label 'department' for the language of the letter.
+		If value in the label is empty or with value "blank" does not print anything.
+		The label can contain also HTML markup such as links or formatting.
+		Usage:
+			1. Configure the label department with text in all languages.
+			2. <<already done by SLSP in this letter>>Insert the template: <xsl:call-template name="SLSP-IZMessage"/> -->
+<xsl:template name="SLSP-IZMessage">
+	<xsl:variable name="notice">@@department@@</xsl:variable>
+	<xsl:if test="$notice != '' and $notice != 'blank'">
+		<strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+			<xsl:with-param name="en" select="'Notice of the library'"/>
+			<xsl:with-param name="fr" select="'Avis de la bibliothèque'"/>
+			<xsl:with-param name="it" select="'Comunicazione della biblioteca'"/>
+			<xsl:with-param name="de" select="'Notiz der Bibliothek'"/>
+		</xsl:call-template>:</strong>&#160;<xsl:value-of select="$notice" disable-output-escaping="yes" />
+	</xsl:if>
+</xsl:template>
 
 	<xsl:template match="/">
 	<html>

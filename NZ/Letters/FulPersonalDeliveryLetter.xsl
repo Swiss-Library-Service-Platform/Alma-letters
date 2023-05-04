@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP WG: Letters version 12/2021
 	10/2022 - replaced greeting template
-	04/2023 - Added IZ message template -->
+	05/2023 - Added IZ message template
+			- adapted bottom margin and font size of address to better fit envelope window -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting, SLSP-IZMessage
 		style - bodyStyleCss, listStyleCss
@@ -56,7 +57,7 @@
 					<xsl:for-each select="/notification_data/phys_item_display/owning_library_details">
 						<table>
 						<xsl:attribute name="style">
-							font-size: 80%;
+							font-size: 9pt;
 							<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 						</xsl:attribute>
 							<tr><td><xsl:value-of select="address1"/></td></tr>
@@ -86,7 +87,7 @@
 						<xsl:when test="notification_data/user_for_printing">
 							<table cellspacing="0" cellpadding="0" border="0">
 								<xsl:attribute name="style">
-									font-weight: 600;
+									font-weight: 600;font-size: 10pt;
 									<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 								</xsl:attribute>
 								<tr>
@@ -144,6 +145,7 @@
 							<xsl:for-each select="notification_data/receivers/receiver/user">
 								<table>
 								<xsl:attribute name="style">
+									font-weight: 600;font-size: 10pt;
 									<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 								</xsl:attribute>
 									<tr>
@@ -183,6 +185,8 @@
 				</td>
 			</tr>
 		</table>
+		<br />
+		<br />
 	</xsl:template>
 
 	<!-- Address template printing delivery address on the left side
@@ -196,7 +200,7 @@
 						<xsl:when test="notification_data/user_for_printing">
 							<table cellspacing="0" cellpadding="0" border="0">
 								<xsl:attribute name="style">
-									font-weight: 600;
+									font-weight: 600;font-size: 10pt;
 									<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 								</xsl:attribute>
 								<tr>
@@ -254,6 +258,7 @@
 							<xsl:for-each select="notification_data/receivers/receiver/user">
 								<table>
 								<xsl:attribute name="style">
+									font-weight: 600;font-size: 10pt;
 									<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 								</xsl:attribute>
 									<tr>
@@ -296,7 +301,7 @@
 					<xsl:for-each select="/notification_data/phys_item_display/owning_library_details">
 						<table>
 						<xsl:attribute name="style">
-							font-size: 80%;
+							font-size: 9pt;
 							<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 						</xsl:attribute>
 							<tr><td><xsl:value-of select="address1"/></td></tr>
@@ -323,6 +328,24 @@
 			</tr>
 		</table>
 	</xsl:template>
+
+<!-- Prints the IZ message stored in label 'department' for the language of the letter.
+		If value in the label is empty or with value "blank" does not print anything.
+		The label can contain also HTML markup such as links or formatting.
+		Usage:
+			1. Configure the label department with text in all languages.
+			2. <<already done by SLSP in this letter>>Insert the template: <xsl:call-template name="SLSP-IZMessage"/> -->
+<xsl:template name="SLSP-IZMessage">
+	<xsl:variable name="notice">@@department@@</xsl:variable>
+	<xsl:if test="$notice != '' and $notice != 'blank'">
+		<strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+			<xsl:with-param name="en" select="'Notice of the library'"/>
+			<xsl:with-param name="fr" select="'Avis de la bibliothèque'"/>
+			<xsl:with-param name="it" select="'Comunicazione della biblioteca'"/>
+			<xsl:with-param name="de" select="'Notiz der Bibliothek'"/>
+		</xsl:call-template>:</strong>&#160;<xsl:value-of select="$notice" disable-output-escaping="yes" />
+	</xsl:if>
+</xsl:template>
 
 	<xsl:template match="/">
 		<html>

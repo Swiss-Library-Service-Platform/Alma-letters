@@ -5,7 +5,7 @@
       10/2022 Added template for SLSP greeting
       01/2023 Rapido: hide digitizing library row if lender library is empty
       03/2023 Fixed linking for docDel with URL
-      04/2023 Added IZ message template-->
+      05/2023 Added IZ message template; adapted formatting of the letter -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss
@@ -62,6 +62,24 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:variable name="user-chapter-temp" select="substring-after(/notification_data/resource_sharing_request/request_metadata, 'dc:rlterms_chapter_title&gt;')"/>
     <xsl:value-of select="substring-before($user-chapter-temp, '&lt;/dc:rlterms_chapter_title')"/>
   </xsl:template>
+
+<!-- Prints the IZ message stored in label 'department' for the language of the letter.
+		If value in the label is empty or with value "blank" does not print anything.
+		The label can contain also HTML markup such as links or formatting.
+		Usage:
+			1. Configure the label department with text in all languages.
+			2. <<already done by SLSP in this letter>>Insert the template: <xsl:call-template name="SLSP-IZMessage"/> -->
+<xsl:template name="SLSP-IZMessage">
+  <xsl:variable name="notice">@@department@@</xsl:variable>
+  <xsl:if test="$notice != '' and $notice != 'blank'">
+    <strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+      <xsl:with-param name="en" select="'Notice of the library'"/>
+      <xsl:with-param name="fr" select="'Avis de la bibliothèque'"/>
+      <xsl:with-param name="it" select="'Comunicazione della biblioteca'"/>
+      <xsl:with-param name="de" select="'Notiz der Bibliothek'"/>
+    </xsl:call-template>:</strong>&#160;<xsl:value-of select="$notice" disable-output-escaping="yes" />
+  </xsl:if>
+</xsl:template>
 
   <xsl:template match="/">
     <html>
@@ -197,7 +215,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:choose>
                 <xsl:when test="/notification_data/url_list != ''">
                   <tr>
-                    <td><br />@@attached_are_the_urls@@:</td>
+                    <td>@@attached_are_the_urls@@:</td>
                   </tr>
                   <tr>
                     <td>
@@ -222,39 +240,33 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                 </xsl:when>
                 <xsl:otherwise>
                   <tr>
-                    <td><br />@@to_see_the_resource@@</td>
+                    <td>@@to_see_the_resource@@</td>
                   </tr>
                   <tr>
-                    <td>@@for_local_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_local" /></xsl:attribute>@@click_here@@</a></td>
-                  </tr>
-                  <tr>
-                    <td>@@for_saml_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_saml" /></xsl:attribute>@@click_here@@</a></td>
-                  </tr>
-                  <xsl:choose>
-                      <!-- non-rapido request -->
-                      <xsl:when test="notification_data/request/document_delivery_max_num_of_view != ''">
-                        <tr>
-                          <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/request/document_delivery_max_num_of_views"/>.</td>
-                        </tr>
-                      </xsl:when>
-                      <!-- Rapido request -->
-                      <xsl:when test="notification_data/borrowing_document_delivery_max_num_of_views != ''">
-                        <tr>
-                          <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/borrowing_document_delivery_max_num_of_views"/>.</td>
-                        </tr>
-                      </xsl:when>
-                  </xsl:choose>
+                    <td>
+                      @@for_local_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_local" /></xsl:attribute>@@click_here@@</a><br/>
+                      @@for_saml_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_saml" /></xsl:attribute>@@click_here@@</a><br/>
+                      <xsl:choose>
+                        <!-- non-rapido request -->
+                        <xsl:when test="notification_data/request/document_delivery_max_num_of_view != ''">
+                          @@max_num_of_views@@ <xsl:value-of select="notification_data/request/document_delivery_max_num_of_views"/>.
+                        </xsl:when>
+                        <!-- Rapido request -->
+                        <xsl:when test="notification_data/borrowing_document_delivery_max_num_of_views != ''">
+                          @@max_num_of_views@@ <xsl:value-of select="notification_data/borrowing_document_delivery_max_num_of_views"/>.
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>                  
                 </xsl:otherwise>
               </xsl:choose>
               <tr>
                 <td>
-                  <br />
                   <xsl:call-template name="SLSP-IZMessage"/>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <br />
                   <xsl:call-template name="SLSP-userAccount"/>
                 </td>
               </tr>
