@@ -12,6 +12,7 @@
     10/2022 - added template SLSP-greeting-ILL
     11/2022 - added cid prefix for barcode image
     02/2023 - added pod name
+    05/2023 - adapted bottom margin and font size of address to better fit envelope window;
     -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:include href="header.xsl"/>
@@ -109,7 +110,7 @@
                     <xsl:for-each select="/notification_data/library">
                         <table>
                             <xsl:attribute name="style">
-                                font-size: 80%;
+                                font-size: 9pt;
                                 <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                             </xsl:attribute>
                             <xsl:if test="string-length(address/line1)!=0">
@@ -144,7 +145,7 @@
                 <td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm; vertical-align: top;">
                     <table cellspacing="0" cellpadding="0" border="0">
                         <xsl:attribute name="style">
-                            font-weight: 600;
+                            font-weight: 600;font-size: 10pt;
                             <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                         </xsl:attribute>
                         <xsl:for-each select="/notification_data/partner_address">
@@ -189,10 +190,10 @@
         <table width="100%">
             <tr>
                 <!-- Receiver -->
-                <td width="50%" align="left" style="padding: 10mm 5mm 10mm 20mm;vertical-align: top;">
+                <td width="50%" align="left" style="padding: 10mm 5mm 10mm 10mm;vertical-align: top;">
                     <table cellspacing="0" cellpadding="0" border="0">
                         <xsl:attribute name="style">
-                            font-weight: 600;
+                            font-weight: 600;font-size: 10pt;
                             <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                         </xsl:attribute>
                         <xsl:for-each select="/notification_data/partner_address">
@@ -232,7 +233,7 @@
                     <xsl:for-each select="/notification_data/library">
                         <table>
                             <xsl:attribute name="style">
-                                font-size: 80%;
+                                font-size: 9pt;
                                 <xsl:call-template name="listStyleCss" />
                             </xsl:attribute>
                             <xsl:if test="string-length(address/line1)!=0">
@@ -265,6 +266,7 @@
                 </td>
             </tr>
         </table>
+        <br />
     </xsl:template>
     
 	<xsl:template match="/">

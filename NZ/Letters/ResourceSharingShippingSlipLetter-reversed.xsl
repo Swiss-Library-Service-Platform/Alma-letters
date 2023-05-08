@@ -15,7 +15,9 @@
 			rapido: fixed barcode issue with img-src prefix cid: and img-alt with barcode text
 	12/2022 rapido: changed the condition node for personal delivery; fixed the borrower reference e-mail for personal delivery
 	02/2023 rapido: added pod name
-	03/2023 rapido: added template for personal delivery-->
+	03/2023 rapido: added template for personal delivery
+	05/2023 adapted bottom margin and font size of address to better fit envelope window;
+			removed duplicate call number from Home delivery-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -134,7 +136,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<xsl:for-each select="/notification_data/item/owning_library_details">
 					<table>
 						<xsl:attribute name="style">
-							font-size: 80%;
+							font-size: 9pt;
 							<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 						</xsl:attribute>
 						<xsl:if test="string-length(address1)!=0">
@@ -169,7 +171,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			<td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm; vertical-align: top;">
 				<table cellspacing="0" cellpadding="0" border="0">
 					<xsl:attribute name="style">
-						font-weight: 600;
+						font-weight: 600;font-size: 10pt;
 						<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 					</xsl:attribute>
 					<xsl:for-each select="/notification_data/partner_shipping_info_list/partner_shipping_info">
@@ -217,10 +219,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<table width="100%">
 		<tr>
 			<!-- Receiver -->
-			<td width="50%" align="left" style="padding: 10mm 10mm 10mm 20mm;vertical-align: top;">
+			<td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm;vertical-align: top;">
 				<table cellspacing="0" cellpadding="0" border="0">
 					<xsl:attribute name="style">
-						font-weight: 600;
+						font-weight: 600;font-size: 10pt;
 					</xsl:attribute>
 					<xsl:for-each select="/notification_data/partner_shipping_info_list/partner_shipping_info">
 						<xsl:if test="/notification_data/incoming_request/rapido_delivery_option='homeDelivery' or /notification_data/incoming_request/rapido_delivery_option='officeDelivery'">
@@ -262,7 +264,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<xsl:for-each select="/notification_data/item/owning_library_details">
 					<table>
 						<xsl:attribute name="style">
-							font-size: 80%;
+							font-size: 9pt;
 							<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 						</xsl:attribute>
 						<xsl:if test="string-length(address1)!=0">
@@ -295,6 +297,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			</td>
 		</tr>
 	</table>
+	<br />
 </xsl:template>
 
 <!-- Template to return type of the request
@@ -382,8 +385,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 										<xsl:if test="notification_data/metadata/issue != ''">
 											@@issue@@: <xsl:value-of select="notification_data/metadata/issue"/><br />
 										</xsl:if>
-										<xsl:value-of select="notification_data/item/owning_library_name"/> | 
-										<xsl:value-of select="notification_data/item/call_number"/>
 									</td>
 								</tr>
 								<tr>
