@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- WG: Letters 10/2022
+	05/2023 adapted bottom margin and font size of address to better fit envelope window
 	Dependancy:
 		header - head
 		style - generalStyle, bodyStyleCss, listStyleCss
-		recordTitle - SLSP-multilingual, SLSP-greeting-ILL
-		10/2022 -->
+		recordTitle - SLSP-multilingual, SLSP-greeting-ILL -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:include href="header.xsl" />
@@ -26,7 +26,7 @@
 						<xsl:when test="notification_data/phys_items_display/physical_item_display_for_printing/owning_library_details/address1">
 							<table>
 								<xsl:attribute name="style">
-									font-size: 80%;
+									font-size: 9pt;
 									<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 								</xsl:attribute>
 								<tr>
@@ -85,7 +85,7 @@
 						<xsl:otherwise>
 							<table>
 								<xsl:attribute name="style">
-									font-size: 80%;
+									font-size: 9pt;
 									<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 								</xsl:attribute>
 								<xsl:if test="notification_data/library/address/line1 !=''">
@@ -150,7 +150,7 @@
 				<td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm; vertical-align: top;">
 					<table cellspacing="0" cellpadding="0" border="0">
 						<xsl:attribute name="style">
-							font-weight: 600;
+							font-weight: 600;font-size: 10pt;
 							<xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
 						</xsl:attribute>
 						<xsl:if test="string-length(notification_data/partner_address/line1)!=0">
@@ -176,6 +176,7 @@
 				</td>
 			</tr>
 		</table>
+		<br/>
 		<br/>
 	</xsl:template>
 

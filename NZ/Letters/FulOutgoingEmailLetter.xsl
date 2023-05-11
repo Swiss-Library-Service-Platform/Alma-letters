@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- WG: Letters 10/2022
 	03/2023 - Fixed partner address if city and postal code not filled in
+	05/2023 - adapted bottom margin and font size of address to better fit envelope window
 	Dependancy:
 		header - head
 		style - generalStyle, bodyStyleCss, listStyleCss
@@ -22,13 +23,14 @@
 		- Sender address smaller font -->
         <table cellspacing="0" cellpadding="5" border="0" width="100%">
             <tr>
+				<!-- sender -->
                 <td width="50%" align="left" style="padding: 10mm 10mm 10mm 10mm;">
                     <xsl:choose>
                         <xsl:when test="notification_data/request/line1 != ''">
                             <xsl:for-each select="notification_data/request">
                                 <table>
                                     <xsl:attribute name="style">
-										font-size: 80%;
+										font-size: 9pt;
                                         <xsl:call-template name="listStyleCss" />
                                         <!-- style.xsl -->
                                     </xsl:attribute>
@@ -65,7 +67,7 @@
                             <xsl:for-each select="notification_data/library">
                                 <table>
                                     <xsl:attribute name="style">
-										font-size: 80%;
+										font-size: 9pt;
                                         <xsl:call-template name="listStyleCss" />
                                         <!-- style.xsl -->
                                     </xsl:attribute>
@@ -137,10 +139,11 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </td>
+				<!-- receiver -->
                 <td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm; vertical-align: top;">
                     <table cellspacing="0" cellpadding="0" border="0">
                         <xsl:attribute name="style">
-							font-weight: 600;
+							font-weight: 600;font-size: 10pt;
                             <xsl:call-template name="listStyleCss" />
                             <!-- style.xsl -->
                         </xsl:attribute>
@@ -198,6 +201,7 @@
             </tr>
         </table>
         <br/>
+		<br/>
     </xsl:template>
 
 	<xsl:template match="/">
