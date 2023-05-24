@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP customized; 26.5.2021
 	10/2022 Added SLSP greeting template
+	05/2023 Added support for VAT free user groups
 Dependance:
 	header - head
 	style - generalStyle, bodyStyleCss
@@ -40,6 +41,8 @@ Dependance:
 							<xsl:when test="user/user_group = '14'"></xsl:when> <!-- letter passes-->
 							<xsl:when test="user/user_group = '15'"></xsl:when> <!-- letter passes-->
 							<xsl:when test="user/user_group = '16'"></xsl:when> <!-- letter passes-->
+							<xsl:when test="user/user_group = '17'"></xsl:when> <!-- letter passes-->
+							<xsl:when test="user/user_group = '18'"></xsl:when> <!-- letter passes-->
 							<xsl:when test="user/user_group = '99'"></xsl:when> <!-- letter passes-->
 							<xsl:otherwise>
 								<xsl:message terminate="yes">User group is not allowed to reset password.</xsl:message>

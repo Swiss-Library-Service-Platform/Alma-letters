@@ -181,7 +181,7 @@ If overdue profiles are changed then the text bellow has to be adapted.
 	</table>
 </xsl:template>
 
-<!-- Template to print only delivery address, on right side -->
+<!-- Template to print only delivery address, on the left side -->
 <xsl:template name="senderReceiver-receiver-only-reversed">
 	<table cellspacing="0" border="0" width="100%">
 		<tr>
