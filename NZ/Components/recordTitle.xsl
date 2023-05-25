@@ -7,6 +7,8 @@
 09/2022 Added templates SLSP-greeting and SLSP-sincerely
 10/2022 Added templates SLSP-greeting-ILL; updated SLSP-multilingual
 11/2022	Added template SLSP-Rapido-destination
+05/2023 Added template SLSP-Rapido-pod-name
+		Adapted labels for template SLSP-userAccount
 -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -85,21 +87,17 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 -->
 	<xsl:template name="SLSP-userAccount">
 		<xsl:call-template name="SLSP-multilingual">
-			<xsl:with-param name="en" select="'To check your current loans and fees that have not yet been invoiced please login at swisscovery: '"/>
+			<xsl:with-param name="en" select="'To check your current loans and fees, please log in to swisscovery: '"/>
 			<!-- Adaptation to include single quote in "n'ont" in the text -->
 			<xsl:with-param name="fr">
-				<![CDATA[Pour consulter vos prêts en cours et les frais qui n'ont pas encore été facturés, veuillez vous connecter à swisscovery: ]]>
+				<![CDATA[Pour consulter vos prêts en cours et les frais, veuillez vous connecter à swisscovery: ]]>
 			</xsl:with-param>
-			<xsl:with-param name="it" select="'Per controllare i suoi prestiti attuali e i costi non ancora fatturati, effettui il login su swisscovery: '"/>
-			<xsl:with-param name="de" select="'Um Ihre aktuellen Ausleihen und noch nicht in Rechnung gestellte Gebühren zu überprüfen, loggen Sie sich bitte bei swisscovery ein: '"/>
+			<xsl:with-param name="it" select="'Per controllare i suoi prestiti attuali e i costi, effettui il login su swisscovery: '"/>
+			<xsl:with-param name="de" select="'Um Ihre aktuellen Ausleihen und Gebühren zu überprüfen, loggen Sie sich bitte bei swisscovery ein: '"/>
 		</xsl:call-template>
 		<a>
-			<xsl:attribute name="href">@@email_my_account@@&#38;lang=
-				<xsl:value-of select="/notification_data/receivers/receiver/preferred_language"/>
-			</xsl:attribute>
-			<xsl:attribute name="target">
-			_blank
-		</xsl:attribute>
+			<xsl:attribute name="href">@@email_my_account@@&#38;lang=<xsl:value-of select="/notification_data/receivers/receiver/preferred_language"/></xsl:attribute>
+			<xsl:attribute name="target">_blank</xsl:attribute>
 			<xsl:call-template name="SLSP-multilingual">
 				<xsl:with-param name="en" select="'My account'"/>
 				<xsl:with-param name="fr" select="'Mon compte'"/>
@@ -214,6 +212,18 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
+	<!-- Template for Resource Request Slip Letter to extract the pod name
+	Usage:
+		<xsl:variable name="podName">
+			<xsl:call-template name="SLSP-Rapido-pod-name" />
+		</xsl:variable>
+		<xsl:value-of select="$podName"/>-->
+	<xsl:template name="SLSP-Rapido-pod-name">
+		<xsl:if test="/notification_data/pod_name != ''">
+			<xsl:value-of select="/notification_data/pod_name"/>
+		</xsl:if>
+	</xsl:template>
 
 	<!-- Template to add greeting to letters in case the label is missing in configuration
 	USAGE: <xsl:call-template name="SLSP-greeting" /> -->

@@ -9,7 +9,8 @@
 		05/2022 - synced adaptations of header and senderReceiver to local templates
 		12/2022 - added SLSP greeting template
 		05/2023 - Added IZ message template; added 5th line to address;
-					adapted bottom margin and font size of address to better fit envelope window-->
+				adapted bottom margin and font size of address to better fit envelope window
+				Added author to loans description; fixed display of call number-->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
         recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
@@ -416,20 +417,24 @@ If overdue profiles are changed then the text bellow has to be adapted.
 												<xsl:value-of select="substring(item_loan/title, 0, 70)"/>
 												<xsl:if test="string-length(item_loan/title) > 70">...</xsl:if>
 												<br />
+												<xsl:if test="item_loan/author != ''">
+													<xsl:value-of select="item_loan/author"/>
+													<br />
+												</xsl:if>
 												<strong>@@barcode@@: </strong>
 												<xsl:value-of select="item_loan/barcode"/>
-												<br />
-												<strong>@@call_number@@: </strong>
 												<xsl:choose>
 													<xsl:when test="physical_item_display_for_printing/display_alt_call_numbers != ''">
-														<xsl:value-of select="physical_item_display_for_printing/display_alt_call_numbers"/>
+														<br />
+														<strong>@@call_number@@: </strong><xsl:value-of select="physical_item_display_for_printing/display_alt_call_numbers"/>
 													</xsl:when>
-													<xsl:otherwise>
-														<xsl:value-of select="physical_item_display_for_printing/call_number"/>
-													</xsl:otherwise>
+													<xsl:when test="physical_item_display_for_printing/call_number != ''">
+														<br />
+														<strong>@@call_number@@: </strong><xsl:value-of select="physical_item_display_for_printing/call_number"/>
+													</xsl:when>
 												</xsl:choose>
-												<br />
 												<xsl:if test="physical_item_display_for_printing/issue_level_description !='' and physical_item_display_for_printing/issue_level_description != 'Vol.' and physical_item_display_for_printing/issue_level_description != '_'">
+													<br />
 													<strong>@@description@@: </strong>
 													<xsl:value-of select="physical_item_display_for_printing/issue_level_description"/>
 												</xsl:if>

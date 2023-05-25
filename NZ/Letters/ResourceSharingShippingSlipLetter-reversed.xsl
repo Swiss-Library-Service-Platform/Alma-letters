@@ -17,7 +17,8 @@
 	02/2023 rapido: added pod name
 	03/2023 rapido: added template for personal delivery
 	05/2023 adapted bottom margin and font size of address to better fit envelope window;
-			removed duplicate call number from Home delivery-->
+			removed duplicate call number from Home delivery
+			added icons for telephone and e-mail-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -159,10 +160,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<tr><td><xsl:value-of select="country"/></td></tr>
 						</xsl:if>
 						<xsl:if test="string-length(phone)!=0">
-							<tr><td><xsl:value-of select="phone"/></td></tr>
+							<tr><td>&#9742;&#160;<xsl:value-of select="phone"/></td></tr>
 						</xsl:if>
 						<xsl:if test="string-length(email)!=0">
-							<tr><td><xsl:value-of select="email"/></td></tr>
+							<tr><td>&#9993;&#160;<xsl:value-of select="email"/></td></tr>
 						</xsl:if>
 					</table>
 				</xsl:for-each>
@@ -287,10 +288,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<tr><td><xsl:value-of select="country"/></td></tr>
 						</xsl:if>
 						<xsl:if test="string-length(phone)!=0">
-							<tr><td><xsl:value-of select="phone"/></td></tr>
+							<tr><td>&#9742;&#160;<xsl:value-of select="phone"/></td></tr>
 						</xsl:if>
 						<xsl:if test="string-length(email)!=0">
-							<tr><td><xsl:value-of select="email"/></td></tr>
+							<tr><td>&#9993;&#160;<xsl:value-of select="email"/></td></tr>
 						</xsl:if>
 					</table>
 				</xsl:for-each>
