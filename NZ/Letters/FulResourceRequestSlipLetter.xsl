@@ -3,7 +3,9 @@
 		02/2022 Added chapter title, author and pages; hidden second requested for; colspan 3
         05/2022 Added rapido request note, rapido volume extraction, rapido pages
         06/2022 added personal delivery field extraction
-        11/2022 added extraction of rapido destination-->
+        11/2022 added extraction of rapido destination
+        05/2023 added pod name for rapido requests; more efficient display of the title metadata
+        06/2023 moved the specific request metadata under the call number; hide requested for if user empty -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:include href="header.xsl" />
@@ -27,11 +29,13 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                 <xsl:call-template name="generalStyle" />
             </head>
             <body>
-                <h1>
-                    <strong>@@requested_for@@ :
-                        <xsl:value-of select="notification_data/user_for_printing/name"/>
-                    </strong>
-                </h1>
+                <xsl:if test="notification_data/user_for_printing/name">
+                    <h1>
+                        <strong>@@requested_for@@ :
+                            <xsl:value-of select="notification_data/user_for_printing/name"/>
+                        </strong>
+                    </h1>
+                </xsl:if>
                 <xsl:call-template name="head" />
                 <!-- header.xsl -->
                 <div class="messageArea">
@@ -90,19 +94,16 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     <xsl:call-template name="recordTitle" />
                                 </td>
                             </tr>
-                            <xsl:if test="notification_data/phys_item_display/edition != ''">
-                                <tr>
-                                    <td colspan="3">
+                            <tr>
+                                <td colspan="3">
+                                    <xsl:if test="notification_data/phys_item_display/edition != ''">
                                         <strong>@@edition@@: </strong>
                                         <xsl:value-of select="notification_data/phys_item_display/edition"/>
-                                    </td>
-                                </tr>
-                            </xsl:if>
-                            <!-- SLSP (4. 6. 2021): Added Series field to better localize norms 
-								Reused Bcc for Series label -->
-                            <xsl:if test="notification_data/request/record_display_section/series_small != ''">
-                                <tr>
-                                    <td colspan="3">
+                                        <br />
+                                    </xsl:if>
+                                    <!-- SLSP (4. 6. 2021): Added Series field to better localize norms 
+                                        Reused Bcc for Series label -->
+                                    <xsl:if test="notification_data/request/record_display_section/series_small != ''">
                                         <strong>
                                             <xsl:call-template name="SLSP-multilingual">
                                                 <xsl:with-param name="en" select="'Series'"/>
@@ -114,78 +115,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                         <xsl:for-each select="notification_data/request/record_display_section/series_small_list/string">
                                             <xsl:value-of select="."/>;
                                         </xsl:for-each>
-                                    </td>
-                                </tr>
-                            </xsl:if>
-                            <!-- SLSP Add volume from Rapido request if available -->
-                            <xsl:variable name="requestVolume">
-                                <xsl:call-template name="SLSP-Rapido-extract-volume" />
-                            </xsl:variable>
-                            <xsl:if test="$requestVolume != ''">
-                                <tr>
-                                    <td colspan="3">
-                                        <strong>
-                                            <xsl:call-template name="SLSP-multilingual">
-                                                <xsl:with-param name="en" select="'Volume'"/>
-                                                <xsl:with-param name="fr" select="'Volume'"/>
-                                                <xsl:with-param name="it" select="'Volume'"/>
-                                                <xsl:with-param name="de" select="'Band'"/>
-                                            </xsl:call-template>:
-                                        </strong>
-                                        <xsl:value-of select="$requestVolume"/>
-                                    </td>
-                                </tr>
-                            </xsl:if>
-                            <!-- SLSP Add chapter/article title from request if available -->
-                            <xsl:if test="notification_data/request/chapter_article_title != ''">
-                                <tr>
-                                    <td colspan="3">
-                                        <strong>
-                                            <xsl:call-template name="SLSP-multilingual">
-                                                <xsl:with-param name="en" select="'Chapter / Article'"/>
-                                                <xsl:with-param name="fr" select="'Chapitre / Article'"/>
-                                                <xsl:with-param name="it" select="'Capitolo / Articolo'"/>
-                                                <xsl:with-param name="de" select="'Kapitel / Artikel'"/>
-                                            </xsl:call-template>:
-                                        </strong>
-                                        <xsl:value-of select="notification_data/request/chapter_article_title"/>
-                                    </td>
-                                </tr>
-                            </xsl:if>
-                            <!-- SLSP Add chapter/article author from request if available -->
-                            <xsl:if test="notification_data/request/chapter_article_author != ''">
-                                <tr>
-                                    <td colspan="3">
-                                        <strong>
-                                            <xsl:call-template name="SLSP-multilingual">
-                                                <xsl:with-param name="en" select="'Author'"/>
-                                                <xsl:with-param name="fr" select="'Auteur'"/>
-                                                <xsl:with-param name="it" select="'Autore'"/>
-                                                <xsl:with-param name="de" select="'Autor'"/>
-                                            </xsl:call-template>:
-                                        </strong>
-                                        <xsl:value-of select="notification_data/request/chapter_article_author"/>
-                                    </td>
-                                </tr>
-                            </xsl:if>
-							<!-- SLSP Add pages from Rapido request if available -->
-							<xsl:variable name="requestPages">
-								<xsl:call-template name="SLSP-Rapido-extract-pages" />
-							</xsl:variable>
-							<xsl:if test="$requestPages != ''">
-								<tr>
-									<td colspan="3">
-										<strong>
-										<xsl:call-template name="SLSP-multilingual">
-											<xsl:with-param name="en" select="'Pages'"/>
-											<xsl:with-param name="fr" select="'Pages'"/>
-											<xsl:with-param name="it" select="'Pagine'"/>
-											<xsl:with-param name="de" select="'Seiten'"/>
-										</xsl:call-template>: </strong><xsl:value-of select="$requestPages"/>
-									</td>
-								</tr>
-							</xsl:if>
-                            <!-- SLSP -->
+                                    </xsl:if>
+                                </td>
+                            </tr>
                             <tr>
                                 <td>
                                     <h2>
@@ -281,6 +213,65 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 </xsl:if>
                             </xsl:if>
                             <tr>
+                                <td colspan="3">
+                                    <!-- SLSP Add volume from Rapido request if available -->
+                                    <xsl:variable name="requestVolume">
+                                        <xsl:call-template name="SLSP-Rapido-extract-volume" />
+                                    </xsl:variable>
+                                    <xsl:if test="$requestVolume != ''">
+                                        <strong>
+                                            <xsl:call-template name="SLSP-multilingual">
+                                                <xsl:with-param name="en" select="'Volume'"/>
+                                                <xsl:with-param name="fr" select="'Volume'"/>
+                                                <xsl:with-param name="it" select="'Volume'"/>
+                                                <xsl:with-param name="de" select="'Band'"/>
+                                            </xsl:call-template>:
+                                        </strong>
+                                        <xsl:value-of select="$requestVolume"/>
+                                        <br />
+                                    </xsl:if>
+                                    <!-- SLSP Add chapter/article title from request if available -->
+                                    <xsl:if test="notification_data/request/chapter_article_title != ''">
+                                        <strong>
+                                            <xsl:call-template name="SLSP-multilingual">
+                                                <xsl:with-param name="en" select="'Chapter / Article'"/>
+                                                <xsl:with-param name="fr" select="'Chapitre / Article'"/>
+                                                <xsl:with-param name="it" select="'Capitolo / Articolo'"/>
+                                                <xsl:with-param name="de" select="'Kapitel / Artikel'"/>
+                                            </xsl:call-template>:
+                                        </strong>
+                                        <xsl:value-of select="notification_data/request/chapter_article_title"/>
+                                        <br />
+                                    </xsl:if>
+                                    <!-- SLSP Add chapter/article author from request if available -->
+                                    <xsl:if test="notification_data/request/chapter_article_author != ''">
+                                        <strong>
+                                            <xsl:call-template name="SLSP-multilingual">
+                                                <xsl:with-param name="en" select="'Author'"/>
+                                                <xsl:with-param name="fr" select="'Auteur'"/>
+                                                <xsl:with-param name="it" select="'Autore'"/>
+                                                <xsl:with-param name="de" select="'Autor'"/>
+                                            </xsl:call-template>:
+                                        </strong>
+                                        <xsl:value-of select="notification_data/request/chapter_article_author"/>
+                                        <br />
+                                    </xsl:if>
+                                    <!-- SLSP Add pages from Rapido request if available -->
+                                    <xsl:variable name="requestPages">
+                                        <xsl:call-template name="SLSP-Rapido-extract-pages" />
+                                    </xsl:variable>
+                                    <xsl:if test="$requestPages != ''">
+                                        <strong>
+                                        <xsl:call-template name="SLSP-multilingual">
+                                            <xsl:with-param name="en" select="'Pages'"/>
+                                            <xsl:with-param name="fr" select="'Pages'"/>
+                                            <xsl:with-param name="it" select="'Pagine'"/>
+                                            <xsl:with-param name="de" select="'Seiten'"/>
+                                        </xsl:call-template>: </strong><xsl:value-of select="$requestPages"/>
+                                    </xsl:if>
+                                </td>
+                            </tr>
+                            <tr>
 								<td colspan="3">
 									<strong>@@move_to_library@@: </strong>
 									<!-- SLSP: extract destination for Rapido requests -->
@@ -288,7 +279,15 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 										<xsl:call-template name="SLSP-Rapido-destination" />
 									</xsl:variable>
 									<xsl:value-of select="$destination"/>
-									<br />
+                                    <br />
+                                    <xsl:variable name="podName">
+                                        <xsl:call-template name="SLSP-Rapido-pod-name" />
+                                    </xsl:variable>
+                                    <xsl:if test="$podName != ''">
+                                        <strong>Pod: </strong>
+                                        <xsl:value-of select="$podName"/>
+                                        <br />
+                                    </xsl:if>
 									<!-- SLSP: Add personal delivery field to request type -->
 									<xsl:variable name="personalDelivery">
 										<xsl:call-template name="SLSP-Rapido-persDel" />
