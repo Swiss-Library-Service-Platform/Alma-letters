@@ -15,7 +15,8 @@
 	03/2023 rapido: added template for personal delivery
 	05/2023 adapted bottom margin and font size of address to better fit envelope window
 			removed duplicate call number from Home delivery
-			added icons for telephone and e-mail-->
+			added icons for telephone and e-mail
+	07/2023	fixed country code display for owning library-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -153,8 +154,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<tr><td><xsl:value-of select="address5"/></td></tr>
 						</xsl:if>
 						<tr><td><xsl:value-of select="/notification_data/item/owning_library_details/postal_code"/>&#160;<xsl:value-of select="/notification_data/item/owning_library_details/city"/></td></tr>
-						<xsl:if test="country != ''">
-							<tr><td><xsl:value-of select="country"/></td></tr>
+						<xsl:if test="country_display != ''">
+							<tr><td><xsl:value-of select="country_display"/></td></tr>
 						</xsl:if>
 						<xsl:if test="string-length(phone)!=0">
 							<tr><td>&#9742;&#160;<xsl:value-of select="phone"/></td></tr>
@@ -281,8 +282,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<tr><td><xsl:value-of select="address5"/></td></tr>
 						</xsl:if>
 						<tr><td><xsl:value-of select="/notification_data/item/owning_library_details/postal_code"/>&#160;<xsl:value-of select="/notification_data/item/owning_library_details/city"/></td></tr>
-						<xsl:if test="country != ''">
-							<tr><td><xsl:value-of select="country"/></td></tr>
+						<xsl:if test="country_display != ''">
+							<tr><td><xsl:value-of select="country_display"/></td></tr>
 						</xsl:if>
 						<xsl:if test="string-length(phone)!=0">
 							<tr><td>&#9742;&#160;<xsl:value-of select="phone"/></td></tr>
