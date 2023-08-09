@@ -60,7 +60,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 <td colspan="3">
                                     <strong>@@request_id@@: </strong>
                                     <br />
-                                    <img src="cid:request_id_barcode.png" alt="Request Barcode"/>
+                                    <img>
+                                        <xsl:attribute name="src">cid:request_id_barcode.png</xsl:attribute>
+                                        <xsl:attribute name="alt"><xsl:value-of select="notification_data/request_id" /></xsl:attribute>
+                                    </img>
                                 </td>
                             </tr>
 							<xsl:if test="/notification_data/incoming_request != ''">
@@ -68,7 +71,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 <td>
 									<strong>Rapido request ID: </strong>
                                     <br />
-                                    <img src="externalId.png" alt="externalId" />
+                                    <img>
+                                        <xsl:attribute name="src">cid:group_qualifier.png</xsl:attribute>
+                                        <xsl:attribute name="alt"><xsl:value-of select="notification_data/group_qualifier" /></xsl:attribute>
+                                    </img>
                                 </td>
                             </tr>
 							</xsl:if>
