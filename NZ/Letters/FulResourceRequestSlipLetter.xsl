@@ -5,7 +5,8 @@
         06/2022 added personal delivery field extraction
         11/2022 added extraction of rapido destination
         05/2023 added pod name for rapido requests; more efficient display of the title metadata
-        06/2023 moved the specific request metadata under the call number; hide requested for if user empty -->
+        06/2023 moved the specific request metadata under the call number; hide requested for if user empty
+        08/2023 fixed display of Rapido ID, added alt attributes in barcode images-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:include href="header.xsl" />
