@@ -84,7 +84,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     <td colspan="3">
                                         <strong>@@item_barcode@@: </strong>
                                         <br />
-                                        <img src="cid:item_id_barcode.png" alt="Item Barcode"/>
+                                        <img>
+                                            <xsl:attribute name="src">cid:item_id_barcode.png</xsl:attribute>
+                                            <xsl:attribute name="alt"><xsl:value-of select="notification_data/phys_item_display/barcode" /></xsl:attribute>
+                                        </img>
                                     </td>
                                 </tr>
                             </xsl:if>
