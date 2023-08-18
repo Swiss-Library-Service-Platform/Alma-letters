@@ -3,7 +3,8 @@
 
     WG: Letters 03/2022
         04/2022 Added senderReceiver to print delivery address
-        12/2022 Added SLSP greeting template -->
+        12/2022 Added SLSP greeting template
+		05/2023 Added IZ message template -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount
 		style - generalStyle, bodyStyleCss, mainTableStyleCss
@@ -17,6 +18,25 @@
 	<xsl:include href="footer.xsl" />
 	<xsl:include href="style.xsl" />
 	<xsl:include href="recordTitle.xsl" />
+
+<!-- Prints the IZ message stored in label 'department' for the language of the letter.
+	If value in the label is empty or with value "blank" does not print anything.
+	The label can contain also HTML markup such as links or formatting.
+	Warning: the label 'department' has to be available in the letter for this template to work	
+	Usage:
+		1. Configure the label department with text in all languages.
+		2. Insert the template: <xsl:call-template name="IZMessage"/> -->
+<xsl:template name="SLSP-IZMessage">
+	<xsl:variable name="notice">@@department@@</xsl:variable>
+	<xsl:if test="$notice != '' and $notice != 'blank'">
+		<strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+			<xsl:with-param name="en" select="'Notice of the library'"/>
+			<xsl:with-param name="fr" select="'Avis de la bibliothèque'"/>
+			<xsl:with-param name="it" select="'Comunicazione della biblioteca'"/>
+			<xsl:with-param name="de" select="'Notiz der Bibliothek'"/>
+		</xsl:call-template>:</strong>&#160;<xsl:value-of select="$notice" disable-output-escaping="yes" />
+	</xsl:if>
+</xsl:template>
 
 	<xsl:template match="/">
 	<html>
@@ -99,22 +119,6 @@
 										<h3>
 											<xsl:value-of select="organization_unit/name" />
 										</h3>
-										<!-- <xsl:if test="organization_unit/address/line1 != ''">
-											<xsl:value-of select="organization_unit/address/line1"/>,
-										</xsl:if>
-										<xsl:if test="organization_unit/address/line2 != ''">
-											<xsl:value-of select="organization_unit/address/line2"/>,
-										</xsl:if>
-										<xsl:if test="organization_unit/address/line3 != ''">
-											<xsl:value-of select="organization_unit/address/line3"/>,
-										</xsl:if>
-										<xsl:if test="organization_unit/address/line4 != ''">
-											<xsl:value-of select="organization_unit/address/line4"/>,
-										</xsl:if>
-										<xsl:if test="organization_unit/address/postal_code != '' or organization_unit/address/city != ''">
-											<xsl:value-of select="organization_unit/address/postal_code"/>&#160;<xsl:value-of select="organization_unit/address/city"/>
-											<br/>
-										</xsl:if> -->
 										<xsl:if test="organization_unit/phone/phone != ''">
 											<xsl:call-template name="SLSP-multilingual">
 											<xsl:with-param name="en" select="'Tel'"/>
@@ -129,14 +133,6 @@
 										</xsl:if>
 									</td>
 								</tr>
-								<!-- <tr align="left">
-									<th>@@title@@</th>
-									<th>@@author@@</th>
-									<th>@@loan_date@@</th>
-									<th>@@due_date@@</th>
-									<th>@@library@@</th>
-									<th>@@description@@</th>
-								</tr> -->
 
 								<xsl:for-each select="item_loans/overdue_and_lost_loan_notification_display">
 									<tr>
@@ -171,17 +167,18 @@
 											<strong>@@loan_date@@: </strong><xsl:value-of select="item_loan/loan_date"/><br />
 											<strong>@@due_date@@: </strong><xsl:value-of select="item_loan/due_date"/>
 										</td>
-										<!-- <td><xsl:value-of select="item_loan/loan_date"/></td>
-										<td><xsl:value-of select="item_loan/due_date"/></td> -->
-										<!-- <td><xsl:value-of select="item_loan/new_due_date_str"/></td> -->
 									</tr>
 								</xsl:for-each>
 							</table>
 							<br />
 						</td>
 					</tr>
-					<!-- <hr/><br/> -->
 				</xsl:for-each>
+				<tr>
+					<td>
+						<xsl:call-template name="SLSP-IZMessage"/>
+					</td>
+				</tr>
 				<tr>
 					<td>
 						<xsl:call-template name="SLSP-userAccount"/><br />
