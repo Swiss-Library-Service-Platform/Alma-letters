@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 03/2022
-        04/2022 - rapido: added extraction of request metadata
-        04/2022 - rapido: added info about library providing the digital copy if outside of IZ
-        05/2022 - added message with information about maximum views for the document -->
+<!-- SLSP WG: Letters version 05/2022
+      05/2022 Rapido: request metadata, info about providing library, max views message
+      10/2022 Rapido: adjusted the providing library part; unified greeting
+      10/2022 Added template for SLSP greeting
+      01/2023 Rapido: hide digitizing library row if lender library is empty
+      03/2023 Fixed linking for docDel with URL -->
 <!-- Dependance:
-		recordTitle - SLSP-multilingual, SLSP-userAccount
+		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
 		style - generalStyle, bodyStyleCss
 		header - head
 		senderReceiver - senderReceiver
@@ -53,18 +55,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			</xsl:call-template>
 		</a>
 	</xsl:template>
-  
-  <!-- Template to extract volume from the encoded XML metadata provided in letter -->
-  <xsl:template name="extract-volume">
-    <xsl:variable name="user-volume-temp" select="substring-after(/notification_data/resource_sharing_request/request_metadata, 'dc:volume&gt;')"/>
-    <xsl:value-of select="substring-before($user-volume-temp, '&lt;/dc:volume')"/>
-  </xsl:template>
-
-  <!-- Template to extract pages from the encoded XML metadata provided in letter -->
-  <xsl:template name="extract-pages">
-    <xsl:variable name="user-pages-temp" select="substring-after(/notification_data/resource_sharing_request/request_metadata, 'dc:rlterms_pages&gt;')"/>
-    <xsl:value-of select="substring-before($user-pages-temp, '&lt;/dc:rlterms_pages')"/>
-  </xsl:template>
 
   <!-- Template to extract chapter from the encoded XML metadata provided in letter -->
   <xsl:template name="extract-chapter">
@@ -92,12 +82,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
           	<table cellspacing="0" cellpadding="5" border="0">
               <tr>
                 <td>
-                  <xsl:call-template name="SLSP-multilingual">
-                    <xsl:with-param name="en" select="'Hello'"/>
-                    <xsl:with-param name="fr" select="'Bonjour,'"/>
-                    <xsl:with-param name="it" select="'Buongiorno,'"/>
-                    <xsl:with-param name="de" select="'Guten Tag'"/>
-                  </xsl:call-template>
+                  <xsl:call-template name="SLSP-greeting" />
                 </td>
               </tr>
           		<tr>
@@ -142,23 +127,23 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                     </xsl:when>
                     <!-- Rapido DocDel request -->
                     <xsl:when test="notification_data/resource_sharing_request != ''">
-                      <xsl:variable name="user-volume">
-                        <xsl:call-template name="extract-volume" />
+                      <xsl:variable name="requestVolume">
+                        <xsl:call-template name="SLSP-Rapido-extract-volume" />
                       </xsl:variable>
                       <xsl:variable name="user-chapter">
                         <xsl:call-template name="extract-chapter" />
                       </xsl:variable>
-                      <xsl:variable name="user-pages">
-                        <xsl:call-template name="extract-pages" />
+                      <xsl:variable name="requestPages">
+                        <xsl:call-template name="SLSP-Rapido-extract-pages" />
                       </xsl:variable>
 
-                      <xsl:if test="$user-volume !=''">
+                      <xsl:if test="$requestVolume !=''">
                         <xsl:call-template name="SLSP-multilingual">
                           <xsl:with-param name="en" select="'Description'"/>
                           <xsl:with-param name="fr" select="'Description'"/>
                           <xsl:with-param name="it" select="'Descrizione'"/>
                           <xsl:with-param name="de" select="'Beschreibung'"/>
-                        </xsl:call-template>: Vol. <xsl:value-of select="$user-volume"/><br />
+                        </xsl:call-template>: Vol. <xsl:value-of select="$requestVolume"/><br />
                       </xsl:if>
 
                       <xsl:if test="$user-chapter !=''">
@@ -170,13 +155,13 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         </xsl:call-template>: <xsl:value-of select="$user-chapter" /><br />
                       </xsl:if>
 
-                      <xsl:if test="$user-pages !=''">
+                      <xsl:if test="$requestPages !=''">
                         <xsl:call-template name="SLSP-multilingual">
                           <xsl:with-param name="en" select="'Pages'"/>
                           <xsl:with-param name="fr" select="'Pages'"/>
                           <xsl:with-param name="it" select="'Pagine'"/>
                           <xsl:with-param name="de" select="'Seiten'"/>
-                        </xsl:call-template>: <xsl:value-of select="$user-pages" /><br />
+                        </xsl:call-template>: <xsl:value-of select="$requestPages" /><br />
                       </xsl:if>
 
                       <xsl:if test="notification_data/resource_sharing_request/note !=''">
@@ -192,7 +177,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                 </td> 
               </tr>
               <!-- RapidILL library that scanned the item -->
-              <xsl:if test="notification_data/resource_sharing_request != '' and notification_data/resource_sharing_request/self_ownership = 'false'">
+              <xsl:if test="notification_data/resource_sharing_request != ''
+                          and notification_data/resource_sharing_request/self_ownership = 'false'
+                          and notification_data/resource_sharing_request/lending_institution != ''">
               <tr>
                 <td>
                     <xsl:call-template name="SLSP-multilingual">
@@ -200,7 +187,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         <xsl:with-param name="fr" select="'La version numérique est fournie par '"/>
                         <xsl:with-param name="it" select="'La versione digitale è fornita da'"/>
                         <xsl:with-param name="de" select="'Die digitale Version wird bereitgestellt von'"/>
-                    </xsl:call-template>: <xsl:value-of select="notification_data/resource_sharing_request/additional_lender_information"/>
+                    </xsl:call-template>: <xsl:value-of select="notification_data/resource_sharing_request/lending_institution"/>
                     (<xsl:call-template name="SLSP-multilingual">
                         <xsl:with-param name="en" select="'Please note that digitization fees, if applicable, will be charged by this library.'"/>
                         <xsl:with-param name="fr" select="'Veuillez noter que les frais de numérisation, le cas échéant, seront facturés par cette bibliothèque.'"/>
@@ -210,29 +197,59 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                 </td>
               </tr>
               </xsl:if>
-              <tr>
-                <td><br /><strong>@@to_see_the_resource@@</strong></td>
-              </tr>
-              <tr>
-                <td>@@for_local_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_local" /></xsl:attribute>@@click_here@@</a></td>
-              </tr>
-              <tr>
-                <td>@@for_saml_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_saml" /></xsl:attribute>@@click_here@@</a></td>
-              </tr>
-                <xsl:choose>
-                    <!-- non-rapido request -->
-                    <xsl:when test="notification_data/request/document_delivery_max_num_of_view != ''">
-                      <tr>
-                        <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/request/document_delivery_max_num_of_views"/>.</td>
-                      </tr>
-                    </xsl:when>
-                    <!-- Rapido request -->
-                    <xsl:when test="notification_data/borrowing_document_delivery_max_num_of_views != ''">
-                      <tr>
-                        <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/borrowing_document_delivery_max_num_of_views"/>.</td>
-                      </tr>
-                    </xsl:when>
-                </xsl:choose>
+              <xsl:choose>
+                <xsl:when test="/notification_data/url_list != ''">
+                  <tr>
+                    <td><br />@@attached_are_the_urls@@:</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <xsl:for-each select="/notification_data/url_list/string">
+                        <xsl:variable name="index" select="position()"/>
+                        <xsl:if test="$index != '1'">
+                          <br/>
+                        </xsl:if>
+                        <!-- <br/> -->
+                        <xsl:variable name="linkText" select="concat('Link ', $index)"/>
+                        <xsl:variable name="linkNoHttps" select="substring-after(.,'//')"/>
+                        <xsl:variable name="linkDomain" select="substring-before($linkNoHttps,'/')"/>
+                        <a>
+                          <xsl:attribute name="href"><xsl:value-of select="."/></xsl:attribute>
+                          <xsl:attribute name="alt"><xsl:value-of select="concat($linkText, ': ', $linkDomain)"/></xsl:attribute>
+                          <xsl:attribute name="title"><xsl:value-of select="$linkDomain"/></xsl:attribute>
+                          <xsl:attribute name="target"><xsl:value-of select="_blank"/></xsl:attribute>
+                          <xsl:value-of select="$linkText"/>
+                        </a>
+                      </xsl:for-each>
+                    </td>
+                  </tr>
+                </xsl:when>
+                <xsl:otherwise>
+                  <tr>
+                    <td><br />@@to_see_the_resource@@</td>
+                  </tr>
+                  <tr>
+                    <td>@@for_local_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_local" /></xsl:attribute>@@click_here@@</a></td>
+                  </tr>
+                  <tr>
+                    <td>@@for_saml_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_saml" /></xsl:attribute>@@click_here@@</a></td>
+                  </tr>
+                  <xsl:choose>
+                      <!-- non-rapido request -->
+                      <xsl:when test="notification_data/request/document_delivery_max_num_of_view != ''">
+                        <tr>
+                          <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/request/document_delivery_max_num_of_views"/>.</td>
+                        </tr>
+                      </xsl:when>
+                      <!-- Rapido request -->
+                      <xsl:when test="notification_data/borrowing_document_delivery_max_num_of_views != ''">
+                        <tr>
+                          <td>@@max_num_of_views@@ <xsl:value-of select="notification_data/borrowing_document_delivery_max_num_of_views"/>.</td>
+                        </tr>
+                      </xsl:when>
+                  </xsl:choose>
+                </xsl:otherwise>
+              </xsl:choose>
               <tr>
                 <td>
                   <br />
@@ -245,7 +262,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                 </td>
               </tr>
               <tr>
-                <td><br />@@sincerely@@ <br/>
+                <td>@@sincerely@@ <br/>
                   <xsl:value-of select="notification_data/organization_unit/name" /></td>
               </tr>
               <tr>
@@ -254,7 +271,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
           	</table>
           </div>
         </div>
-
       </body>
     </html>
   </xsl:template>

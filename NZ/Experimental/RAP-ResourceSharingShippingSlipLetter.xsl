@@ -11,7 +11,8 @@
 	11/2022 rapido: removed shipping cost for Personal delivery
 			rapido: fixed barcode issue with img-src prefix cid: and img-alt with barcode text
 	12/2022 rapido: changed the condition node for personal delivery; fixed the borrower reference e-mail for personal delivery
-	02/2023 rapido: added pod name; added template for personal delivery-->
+	02/2023 rapido: added pod name
+	03/2023 rapido: added template for personal delivery-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -431,15 +432,14 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 											<br />
 											<strong>@@call_number@@: </strong><xsl:value-of select="$callNumber"/>
 										</xsl:if>
-										<br />
+										<!-- <br />
 										<strong>@@item_barcode@@: </strong>
 										<xsl:for-each select="notification_data/multi_barcodes/string">
 											<xsl:variable name="index" select="position()"/>
 											<xsl:if test="$index != '1'">, </xsl:if>
 											<xsl:variable name="barcode" select="concat('Barcode', $index)"/>
-											<!-- <xsl:value-of select="$barcode"/><br/> -->
 											<xsl:value-of select="."/>
-										</xsl:for-each>
+										</xsl:for-each> -->
 										<br/>
 										<strong><xsl:call-template name="SLSP-multilingual">
 											<xsl:with-param name="en" select="'Request date'"/>

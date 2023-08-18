@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- WG:Letters 1/2023 -->
+<!-- WG:Letters 03/2023 -->
 <!-- Dependance:
     header - head
     senderReceiver - senderReceiver

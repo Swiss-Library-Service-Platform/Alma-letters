@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP version 11/2022
+<!-- WG version 02/2022
 Dependancy:
 	header - head
-	style - generalStyle, bodyStyleCss, listStyleCss -->
+	style - generalStyle, bodyStyleCss, listStyleCss
+	recordTitle - SLSP-userAccount -->
+<!-- Add logic if all the terms and policies are the same
+	notification_data/old_cost = notification_data/new_cost
+	notification_data/old_delivey_time = notification_data/ngrs_request/offer_delivery_time
+	notification_data/old_loan_period = notification_data/ngrs_request/offer_loan_period -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:include href="header.xsl" />
@@ -89,76 +94,109 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							</td>
 						</tr>
 					</xsl:if>
-					
+					<!-- set up variable to tell if policy has changed -->
+					<xsl:variable name="policyChanged">
+						<xsl:choose>
+							<xsl:when test="notification_data/old_delivey_time != notification_data/ngrs_request/delivery_time or notification_data/old_loan_period != notification_data/ngrs_request/loan_period or notification_data/old_cost != notification_data/new_cost">true</xsl:when>
+							<xsl:otherwise>false</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+					<xsl:if test="$policyChanged = 'true'">
+						<tr>
+							<td>
+								<xsl:if test="notification_data/old_terms_exist='true'">
+									<xsl:if test="notification_data/old_delivey_time != '' and notification_data/old_loan_period != ''">
+										@@from@@
+										<xsl:value-of select="notification_data/old_delivey_time" />
+										@@keepFor@@
+										<xsl:value-of select="notification_data/old_loan_period" />
+										@@days@@
+									</xsl:if>	
+									<xsl:if test="notification_data/old_delivey_time = ''">
+										@@fromRota@@
+										@@deliveryNotExist@@
+										<xsl:value-of select="notification_data/old_loan_period" />
+										@@days@@
+									</xsl:if>	
+									<xsl:if test="notification_data/old_loan_period = ''">
+										@@from@@
+										<xsl:value-of select="notification_data/old_delivey_time" />
+										@@loanPeriodNotExist@@
+									</xsl:if>				
+									<xsl:if test="notification_data/old_cost !=''">
+										@@costToPatron@@
+										<xsl:value-of select="notification_data/old_cost" />
+										<xsl:value-of select="' '" />
+										<xsl:value-of select="notification_data/currency" />
+									</xsl:if>
+									<!-- <xsl:if test="notification_data/old_cost ='' and notification_data/new_cost !=''">
+										@@costIsUnkown@@
+									</xsl:if> -->
+								</xsl:if>
+								<xsl:if test="notification_data/old_terms_exist='false'">
+									@@unknownTerms@@
+								</xsl:if>
+							</td>
+						</tr>
+					</xsl:if>
 					<tr>
 						<td>
-							<xsl:if test="notification_data/old_terms_exist='true'">
-								<xsl:if test="notification_data/old_delivey_time != '' and notification_data/old_loan_period != ''">
-									@@from@@
-									<xsl:value-of select="notification_data/old_delivey_time" />
-									@@keepFor@@
-									<xsl:value-of select="notification_data/old_loan_period" />
-									@@days@@
-								</xsl:if>	
-								<xsl:if test="notification_data/old_delivey_time = ''">
-									@@fromRota@@
-									@@deliveryNotExist@@
-									<xsl:value-of select="notification_data/old_loan_period" />
-									@@days@@
-								</xsl:if>	
-								<xsl:if test="notification_data/old_loan_period = ''">
-									@@from@@
-									<xsl:value-of select="notification_data/old_delivey_time" />
-									@@loanPeriodNotExist@@
-								</xsl:if>				
-								<xsl:if test="notification_data/old_cost !=''">
-									@@costToPatron@@
-									<xsl:value-of select="notification_data/old_cost" />
-									<xsl:value-of select="' '" />
-									<xsl:value-of select="notification_data/currency" />
-								</xsl:if>
-								<!-- <xsl:if test="notification_data/old_cost ='' and notification_data/new_cost !=''">
-									@@costIsUnkown@@
-								</xsl:if> -->
-							</xsl:if>
-							<xsl:if test="notification_data/old_terms_exist='false'">
-								@@unknownTerms@@
-							</xsl:if>
-							<xsl:if test="notification_data/new_terms_exist='true'">
-								<br />
+							<xsl:if test="notification_data/new_terms_exist='true' and $policyChanged = 'true'">
 								<strong>
-								<xsl:if test="notification_data/ngrs_request/delivery_time != '0' and notification_data/ngrs_request/loan_period != '0'">
-									@@to@@
-									<xsl:value-of select="notification_data/ngrs_request/delivery_time" />
-									@@keepFor@@
-									<xsl:value-of select="notification_data/ngrs_request/loan_period" />
-									@@days@@
-								</xsl:if>	
-								<xsl:if test="notification_data/ngrs_request/delivery_time = '0'">
-									@@toRota@@
-									@@deliveryNotExist@@
-									<xsl:value-of select="notification_data/ngrs_request/loan_period" />
-									@@days@@
-								</xsl:if>	
-								<xsl:if test="notification_data/ngrs_request/loan_period = '0'">
-									@@to@@
-									<xsl:value-of select="notification_data/ngrs_request/delivery_time" />
-									@@loanPeriodNotExist@@
-								</xsl:if>		
-								<xsl:if test="notification_data/new_cost !=''">
-									@@costToPatron@@
-									<xsl:value-of select="notification_data/new_cost" />
-									<xsl:value-of select="' '" />
-									<xsl:value-of select="notification_data/currency" />
-								</xsl:if>
-								<!-- <xsl:if test="notification_data/new_cost ='' and notification_data/old_cost !=''">
-									@@costIsUnkown@@
-								</xsl:if> -->
+									<xsl:if test="notification_data/ngrs_request/delivery_time != '0' and notification_data/ngrs_request/loan_period != '0'">
+										@@to@@
+										<xsl:value-of select="notification_data/ngrs_request/delivery_time" />
+										@@keepFor@@
+										<xsl:value-of select="notification_data/ngrs_request/loan_period" />
+										@@days@@
+									</xsl:if>	
+									<xsl:if test="notification_data/ngrs_request/delivery_time = '0'">
+										@@toRota@@
+										@@deliveryNotExist@@
+										<xsl:value-of select="notification_data/ngrs_request/loan_period" />
+										@@days@@
+									</xsl:if>	
+									<xsl:if test="notification_data/ngrs_request/loan_period = '0'">
+										@@to@@
+										<xsl:value-of select="notification_data/ngrs_request/delivery_time" />
+										@@loanPeriodNotExist@@
+									</xsl:if>		
+									<xsl:if test="notification_data/new_cost !=''">
+										@@costToPatron@@
+										<xsl:value-of select="notification_data/new_cost" />
+										<xsl:value-of select="' '" />
+										<xsl:value-of select="notification_data/currency" />
+									</xsl:if>
+									<!-- <xsl:if test="notification_data/new_cost ='' and notification_data/old_cost !=''">
+										@@costIsUnkown@@
+									</xsl:if> -->
 								</strong>
+								<br />
 							</xsl:if>
 							<xsl:if test="notification_data/new_terms_exist='false'">
-								<br />
 								@@toUnknownTerms@@
+								<br />
+							</xsl:if>
+							<xsl:if test="notification_data/new_pickup_date !=''">
+								<strong>
+								@@newPickupDate@@:
+								<xsl:value-of select="notification_data/new_pickup_date"/>
+								</strong>
+								<br />
+							</xsl:if>
+							<xsl:if test="notification_data/new_due_date !=''">
+								<strong>
+								@@newDueDate@@:
+								<xsl:value-of select="notification_data/new_due_date"/>
+								</strong>
+								<br />
+							</xsl:if>
+							<xsl:if test="notification_data/new_delivery_date!=''">
+								<strong>
+								@@newDeliveryDate@@:
+								<xsl:value-of select="notification_data/new_delivery_date"/>
+								</strong>
+								<br />
 							</xsl:if>
 						</td>
 					</tr>
@@ -185,25 +223,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					</xsl:if>
 					<tr>
 						<td>
-							<xsl:if test="notification_data/new_pickup_date !=''">
-								@@newPickupDate@@:
-								<xsl:value-of select="notification_data/new_pickup_date"/>
-							</xsl:if>
-							<xsl:if test="notification_data/new_due_date !=''">
-								<br />
-								@@newDueDate@@:
-								<xsl:value-of select="notification_data/new_due_date"/>
-							</xsl:if>
-							<xsl:if test="notification_data/new_delivery_date!=''">
-								<br />
-								@@newDeliveryDate@@:
-								<xsl:value-of select="notification_data/new_delivery_date"/>
-							</xsl:if>
+							<xsl:call-template name="SLSP-userAccount"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<br />
 							@@end@@
 						</td>
 					</tr>
@@ -215,9 +239,14 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 					</tr>
 					<tr>
 						<td>
-							<xsl:if test="notification_data/organization_unit/address/line1 !=''">
-								<xsl:value-of select="notification_data/organization_unit/address/line1" />
-							</xsl:if>
+							<xsl:choose>
+								<xsl:when test="notification_data/organization_unit/address/line1 !=''">
+									<xsl:value-of select="notification_data/organization_unit/address/line1" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="notification_data/organization_unit/name" />
+								</xsl:otherwise>
+							</xsl:choose>
 							<xsl:if test="notification_data/organization_unit/address/line2 !=''">
 								<br />
 								<xsl:value-of select="notification_data/organization_unit/address/line2" />
