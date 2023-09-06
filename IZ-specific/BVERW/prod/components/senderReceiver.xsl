@@ -2,7 +2,8 @@
 <!-- IZ customization: templates for acquisition: senderReceiverAcq, senderReceiverClaim
 
     SLSP-customized 03/2022
-        05/2023 Added 5th address line; adapted bottom margin and font size of address to better fit envelope window -->
+        05/2023 Added 5th address line; adapted bottom margin and font size of address to better fit envelope window
+        09/2023 Added logic for POLineClaimAggregatedLetter to print only first name-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -10,7 +11,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
         - Fixed padding for envelopes with window
         - Delivery address bold
         - Sender address smaller font -->
-	<xsl:template name="senderReceiver">
+    <xsl:template name="senderReceiver">
         <table cellspacing="0" cellpadding="5" border="0" width="100%">
             <tr>
                 <!-- sender -->
@@ -21,7 +22,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 font-size: 9pt;
                                 <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                             </xsl:attribute>
-                            <!-- <tr><td><xsl:value-of select="name"/></td></tr> -->
                             <xsl:if test="string-length(address/line1)!=0">
                                 <tr><td><xsl:value-of select="address/line1"/></td></tr>
                             </xsl:if>
@@ -72,6 +72,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     <xsl:when test="notification_data/general_data/letter_type = 'POLineRenewalLetter'">
                                         <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/></td></tr>
                                     </xsl:when>
+                                    <xsl:when test="notification_data/general_data/letter_type = 'POLineClaimAggregatedLetter'">
+                                        <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/></td></tr>
+                                    </xsl:when>
                                     <xsl:otherwise>
                                         <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/>&#160;<xsl:value-of select="notification_data/user_for_printing/last_name"/></td></tr>
                                     </xsl:otherwise>
@@ -131,6 +134,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                         <xsl:when test="/notification_data/general_data/letter_type = 'POLineRenewalLetter'">
                                             <tr><td><xsl:value-of select="first_name"/></td></tr>
                                         </xsl:when>
+                                        <xsl:when test="/notification_data/general_data/letter_type = 'POLineClaimAggregatedLetter'">
+                                            <tr><td><xsl:value-of select="first_name"/></td></tr>
+                                        </xsl:when>
                                         <xsl:otherwise>
                                             <tr><td><xsl:value-of select="first_name"/>&#160;<xsl:value-of select="last_name"/></td></tr>
                                         </xsl:otherwise>
@@ -166,10 +172,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     </td></tr>
                                 </table>
                             </xsl:for-each>
-
                         </xsl:when>
-                        <xsl:otherwise>
-                        </xsl:otherwise>
                     </xsl:choose>
                 </td>
             </tr>
@@ -209,6 +212,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     <xsl:when test="notification_data/general_data/letter_type = 'POLineRenewalLetter'">
                                         <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/></td></tr>
                                     </xsl:when>
+                                    <xsl:when test="notification_data/general_data/letter_type = 'POLineClaimAggregatedLetter'">
+                                        <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/></td></tr>
+                                    </xsl:when>
                                     <xsl:otherwise>
                                         <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/>&#160;<xsl:value-of select="notification_data/user_for_printing/last_name"/></td></tr>
                                     </xsl:otherwise>
@@ -268,6 +274,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                         <xsl:when test="/notification_data/general_data/letter_type = 'POLineRenewalLetter'">
                                             <tr><td><xsl:value-of select="first_name"/></td></tr>
                                         </xsl:when>
+                                        <xsl:when test="/notification_data/general_data/letter_type = 'POLineClaimAggregatedLetter'">
+                                            <tr><td><xsl:value-of select="first_name"/></td></tr>
+                                        </xsl:when>
                                         <xsl:otherwise>
                                             <tr><td><xsl:value-of select="first_name"/>&#160;<xsl:value-of select="last_name"/></td></tr>
                                         </xsl:otherwise>
@@ -304,8 +313,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 </table>
                             </xsl:for-each>
                         </xsl:when>
-                        <xsl:otherwise>
-                        </xsl:otherwise>
                     </xsl:choose>
                 </td>
                 <!-- sender -->

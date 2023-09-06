@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP-customized
+<!--IZ Customization: ACQ e-mail in senderReceiver
+    
+    SLSP-customized
     05/2022 Added padding for Post envelopes
-    IZ adaptations: ACQ e-mail change -->
+    05/2023 Added 5th address line; adapted bottom margin and font size of address to better fit envelope window
+    09/2023 Added logic for POLineClaimAggregatedLetter to print only first name-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -12,14 +15,14 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:template name="senderReceiver">
         <table cellspacing="0" cellpadding="5" border="0" width="100%">
             <tr>
+                <!-- sender -->
                 <td width="50%" align="left" style="padding: 10mm 10mm 10mm 10mm;">
                     <xsl:for-each select="notification_data/organization_unit">
                         <table>
                             <xsl:attribute name="style">
-                                font-size: 80%;
+                                font-size: 9pt;
                                 <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                             </xsl:attribute>
-                            <!-- <tr><td><xsl:value-of select="name"/></td></tr> -->
                             <xsl:if test="string-length(address/line1)!=0">
                                 <tr><td><xsl:value-of select="address/line1"/></td></tr>
                             </xsl:if>
@@ -32,29 +35,33 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             <xsl:if test="string-length(address/line4)!=0">
                                 <tr><td><xsl:value-of select="address/line4"/></td></tr>
                             </xsl:if>
+                            <xsl:if test="string-length(address/line5)!=0">
+                                <tr><td><xsl:value-of select="address/line5"/></td></tr>
+                            </xsl:if>
                             <tr><td><xsl:value-of select="address/postal_code"/>&#160;<xsl:value-of select="address/city"/></td></tr>
                             <xsl:if test="string-length(phone/phone)!=0">
                                 <tr><td><xsl:value-of select="phone/phone"/></td></tr>
                             </xsl:if>
                             <xsl:if test="string-length(email/email)!=0">
-								<xsl:choose>
-								    <xsl:when test="email/email = 'acquisitions.bge@ville-ge.ch'">
-                                        <tr><td>info.bge@ville-ge.ch</td></tr>
-								    </xsl:when>
-                                    <xsl:otherwise>
-                                        <tr><td><xsl:value-of select="email/email"/></td></tr>
-                                    </xsl:otherwise>
-								</xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="email/email = 'acquisitions.bge@ville-ge.ch'">
+                                    <tr><td>info.bge@ville-ge.ch</td></tr>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <tr><td><xsl:value-of select="email/email"/></td></tr>
+                                </xsl:otherwise>
+                            </xsl:choose>
                             </xsl:if>
                         </table>
                     </xsl:for-each>
                 </td>
+                <!-- receiver -->
                 <td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm; vertical-align: top;">
                     <xsl:choose>
                         <xsl:when test="notification_data/user_for_printing">
                             <table cellspacing="0" cellpadding="0" border="0">
                                 <xsl:attribute name="style">
-                                    font-weight: 600;
+                                    font-weight: 600;font-size: 10pt;
                                     <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                                 </xsl:attribute>
                                 <xsl:choose>
@@ -73,6 +80,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     <xsl:when test="notification_data/general_data/letter_type = 'POLineRenewalLetter'">
                                         <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/></td></tr>
                                     </xsl:when>
+                                    <xsl:when test="notification_data/general_data/letter_type = 'POLineClaimAggregatedLetter'">
+                                        <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/></td></tr>
+                                    </xsl:when>
                                     <xsl:otherwise>
                                         <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/>&#160;<xsl:value-of select="notification_data/user_for_printing/last_name"/></td></tr>
                                     </xsl:otherwise>
@@ -88,6 +98,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 </xsl:if>
                                 <xsl:if test="string-length(notification_data/user_for_printing/address4)!=0">
                                     <tr><td><xsl:value-of select="notification_data/user_for_printing/address4"/></td></tr>
+                                </xsl:if>
+                                <xsl:if test="string-length(notification_data/user_for_printing/address5)!=0">
+                                    <tr><td><xsl:value-of select="notification_data/user_for_printing/address5"/></td></tr>
                                 </xsl:if>
                                 <tr><td><xsl:value-of select="notification_data/user_for_printing/postal_code"/>&#160;<xsl:value-of select="notification_data/user_for_printing/city"/></td></tr>
                                 <!-- There is a known bug when there is no country chosen for the user. this change in the letter component called "SenderReceiver.xsl" will do the trick -->
@@ -110,7 +123,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             <xsl:for-each select="notification_data/receivers/receiver/user">
                                 <table>
                                     <xsl:attribute name="style">
-                                        font-weight: 600;
+                                        font-weight: 600;font-size: 10pt;
                                         <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                                     </xsl:attribute>
                                     <xsl:choose>
@@ -129,6 +142,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                         <xsl:when test="/notification_data/general_data/letter_type = 'POLineRenewalLetter'">
                                             <tr><td><xsl:value-of select="first_name"/></td></tr>
                                         </xsl:when>
+                                        <xsl:when test="/notification_data/general_data/letter_type = 'POLineClaimAggregatedLetter'">
+                                            <tr><td><xsl:value-of select="first_name"/></td></tr>
+                                        </xsl:when>
                                         <xsl:otherwise>
                                             <tr><td><xsl:value-of select="first_name"/>&#160;<xsl:value-of select="last_name"/></td></tr>
                                         </xsl:otherwise>
@@ -144,6 +160,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     </xsl:if>
                                     <xsl:if test="string-length(user_address_list/user_address/line4)!=0">
                                         <tr><td><xsl:value-of select="user_address_list/user_address/line4"/></td></tr>
+                                    </xsl:if>
+                                    <xsl:if test="string-length(user_address_list/user_address/line5)!=0">
+                                        <tr><td><xsl:value-of select="user_address_list/user_address/line5"/></td></tr>
                                     </xsl:if>
                                     <tr><td><xsl:value-of select="user_address_list/user_address/postal_code"/>&#160;<xsl:value-of select="user_address_list/user_address/city"/>&#160;</td></tr>
                                     <tr><td>
@@ -176,12 +195,13 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:template name="senderReceiver-reversed">
         <table cellspacing="0" cellpadding="5" border="0" width="100%">
             <tr>
+                <!-- receiver -->
                 <td width="50%"  align="left" style="padding: 10mm 10mm 10mm 10mm; vertical-align: top;">
                     <xsl:choose>
                         <xsl:when test="notification_data/user_for_printing">
                             <table cellspacing="0" cellpadding="0" border="0">
                                 <xsl:attribute name="style">
-                                    font-weight: 600;
+                                    font-weight: 600;font-size: 10pt;
                                     <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                                 </xsl:attribute>
                                 <xsl:choose>
@@ -200,6 +220,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     <xsl:when test="notification_data/general_data/letter_type = 'POLineRenewalLetter'">
                                         <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/></td></tr>
                                     </xsl:when>
+                                    <xsl:when test="notification_data/general_data/letter_type = 'POLineClaimAggregatedLetter'">
+                                        <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/></td></tr>
+                                    </xsl:when>
                                     <xsl:otherwise>
                                         <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/>&#160;<xsl:value-of select="notification_data/user_for_printing/last_name"/></td></tr>
                                     </xsl:otherwise>
@@ -215,6 +238,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 </xsl:if>
                                 <xsl:if test="string-length(notification_data/user_for_printing/address4)!=0">
                                     <tr><td><xsl:value-of select="notification_data/user_for_printing/address4"/></td></tr>
+                                </xsl:if>
+                                <xsl:if test="string-length(notification_data/user_for_printing/address5)!=0">
+                                    <tr><td><xsl:value-of select="notification_data/user_for_printing/address5"/></td></tr>
                                 </xsl:if>
                                 <tr><td><xsl:value-of select="notification_data/user_for_printing/postal_code"/>&#160;<xsl:value-of select="notification_data/user_for_printing/city"/></td></tr>
                                 <!-- There is a known bug when there is no country chosen for the user. this change in the letter component called "SenderReceiver.xsl" will do the trick -->
@@ -237,7 +263,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             <xsl:for-each select="notification_data/receivers/receiver/user">
                                 <table>
                                     <xsl:attribute name="style">
-                                        font-weight: 600;
+                                        font-weight: 600;font-size: 10pt;
                                         <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                                     </xsl:attribute>
                                     <xsl:choose>
@@ -256,6 +282,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                         <xsl:when test="/notification_data/general_data/letter_type = 'POLineRenewalLetter'">
                                             <tr><td><xsl:value-of select="first_name"/></td></tr>
                                         </xsl:when>
+                                        <xsl:when test="/notification_data/general_data/letter_type = 'POLineClaimAggregatedLetter'">
+                                            <tr><td><xsl:value-of select="first_name"/></td></tr>
+                                        </xsl:when>
                                         <xsl:otherwise>
                                             <tr><td><xsl:value-of select="first_name"/>&#160;<xsl:value-of select="last_name"/></td></tr>
                                         </xsl:otherwise>
@@ -271,6 +300,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     </xsl:if>
                                     <xsl:if test="string-length(user_address_list/user_address/line4)!=0">
                                         <tr><td><xsl:value-of select="user_address_list/user_address/line4"/></td></tr>
+                                    </xsl:if>
+                                    <xsl:if test="string-length(user_address_list/user_address/line5)!=0">
+                                        <tr><td><xsl:value-of select="user_address_list/user_address/line5"/></td></tr>
                                     </xsl:if>
                                     <tr><td><xsl:value-of select="user_address_list/user_address/postal_code"/>&#160;<xsl:value-of select="user_address_list/user_address/city"/>&#160;</td></tr>
                                     <tr><td>
@@ -291,14 +323,14 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         </xsl:when>
                     </xsl:choose>
                 </td>
+                <!-- sender -->
                 <td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm;">
                     <xsl:for-each select="notification_data/organization_unit">
                         <table>
                             <xsl:attribute name="style">
-                                font-size: 80%;
+                                font-size: 9pt;
                                 <xsl:call-template name="listStyleCss" /> <!-- style.xsl -->
                             </xsl:attribute>
-                            <!-- <tr><td><xsl:value-of select="name"/></td></tr> -->
                             <xsl:if test="string-length(address/line1)!=0">
                                 <tr><td><xsl:value-of select="address/line1"/></td></tr>
                             </xsl:if>
@@ -310,6 +342,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                             </xsl:if>
                             <xsl:if test="string-length(address/line4)!=0">
                                 <tr><td><xsl:value-of select="address/line4"/></td></tr>
+                            </xsl:if>
+                            <xsl:if test="string-length(address/line5)!=0">
+                                <tr><td><xsl:value-of select="address/line5"/></td></tr>
                             </xsl:if>
                             <tr><td><xsl:value-of select="address/postal_code"/>&#160;<xsl:value-of select="address/city"/></td></tr>
                             <xsl:if test="string-length(phone/phone)!=0">
