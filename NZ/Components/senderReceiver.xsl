@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP-customized
     05/2022 Added padding for Post envelopes
-    05/2023 Added 5th address line; adapted bottom margin and font size of address to better fit envelope window -->
+    05/2023 Added 5th address line; adapted bottom margin and font size of address to better fit envelope window
+    09/2023 Added logic for POLineClaimAggregatedLetter to print only first name-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -70,6 +71,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     <xsl:when test="notification_data/general_data/letter_type = 'POLineRenewalLetter'">
                                         <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/></td></tr>
                                     </xsl:when>
+                                    <xsl:when test="notification_data/general_data/letter_type = 'POLineClaimAggregatedLetter'">
+                                        <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/></td></tr>
+                                    </xsl:when>
                                     <xsl:otherwise>
                                         <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/>&#160;<xsl:value-of select="notification_data/user_for_printing/last_name"/></td></tr>
                                     </xsl:otherwise>
@@ -127,6 +131,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                             <tr><td><xsl:value-of select="first_name"/></td></tr>
                                         </xsl:when>
                                         <xsl:when test="/notification_data/general_data/letter_type = 'POLineRenewalLetter'">
+                                            <tr><td><xsl:value-of select="first_name"/></td></tr>
+                                        </xsl:when>
+                                        <xsl:when test="/notification_data/general_data/letter_type = 'POLineClaimAggregatedLetter'">
                                             <tr><td><xsl:value-of select="first_name"/></td></tr>
                                         </xsl:when>
                                         <xsl:otherwise>
@@ -204,6 +211,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     <xsl:when test="notification_data/general_data/letter_type = 'POLineRenewalLetter'">
                                         <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/></td></tr>
                                     </xsl:when>
+                                    <xsl:when test="notification_data/general_data/letter_type = 'POLineClaimAggregatedLetter'">
+                                        <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/></td></tr>
+                                    </xsl:when>
                                     <xsl:otherwise>
                                         <tr><td><xsl:value-of select="notification_data/user_for_printing/first_name"/>&#160;<xsl:value-of select="notification_data/user_for_printing/last_name"/></td></tr>
                                     </xsl:otherwise>
@@ -261,6 +271,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                             <tr><td><xsl:value-of select="first_name"/></td></tr>
                                         </xsl:when>
                                         <xsl:when test="/notification_data/general_data/letter_type = 'POLineRenewalLetter'">
+                                            <tr><td><xsl:value-of select="first_name"/></td></tr>
+                                        </xsl:when>
+                                        <xsl:when test="/notification_data/general_data/letter_type = 'POLineClaimAggregatedLetter'">
                                             <tr><td><xsl:value-of select="first_name"/></td></tr>
                                         </xsl:when>
                                         <xsl:otherwise>
