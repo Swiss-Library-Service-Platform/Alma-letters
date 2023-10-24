@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 05/2023 -->
+<!-- SLSP WG: Letters version 10/2023 -->
 <!-- Dependance:
     header - head
     style - generalStyle, bodyStyleCss, mainTableStyleCss
@@ -54,6 +54,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                 <xsl:for-each select="notification_data/receivers/receiver/user">
                     <tr>
                         <td>
+                            <br />
                             <xsl:if test="user_group = '92'">
                                 <strong>
                                     <xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
@@ -109,11 +110,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         <xsl:call-template name="SLSP-greeting" />
                     </td>
                 </tr>
-                <!-- <tr>
-                    <td>
-                        @@message@@
-                    </td>
-                </tr> -->
                 <tr>
                     <td>
                         @@following_items_awaiting_pickup@@
@@ -127,7 +123,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     <xsl:call-template name="mainTableStyleCss" />
                                 </xsl:attribute>
                                 <tr align="left" bgcolor="#f5f5f5">
-                                    <td colspan="4" style="padding-left:20">
+                                    <td colspan ="2" style="padding-left:20">
                                         <h3><xsl:value-of select="organization_unit/name" /></h3>
                                         <xsl:if test="organization_unit/address/line1 != ''">
                                             <xsl:value-of select="organization_unit/address/line1"/><br/>
@@ -153,8 +149,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>@@title@@</th>
-                                    <th>@@note_item_held_until@@</th>
+                                    <th align="left" width="70%">@@title@@</th>
+                                    <th align="left">@@note_item_held_until@@</th>
                                 </tr>
 
                                 <xsl:for-each select="requests/request_for_display">
@@ -197,7 +193,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                     </tr>
                     <br/>
                 </xsl:for-each>
-                
+                <tr>
+                    <td>
+                        @@circulation_desk@@
+                    </td>
+                </tr>
                 <xsl:if test="notification_data/out_of_institution_requests/request_for_display">
                     <tr>
                         <td>

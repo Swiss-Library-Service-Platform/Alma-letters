@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- WG: Letters 05/2023
+<!-- WG: Letters 10/2023
 	Dependancy:
 		header - head
 		style - generalStyle, bodyStyleCss, listStyleCss
@@ -32,6 +32,30 @@
 		</xsl:call-template>:</strong>&#160;<xsl:value-of select="$notice" disable-output-escaping="yes" />
 	</xsl:if>
 </xsl:template>
+
+<!--Fix to transform the note coming from Alma UI to insert new lines
+		Takes the parameter text and replaces new lines with <br/> 
+	Source: https://stackoverflow.com/questions/561235/xslt-replace-n-with-br-only-in-one-node
+		@Tomalak, CC-BY-SA 3.0
+	-->
+	<xsl:template name="break">
+		<xsl:param name="text" select="string(.)"/>
+		<xsl:choose>
+			<xsl:when test="contains($text, '&#xa;')">
+			<xsl:value-of select="substring-before($text, '&#xa;')"/>
+			<br/>
+			<xsl:call-template name="break">
+				<xsl:with-param 
+				name="text" 
+				select="substring-after($text, '&#xa;')"
+				/>
+			</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+			<xsl:value-of select="$text"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
 
     <xsl:template match="/">
         <html>
@@ -140,30 +164,29 @@
                         <xsl:choose>
                             <xsl:when test="notification_data/success='true'">
                                 <tr>
-                                    <td>@@new_due_date@@: <xsl:value-of select="notification_data/item_loan_due_date"/></td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <strong>@@success_reason@@</strong>
-                                    </td>
+                                    <td><strong>@@new_due_date@@: </strong><xsl:value-of select="notification_data/item_loan_due_date"/></td>
                                 </tr>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:choose>
                                     <xsl:when test="notification_data/note != ''">
                                         <tr>
+                                            <td><strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+                                                <xsl:with-param name="en" select="'Due date'"/>
+                                                <xsl:with-param name="fr" select="'Date de retour'"/>
+                                                <xsl:with-param name="it" select="'Data di scadenza'"/>
+                                                <xsl:with-param name="de" select="'Fälligkeitsdatum'"/>
+                                            </xsl:call-template>: </strong><xsl:value-of select="notification_data/outgoing/due_date"/></td>
+                                        </tr>   
+                                        <tr>
                                             <td>
-                                                <strong>@@failure_reason@@: <xsl:value-of select="notification_data/note"/></strong>
+                                                <strong>@@failure_reason@@: </strong><xsl:call-template name="break">
+                                                    <xsl:with-param name="text" select="notification_data/note"/>
+                                                </xsl:call-template>
                                             </td>
                                         </tr>
                                     </xsl:when>
                                 </xsl:choose>
-                                <tr>
-                                    <td>
-                                        <strong>@@contact_dep@@</strong>
-                                    </td>
-                                </tr>
                             </xsl:otherwise>
                         </xsl:choose>
                         <tr>
@@ -179,7 +202,27 @@
                         </tr>
                         <tr>
                             <td>
-                                <xsl:value-of select="/notification_data/organization_unit/name"/>
+                                <xsl:if test="/notification_data/organization_unit/address/line1 != ''">
+                                    <xsl:value-of select="/notification_data/organization_unit/address/line1"/><br />
+                                </xsl:if>
+                                <xsl:if test="/notification_data/organization_unit/address/line2 != ''">
+                                    <xsl:value-of select="/notification_data/organization_unit/address/line2"/><br />
+                                </xsl:if>
+                                <xsl:if test="/notification_data/organization_unit/address/line3 != ''">
+                                    <xsl:value-of select="/notification_data/organization_unit/address/line3"/><br />
+                                </xsl:if>
+                                <xsl:if test="/notification_data/organization_unit/address/line4 != ''">
+                                    <xsl:value-of select="/notification_data/organization_unit/address/line4"/><br />
+                                </xsl:if>
+                                <xsl:if test="/notification_data/organization_unit/address/line5 != ''">
+                                    <xsl:value-of select="/notification_data/organization_unit/address/line5"/><br />
+                                </xsl:if>
+                                <xsl:if test="/notification_data/organization_unit/address/postal_code != '' or /notification_data/organization_unit/address/city != ''">
+                                    <xsl:value-of select="/notification_data/organization_unit/address/postal_code"/>&#160;<xsl:value-of select="/notification_data/organization_unit/address/city"/><br />
+                                </xsl:if>
+                                <xsl:if test="/notification_data/organization_unit/address/country_display != ''">
+                                    <xsl:value-of select="/notification_data/organization_unit/address/country_display"/>
+                                </xsl:if>
                             </td>
                         </tr>
                         <tr>
