@@ -25,10 +25,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 		<xsl:attribute name="href">https://libraries.swisscovery.help/?lang=<xsl:value-of select="/notification_data/receivers/receiver/preferred_language"/></xsl:attribute>
 		<xsl:attribute name="target">_blank</xsl:attribute>
 		<xsl:call-template name="SLSP-multilingual">
-			<xsl:with-param name="en" select="'Further information on library location'"/>
+			<xsl:with-param name="en" select="'Further information on library locations'"/>
 			<xsl:with-param name="fr"><![CDATA[Plus d’informations sur la localisation des bibliothèques]]></xsl:with-param>
-			<xsl:with-param name="it" select="'Ulteriori informazioni sulla biblioteca'"/>
-			<xsl:with-param name="de" select="'Weitere Informationen zum Bibliotheksstandort'"/>
+			<xsl:with-param name="it" select="'Ulteriori informazioni sulle biblioteche'"/>
+			<xsl:with-param name="de" select="'Weitere Informationen zu den Bibliotheksstandorten'"/>
 		</xsl:call-template>
 	</a>
 </xsl:template>
