@@ -3,7 +3,8 @@
 		01/2022 - Fixed FR version of librariesURL template
 		10/2022 - replaced greeting template
 		05/2023 - Added IZ message template; removed previous solution
-				- Updated URL to list of libraries -->
+				- Updated URL to list of libraries
+		11/2023 - Updated the label for link to libraries list -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle, SLSP-greeting, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss
