@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP WG: Letters version 05/2022
+<!-- IZ Customization: logic for user types for download link
+  SLSP WG: Letters version 05/2022
       05/2022 Rapido: request metadata, info about providing library, max views message
       10/2022 Rapido: adjusted the providing library part; unified greeting
       10/2022 Added template for SLSP greeting
@@ -192,9 +193,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                   </xsl:choose>
                 </td> 
               </tr>
-            <!-- RapidILL library that scanned the item -->
-            <xsl:if test="notification_data/resource_sharing_request != ''
-              and notification_data/resource_sharing_request/lending_institution != ''">
+              <!-- RapidILL library that scanned the item -->
+              <xsl:if test="notification_data/resource_sharing_request != ''
+                          and notification_data/resource_sharing_request/lending_institution != ''">
               <tr>
                 <td>
                     <xsl:call-template name="SLSP-multilingual">
@@ -243,9 +244,14 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                     <td>@@to_see_the_resource@@</td>
                   </tr>
                   <tr>
-                    <td>
-                      @@for_local_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_local" /></xsl:attribute>@@click_here@@</a><br/>
-                      @@for_saml_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_saml" /></xsl:attribute>@@click_here@@</a><br/>
+                    <td><xsl:choose>
+                        <xsl:when test="contains(/notification_data/receivers/receiver/user/user_name, '@eduid.ch')">
+                            <a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_saml" /></xsl:attribute>@@click_here@@</a><br/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_local" /></xsl:attribute>@@click_here@@</a><br/>
+                        </xsl:otherwise>
+                      </xsl:choose>
                       <xsl:choose>
                         <!-- non-rapido request -->
                         <xsl:when test="notification_data/request/document_delivery_max_num_of_view != ''">
