@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- IZ adaptation: reversed senderReceiver address field
-	
+<!-- IZ adaptation: reversed senderReceiver address field; adapted header
+
 	SLSP WG: Letters version 10/2021
 		10/2021 - fix date in header
 		11/2021 - senderReceiver-receiver-only: added 1cm margin on the left side to better fit envelope window
 		11/2021 - body style: font-size: 100%
-		02/2022 - added greeting to all languages 
+		02/2022 - added greeting to all languages
 		05/2022 - synced adaptations of header and senderReceiver to local templates
-		12/2022	- added SLSP greeting template -->
+		12/2022 - added SLSP greeting template
+		05/2023 - Added IZ message template; added 5th line to address;
+				adapted bottom margin and font size of address to better fit envelope window
+				Added author to loans description; fixed display of call number
+		12/2023 - Added support for temporary call numbers-->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
         recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
+         -->
+<!-- ZHdK: 
+        20231110 logo height 10mm (from 20mm)
+        20231110 subject heading h4 (from h1)
          -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/strings">
@@ -49,7 +57,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 				<div id="mailHeader">
 					<div id="logoContainer" class="alignLeft">
 						<!-- SLSP: fixed height of logo -->
-						<img onerror="this.src='/infra/branding/logo/logo-email.png'" src="cid:logo.jpg" alt="logo" style="height:20mm"/>
+						<img onerror="this.src='/infra/branding/logo/logo-email.png'" src="cid:logo.jpg" alt="logo" style="height:10mm"/>
 					</div>
 				</div>
 			</td>
@@ -58,7 +66,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 		<tr>
 			<xsl:for-each select="notification_data/general_data">
 				<td>
-					<h1><xsl:value-of select="subject"/>&#160;-&#160;<xsl:call-template name="recall-type" /></h1>
+					<h4><xsl:value-of select="subject"/>&#160;-&#160;<xsl:call-template name="recall-type" /></h4>
 				</td>
 				<td align="right">
 					<xsl:value-of select="current_date"/>
@@ -108,7 +116,7 @@ If overdue profiles are changed then the text bellow has to be adapted.
 			<td width="50%" align="left" style="padding: 10mm 10mm 10mm 15mm;">
 				<table cellspacing="0" cellpadding="0" border="0">
 					<xsl:attribute name="style">
-						font-weight: 600;
+						font-weight: 600;font-size: 10pt;
 						<xsl:call-template name="listStyleCss" />
 						<!-- style.xsl -->
 					</xsl:attribute>
@@ -142,6 +150,13 @@ If overdue profiles are changed then the text bellow has to be adapted.
 						<tr>
 							<td>
 								<xsl:value-of select="/notification_data/user_for_printing/address4"/>
+							</td>
+						</tr>
+					</xsl:if>
+					<xsl:if test="string-length(/notification_data/user_for_printing/address5)!=0">
+						<tr>
+							<td>
+								<xsl:value-of select="/notification_data/user_for_printing/address5"/>
 							</td>
 						</tr>
 					</xsl:if>
@@ -172,14 +187,14 @@ If overdue profiles are changed then the text bellow has to be adapted.
 	</table>
 </xsl:template>
 
-<!-- Template to print only delivery address only, on right side -->
+<!-- Template to print only delivery address, on the left side -->
 <xsl:template name="senderReceiver-receiver-only-reversed">
 	<table cellspacing="0" border="0" width="100%">
 		<tr>
 			<td width="50%"  align="left" style="padding: 10mm 10mm 10mm 10mm;">
 				<table cellspacing="0" cellpadding="0" border="0">
 					<xsl:attribute name="style">
-						font-weight: 600;
+						font-weight: 600;font-size: 10pt;
 						<xsl:call-template name="listStyleCss" />
 						<!-- style.xsl -->
 					</xsl:attribute>
@@ -213,6 +228,13 @@ If overdue profiles are changed then the text bellow has to be adapted.
 						<tr>
 							<td>
 								<xsl:value-of select="/notification_data/user_for_printing/address4"/>
+							</td>
+						</tr>
+					</xsl:if>
+					<xsl:if test="string-length(/notification_data/user_for_printing/address5)!=0">
+						<tr>
+							<td>
+								<xsl:value-of select="/notification_data/user_for_printing/address5"/>
 							</td>
 						</tr>
 					</xsl:if>
@@ -242,8 +264,28 @@ If overdue profiles are changed then the text bellow has to be adapted.
 			<td width="50%" align="left" ></td>
 		</tr>
 	</table>
+	<br />
+	<br />
 </xsl:template>
 
+<!-- Prints the IZ message stored in label 'department' for the language of the letter.
+		If value in the label is empty or with value "blank" does not print anything.
+		The label can contain also HTML markup such as links or formatting.
+		Warning: the label 'department' has to be available in the letter for this template to work	
+		Usage:
+			1. Configure the label department with text in all languages.
+			2. Insert the template: <xsl:call-template name="IZMessage"/> -->
+<xsl:template name="SLSP-IZMessage">
+	<xsl:variable name="notice">@@department@@</xsl:variable>
+	<xsl:if test="$notice != '' and $notice != 'blank'">
+		<strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+			<xsl:with-param name="en" select="'Notice of the library'"/>
+			<xsl:with-param name="fr" select="'Avis de la bibliothèque'"/>
+			<xsl:with-param name="it" select="'Comunicazione della biblioteca'"/>
+			<xsl:with-param name="de" select="'Notiz der Bibliothek'"/>
+		</xsl:call-template>:</strong>&#160;<xsl:value-of select="$notice" disable-output-escaping="yes" />
+	</xsl:if>
+</xsl:template>
 
 <xsl:template match="/">
 	<html>
@@ -257,7 +299,6 @@ If overdue profiles are changed then the text bellow has to be adapted.
 			<!-- Use specific header with information what recall this is -->
 			<xsl:call-template name="head-overdue-letter" />
 			<!-- Show patron address only for special cases - user group 92 or 3rd Recall -->
-			
 			<xsl:if test="notification_data/user_for_printing/user_group = '92' or notification_data/notification_type = 'OverdueNotificationType4'">
 				<xsl:call-template name="senderReceiver-receiver-only-reversed" />
 			</xsl:if>
@@ -381,20 +422,29 @@ If overdue profiles are changed then the text bellow has to be adapted.
 												<xsl:value-of select="substring(item_loan/title, 0, 70)"/>
 												<xsl:if test="string-length(item_loan/title) > 70">...</xsl:if>
 												<br />
+												<xsl:if test="item_loan/author != ''">
+													<xsl:value-of select="item_loan/author"/>
+													<br />
+												</xsl:if>
 												<strong>@@barcode@@: </strong>
 												<xsl:value-of select="item_loan/barcode"/>
-												<br />
-												<strong>@@call_number@@: </strong>
 												<xsl:choose>
-													<xsl:when test="physical_item_display_for_printing/display_alt_call_numbers != ''">
-														<xsl:value-of select="physical_item_display_for_printing/display_alt_call_numbers"/>
+													<xsl:when test="item_loan/physical_item/temporary_physical_location_in_use = 'true'
+													and item_loan/physical_item/temporary_call_number != ''">
+														<br />
+														<strong>@@call_number@@: </strong><xsl:value-of select="item_loan/physical_item/temporary_call_number"/>
 													</xsl:when>
-													<xsl:otherwise>
-														<xsl:value-of select="physical_item_display_for_printing/call_number"/>
-													</xsl:otherwise>
+													<xsl:when test="physical_item_display_for_printing/display_alt_call_numbers != ''">
+														<br />
+														<strong>@@call_number@@: </strong><xsl:value-of select="physical_item_display_for_printing/display_alt_call_numbers"/>
+													</xsl:when>
+													<xsl:when test="physical_item_display_for_printing/call_number != ''">
+														<br />
+														<strong>@@call_number@@: </strong><xsl:value-of select="physical_item_display_for_printing/call_number"/>
+													</xsl:when>
 												</xsl:choose>
-												<br />
 												<xsl:if test="physical_item_display_for_printing/issue_level_description !='' and physical_item_display_for_printing/issue_level_description != 'Vol.' and physical_item_display_for_printing/issue_level_description != '_'">
+													<br />
 													<strong>@@description@@: </strong>
 													<xsl:value-of select="physical_item_display_for_printing/issue_level_description"/>
 												</xsl:if>
@@ -431,6 +481,9 @@ If overdue profiles are changed then the text bellow has to be adapted.
 					<hr/><br/>
 				</div>
 			</xsl:if>
+			<p>
+				<xsl:call-template name="SLSP-IZMessage"/>
+			</p>
 			<p>
 				<xsl:call-template name="SLSP-userAccount"/>
 			</p>

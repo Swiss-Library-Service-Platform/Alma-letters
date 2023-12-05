@@ -11,6 +11,7 @@
 		05/2023 - Added IZ message template; added 5th line to address;
 			added margin between address and letter content for delivery address on left
 			Added author to loans description; fixed display of call number
+		12/2023 - Added support for temporary call numbers
  -->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
@@ -429,6 +430,11 @@ If overdue profiles are changed then the text bellow has to be adapted.
 												<strong>@@barcode@@: </strong>
 												<xsl:value-of select="item_loan/barcode"/>
 												<xsl:choose>
+													<xsl:when test="item_loan/physical_item/temporary_physical_location_in_use = 'true'
+													and item_loan/physical_item/temporary_call_number != ''">
+														<br />
+														<strong>@@call_number@@: </strong><xsl:value-of select="item_loan/physical_item/temporary_call_number"/>
+													</xsl:when>
 													<xsl:when test="physical_item_display_for_printing/display_alt_call_numbers != ''">
 														<br />
 														<strong>@@call_number@@: </strong><xsl:value-of select="physical_item_display_for_printing/display_alt_call_numbers"/>
