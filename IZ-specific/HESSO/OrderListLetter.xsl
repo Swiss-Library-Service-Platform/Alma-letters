@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP customized 11/2021
+    02/2024 - removed the organization name as per request: SUPPORT-26777
     Dependance:
         recordTitle - SLSP-multilingual
         style - bodyStyleCss, generalStyle, mainTableStyleCss
@@ -64,9 +65,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                     <tr>
                         <td width="50%">
                             <b>@@shipping_address@@: </b><br />
-                            <xsl:if test="/notification_data/organization_unit/name != ''">
-                                <xsl:value-of select="/notification_data/organization_unit/name"/><br />
-                            </xsl:if>
+                            <!-- removed the organization name as per request: SUPPORT-26777 -->
                             <xsl:if test="po/ship_to_address/line1 != ''">
                                 <xsl:value-of select="po/ship_to_address/line1"/><br />
                             </xsl:if>
@@ -91,9 +90,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         </td>
                         <td width="50%">
                             <b>@@billing_address@@: </b><br />
-                            <xsl:if test="/notification_data/organization_unit/name != ''">
-                                <xsl:value-of select="/notification_data/organization_unit/name"/><br />
-                            </xsl:if>
+                            <!-- removed the organization name as per request: SUPPORT-26777 -->
                             <xsl:if test="po/bill_to_address/line1 != ''">
                                 <xsl:value-of select="po/bill_to_address/line1"/><br />
                             </xsl:if>
