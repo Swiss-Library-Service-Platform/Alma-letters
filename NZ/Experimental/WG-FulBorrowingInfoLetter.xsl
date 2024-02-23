@@ -176,7 +176,7 @@
                                                 <xsl:with-param name="fr" select="'Date de retour'"/>
                                                 <xsl:with-param name="it" select="'Data di scadenza'"/>
                                                 <xsl:with-param name="de" select="'Fälligkeitsdatum'"/>
-                                            </xsl:call-template>: </strong><xsl:value-of select="notification_data/outgoing/due_date"/></td>
+                                            </xsl:call-template>: </strong><xsl:value-of select="notification_data/item_loan_due_date"/></td>
                                         </tr>   
                                         <tr>
                                             <td>
