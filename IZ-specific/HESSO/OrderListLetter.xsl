@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP customized 11/2021
-    02/2024 - removed the organization name as per request: SUPPORT-26777
+    02/2024 - removed the organization name from billing and shipping address as per request: SUPPORT-26777
     Dependance:
         recordTitle - SLSP-multilingual
         style - bodyStyleCss, generalStyle, mainTableStyleCss
