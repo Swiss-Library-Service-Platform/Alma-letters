@@ -19,7 +19,8 @@
 	05/2023 adapted bottom margin and font size of address to better fit envelope window;
 			removed duplicate call number from Home delivery
 			added icons for telephone and e-mail
-	07/2023	fixed country code display for owning library-->
+	07/2023	fixed country code display for owning library
+	02/2024 added check for equal group ID and External ID for ILL requests-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -480,8 +481,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 										</xsl:if>
 									</td>
 								</tr>
-								<!-- Show externalID in ILL requests -->
-								<xsl:if test="$requestType = 'ILL'">
+								<!-- Show externalID in ILL requests unless the externalID is the same as group_qualifier -->
+								<xsl:if test="$requestType = 'ILL' and notification_data/group_qualifier != notification_data/incoming_request/external_request_id">
 									<tr>
 										<td>
 											<strong>@@my_id@@:</strong><br/>
