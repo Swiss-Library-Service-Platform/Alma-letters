@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- WG: Letters 05/2023 -->
+<!-- WG: Letters 10/2023 -->
 <!-- Dependance:
     header - head
     style - generalStyle, bodyStyleCss, mainTableStyleCss
@@ -253,6 +253,9 @@
                                 <tr>
                                     <td>
                                         @@requested@@
+                                        <xsl:if test="desired_due_date != ''">
+                                            @@desired_due_date@@&#160;<xsl:value-of select="desired_due_date" />.
+                                        </xsl:if>
                                     </td>
                                 </tr>
                                 <tr>
@@ -354,14 +357,10 @@
                                         </xsl:if>
                                     </td>
                                 </tr>
-                                <!-- Empty line before printing request info -->
-								<tr>
-									<td>
-										&#160;<br />
-									</td>
-								</tr>
                                 <tr>
                                     <td>
+                                        <!-- Empty line before printing request info -->
+                                        <br />
                                         <strong>@@request_id@@: </strong>
                                         <xsl:value-of select="external_request_id" />
                                         <xsl:if test="needed_by !=''">
