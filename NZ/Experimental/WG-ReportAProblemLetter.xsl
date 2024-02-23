@@ -119,7 +119,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                     <xsl:with-param name="fr" select="'Description du problème'"/>
                                     <xsl:with-param name="it" select="'Descrizione del problema'"/>
                                     <xsl:with-param name="de" select="'Beschreibung des Problems'"/>
-                                </xsl:call-template>: </strong>
+                                </xsl:call-template>: </strong><br />
                                 <xsl:call-template name="break">
                                     <xsl:with-param name="text" select="/notification_data/problem_description"/>
                                 </xsl:call-template>
