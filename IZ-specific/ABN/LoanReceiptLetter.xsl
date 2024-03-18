@@ -4,7 +4,8 @@
 
     WG: Letters 05/2022
 	12/2022 Added SLSP greeting template
-	05/2023 Added IZ message template -->
+	05/2023 Added IZ message template 
+	03/2024 Fixed the display logic of senderReceiver -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss, mainTableStyleCss
@@ -193,9 +194,8 @@
 		</xsl:attribute>
 
 		<xsl:call-template name="head" />
-        <!-- returns false when all delivery_address elements are empty, true if there is at least one loan with delivery address -->
-        <xsl:if test="not(notification_data/items/item_loan/delivery_address[not(.!='')])">
-            <!-- <xsl:value-of select="notification_data/items/item_loan/delivery_address[.!='']"/> -->
+        <!-- true if any delivery address is non-empty -->
+        <xsl:if test="notification_data/items/item_loan/delivery_address[(.!='')]">
             <xsl:call-template name="senderReceiver-personal-delivery-right"/>
         </xsl:if>
 		<div class="messageArea">
