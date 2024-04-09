@@ -2,6 +2,7 @@
 <!-- SLSP customized
 	10/2022 Added SLSP greeting template; removed bold tags from paragraphs
 	05/2023 Added IZ message; formatting changes
+	04/2024 call number and description bellow title; link to user account
 Dependance:
 	header - head
 	senderReceiver - senderReceiver
@@ -104,24 +105,19 @@ xmlns:str="http://exslt.org/strings">
 
         <div class="messageArea">
           <div class="messageBody">
-
 			<table cellspacing="0" cellpadding="5" border="0">
-
             <xsl:if test="notification_data/item_loans/item_loan or notification_data/overdue_item_loans/item_loan">
-
 				<tr>
 					<td>
 						<xsl:call-template name="SLSP-greeting" />
 					</td>
 				</tr>
-			
 				<tr>
 					<td>
 						@@reminder_message@@
 						<br/><br/>
 					</td>
 				</tr>
-
 				<xsl:if test="notification_data/loans_by_library/library_loans_for_display">
 					<xsl:for-each select="notification_data/loans_by_library/library_loans_for_display">
 						<tr>
@@ -131,7 +127,7 @@ xmlns:str="http://exslt.org/strings">
 										<xsl:call-template name="mainTableStyleCss" />
 									</xsl:attribute>
 									<tr align="left" bgcolor="#f5f5f5">
-										<td colspan="4" style="padding-left:20">
+										<td colspan="3" style="padding-left:20">
 											<h3><xsl:value-of select="organization_unit/name" /></h3>
                                                 <xsl:if test="organization_unit/address/line1 != ''">
                                                     <xsl:value-of select="organization_unit/address/line1"/><br/>
@@ -157,18 +153,29 @@ xmlns:str="http://exslt.org/strings">
 										</td>
 									</tr>
 									<tr>
-										<th width="60%">@@title@@</th>
-										<th width="10%">@@due_date@@</th>
-										<th width="10%">@@fine@@</th>
-										<th width="20%">@@call_number@@</th>
+										<th width="70%">@@title@@</th>
+										<th width="15%">@@due_date@@</th>
+										<th width="15%">@@fine@@</th>
 									</tr>
-
 									<xsl:for-each select="item_loans/overdue_and_lost_loan_notification_display/item_loan">
 										<tr>
 											<td>
-												<xsl:value-of select="substring(title, 0, 70)"/>
-												<xsl:if test="string-length(title) > 70">...</xsl:if>
-												<xsl:value-of select="description"/> </td>
+												<xsl:value-of select="substring(title, 0, 100)"/>
+												<xsl:if test="string-length(title) > 100">...</xsl:if>
+												<xsl:if test="author != ''">
+													<br />
+													<xsl:value-of select="author"/>
+												</xsl:if>
+												<xsl:choose>
+													<xsl:when test="alternative_call_number != ''">
+														<br/><strong>@@call_number@@: </strong><xsl:value-of select="alternative_call_number"/>
+													</xsl:when>
+													<xsl:when test="call_number != ''">
+														<br/><strong>@@call_number@@: </strong><xsl:value-of select="call_number"/>
+													</xsl:when>
+												</xsl:choose><br />
+												<xsl:if test="description != ''"><strong>@@description@@: </strong><xsl:value-of select="description"/></xsl:if>
+											</td>
 											<td>
                                                 <xsl:call-template name="check_DueDate">
                                                 <xsl:with-param name="completeDueDate" select="due_date"/>
@@ -176,7 +183,6 @@ xmlns:str="http://exslt.org/strings">
                                                 </xsl:call-template>
                                             </td>
 											<td><xsl:value-of select="normalized_fine"/></td>
-											<td><xsl:value-of select="call_number"/></td>
 										</tr>
 									</xsl:for-each>
 								</table>
@@ -184,9 +190,7 @@ xmlns:str="http://exslt.org/strings">
 						</tr>
 					</xsl:for-each>
 				</xsl:if>
-
             </xsl:if>
-
 			<xsl:if test="notification_data/organization_fee_list/string">
 				<tr>
 					<td>
@@ -194,8 +198,6 @@ xmlns:str="http://exslt.org/strings">
 						@@debt_message@@
 					</td>
 				</tr>
-
-
 				<tr>
 					<td>
 						<table>
@@ -211,7 +213,6 @@ xmlns:str="http://exslt.org/strings">
 									</td>
 								</tr>
 							</xsl:for-each>
-
 								<tr>
 									<td>
 										<b>@@total@@</b>
@@ -225,7 +226,6 @@ xmlns:str="http://exslt.org/strings">
 						</table>
 					</td>
 				</tr>
-
 			</xsl:if>
 				<tr>
 					<td>
@@ -233,7 +233,12 @@ xmlns:str="http://exslt.org/strings">
 					</td>
 				</tr>
 				<tr>
-					<td>@@sincerely@@
+					<td><xsl:call-template name="SLSP-userAccount"/></td>
+				</tr>
+				<tr>
+					<td>
+						<br />
+						@@sincerely@@
 					</td>
 				</tr>
 				<tr>
