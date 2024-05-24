@@ -17,7 +17,8 @@
 			removed duplicate call number from Home delivery
 			added icons for telephone and e-mail
 	07/2023	fixed country code display for owning library
-	02/2024 added check for equal group ID and External ID for ILL requests-->
+	02/2024 added check for equal group ID and External ID for ILL requests
+	05/2024 added library code from field Alternate Symbol-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:variable name="counter" select="0"/>
@@ -78,7 +79,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<xsl:value-of select="$requestType" />
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="notification_data/partner_name" />
+						<xsl:value-of select="notification_data/partner_name" /> [<xsl:value-of select="notification_data/alternate_symbol" />]
 					</xsl:otherwise>
 				</xsl:choose>
 				</span>

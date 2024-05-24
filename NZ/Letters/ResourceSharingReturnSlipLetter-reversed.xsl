@@ -12,7 +12,8 @@
     10/2022 - added template SLSP-greeting-ILL
     11/2022 - added cid prefix for barcode image
     02/2023 - added pod name
-    05/2023 - adapted bottom margin and font size of address to better fit envelope window;
+    05/2023 - adapted bottom margin and font size of address to better fit envelope window
+    05/2024 - added library code from field Alternate Symbol
     -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:include href="header.xsl"/>
@@ -35,7 +36,7 @@
             </xsl:attribute>
                 <td>
                     <span style="font-size: 160%; font-weight: bold">&#x21e8;
-                        <xsl:value-of select="notification_data/partner_name" />
+                        <xsl:value-of select="notification_data/partner_name" /> [<xsl:value-of select="notification_data/alternate_symbol" />]
                     </span>
                 </td>
             </tr>
