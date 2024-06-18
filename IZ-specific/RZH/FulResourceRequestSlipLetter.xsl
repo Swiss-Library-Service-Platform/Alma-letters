@@ -8,7 +8,7 @@
 		06/2022 added personal delivery field extraction
 		11/2022 format adjustments to fit A4 (SUPPORT-19945)
 		11/2022 add extraction for destination of Rapido requests
-		05/2024 changed format to fit receipt printer (SUPPORT-29017)
+		06/2024 changed format to fit receipt printer (SUPPORT-29017)
 	Dependance:
 		header - head
 		style - generalStyle
@@ -332,7 +332,12 @@ SLSP-Rapido-extract-pages, SLSP-Rapido-persDel
 						<xsl:if test="notification_data/request/selected_inventory_type!='ITEM'">
 							<xsl:choose>
 								<xsl:when test="count(notification_data/phys_item_display/available_items/available_item)>5">
-									<p>More than 5 items available</p>
+									<p><xsl:call-template name="SLSP-multilingual">
+										<xsl:with-param name="en" select="'More than 5 items available'" />
+										<xsl:with-param name="fr" select="'Plus de 5 exemplaires disponibles'" />
+										<xsl:with-param name="it" select="'Più di 5 copie disponibili'" />
+										<xsl:with-param name="de" select="'Mehr als 5 Exemplare verfügbar'" />
+									</xsl:call-template></p>
 								</xsl:when>
 								<xsl:when test="count(notification_data/phys_item_display/available_items/available_item)>1">
 									<xsl:if test="notification_data/phys_item_display/available_items/available_item/barcode!='ITEM'">
