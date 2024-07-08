@@ -7,7 +7,8 @@ SLSP WG: Letters version 12/2021
 	10/2022 - replaced greeting template
 	05/2023 - Added IZ message template; removed previous solution
 			- Updated URL to list of libraries
-	11/2023 - Updated the label for link to libraries list -->
+	11/2023 - Updated the label for link to libraries list
+	07/2024 - Added request note -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle
 		style - generalStyle, bodyStyleCss
@@ -30,12 +31,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
      <xsl:choose>
         <xsl:when test=" $lang = 'de' ">
               <a>
-		<xsl:attribute name="href">https://www.unisg.ch/de/universitaet/bibliothek</xsl:attribute>
+		<xsl:attribute name="href">https://www.unisg.ch/de/universitaet/bibliothek/</xsl:attribute>
 		<xsl:attribute name="target">_blank</xsl:attribute>Weitere Informationen zum Bibliotheksstandort</a>
         </xsl:when>
         <xsl:otherwise>
               <a>
-		<xsl:attribute name="href">https://www.unisg.ch/en/universitaet/bibliothek</xsl:attribute>
+		<xsl:attribute name="href">https://www.unisg.ch/en/university/library/</xsl:attribute>
 		<xsl:attribute name="target">_blank</xsl:attribute>Further information on library location</a>
         </xsl:otherwise>
     </xsl:choose>
@@ -168,6 +169,18 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 									</xsl:choose>
 								</td>
 							</tr>
+							<xsl:if test="/notification_data/request/note != ''">
+								<tr>
+									<td>
+										<span><xsl:call-template name="SLSP-multilingual">
+											<xsl:with-param name="en" select="'Request note'"/>
+											<xsl:with-param name="fr" select="'Note de demande'"/>
+											<xsl:with-param name="it" select="'Nota di richiesta'"/>
+											<xsl:with-param name="de" select="'Notiz zur Bestellung'"/>
+										</xsl:call-template>: </span><xsl:value-of select="notification_data/request/note"/>
+									</td>
+								</tr>
+							</xsl:if>
 							<tr>
 								<td>
 									<span style="font-size: 140%; font-weight: bold;">@@circulation_desk@@&#160;<xsl:value-of select="notification_data/request/delivery_address"/></span>
@@ -198,14 +211,14 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 										<xsl:when test=" $lang = 'de' and starts-with(notification_data/request/delivery_address, 'HSG') ">
 										Bitte beachten Sie, dass die Medien nur zu den 
 											<a>
-										<xsl:attribute name="href">https://www.unisg.ch/de/universitaet/bibliothek/ueberuns/oeffnungszeiten</xsl:attribute>
+										<xsl:attribute name="href">https://www.unisg.ch/de/universitaet/bibliothek/besuchen-und-arbeiten/oeffnungszeiten-und-anfahrt/</xsl:attribute>
 										<xsl:attribute name="target">_blank</xsl:attribute>Servicezeiten</a>
 										 abgeholt werden können.
 										</xsl:when>
 										<xsl:when test=" ($lang = 'en' or 'fr' or 'it') and starts-with(notification_data/request/delivery_address, 'HSG') ">
 										Please note that the items can only be picked up during 
 											<a>
-										<xsl:attribute name="href">https://www.unisg.ch/en/universitaet/bibliothek/ueberuns/oeffnungszeiten</xsl:attribute>
+										<xsl:attribute name="href">https://www.unisg.ch/en/university/library/visiting-and-studying/opening-hours-and-directions/</xsl:attribute>
 										<xsl:attribute name="target">_blank</xsl:attribute>service hours</a>.
 										</xsl:when>
 										<xsl:otherwise></xsl:otherwise>

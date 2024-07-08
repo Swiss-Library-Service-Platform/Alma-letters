@@ -4,7 +4,8 @@
 		10/2022 - replaced greeting template
 		05/2023 - Added IZ message template; removed previous solution
 				- Updated URL to list of libraries
-		11/2023 - Updated the label for link to libraries list -->
+		11/2023 - Updated the label for link to libraries list
+		07/2024 - Added request note -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle, SLSP-greeting, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss
@@ -146,6 +147,18 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 									</xsl:choose>
 								</td>
 							</tr>
+							<xsl:if test="/notification_data/request/note != ''">
+								<tr>
+									<td>
+										<span><xsl:call-template name="SLSP-multilingual">
+											<xsl:with-param name="en" select="'Request note'"/>
+											<xsl:with-param name="fr" select="'Note de demande'"/>
+											<xsl:with-param name="it" select="'Nota di richiesta'"/>
+											<xsl:with-param name="de" select="'Notiz zur Bestellung'"/>
+										</xsl:call-template>: </span><xsl:value-of select="notification_data/request/note"/>
+									</td>
+								</tr>
+							</xsl:if>
 							<tr>
 								<td>
 									<span style="font-size: 140%; font-weight: bold;">@@circulation_desk@@&#160;<xsl:value-of select="notification_data/request/delivery_address"/></span>
