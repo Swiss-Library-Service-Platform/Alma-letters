@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP customized 11/2021 -->
+<!-- SLSP customized 07/2024 -->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, mainTableStyleCss
         recordTitle - SLSP-multilingual, SLSP-userAccount 
@@ -42,23 +42,28 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         <table cellspacing="0" cellpadding="5" border="0">
                             <tr>
                                 <td>
+                                    <xsl:call-template name="SLSP-greeting" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <xsl:if test="notification_data/message='RECALL_DUEDATE_CHANGE'">
-                                        <strong>@@recall_and_date_change@@</strong>
+                                        @@recall_and_date_change@@.
                                     </xsl:if>
                                     <xsl:if test="notification_data/message='RECALL_ONLY'">
-                                        <strong>@@recall_and_no_date_change@@</strong>
+                                        @@recall_and_no_date_change@@.
                                     </xsl:if>
                                     <xsl:if test="notification_data/message='DUE_DATE_CHANGE_ONLY'">
-                                        <strong>@@message@@</strong>
+                                        @@message@@.
                                     </xsl:if>
                                     <xsl:if test="notification_data/message='RECALL_CANCEL_RESTORE_ORIGINAL_DUEDATE'">
-                                        <strong>@@cancel_recall_date_change@@</strong>
+                                        @@cancel_recall_date_change@@.
                                     </xsl:if>
                                     <xsl:if test="notification_data/message='RECALL_CANCEL_ITEM_RENEWED'">
-                                        <strong>@@cancel_recall_renew@@</strong>
+                                        @@cancel_recall_renew@@.
                                     </xsl:if>
                                     <xsl:if test="notification_data/message='RECALL_CANCEL_NO_CHANGE'">
-                                        <strong>@@cancel_recall_no_date_change@@</strong>
+                                        @@cancel_recall_no_date_change@@.
                                     </xsl:if>
                                     <br/>
                                     <br/>
