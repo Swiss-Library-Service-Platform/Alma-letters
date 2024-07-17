@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP innitial adaptation, 11/2021
+<!-- SLSP initial adaptation, 11/2021
+	05/2024 - added greeting, global header
 	Dependance:
 		header - head
 		style - generalStyle, bodyStyleCss
@@ -68,12 +69,17 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<xsl:call-template name="bodyStyleCss" /> <!-- style.xsl -->
 			</xsl:attribute>
 
-				<xsl:call-template name="head-overdue-letter" /> <!-- header.xsl -->
+				<xsl:call-template name="head" /> <!-- header.xsl -->
 				<xsl:call-template name="senderReceiver" /> <!-- SenderReceiver.xsl -->
 
 				<br />
 				<!-- <xsl:call-template name="toWhomIsConcerned" />  --><!-- mailReason.xsl -->
 				<table role='presentation'  cellspacing="0" cellpadding="5" border="0">
+					<tr>
+						<td>
+							<xsl:call-template name="SLSP-greeting" />
+						</td>
+					</tr>
 					<tr>
 						<td>@@introduction@@
 							<xsl:choose >

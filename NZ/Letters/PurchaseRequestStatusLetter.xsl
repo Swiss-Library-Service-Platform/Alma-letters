@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!-- SLSP version, 07/2024
+	Dependance:
+		header - head
+		style - generalStyle, bodyStyleCss
+		SenderReceiver - senderReceiver
+		recordTitle - SLSP-multilingual
+-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -8,6 +14,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:include href="mailReason.xsl" />
 <xsl:include href="footer.xsl" />
 <xsl:include href="style.xsl" />
+<xsl:include href="recordTitle.xsl" />
 
 <xsl:template match="/">
 	<html>
@@ -34,30 +41,47 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<xsl:call-template name="senderReceiver" /> <!-- SenderReceiver.xsl -->
 
 				<br />
-				<xsl:call-template name="toWhomIsConcerned" /> <!-- mailReason.xsl -->
+				<!-- <xsl:call-template name="toWhomIsConcerned" />  --><!-- mailReason.xsl -->
 				<table role='presentation'  cellspacing="0" cellpadding="5" border="0">
+					<tr>
+						<td>
+							<xsl:call-template name="SLSP-greeting" />
+						</td>
+					</tr>
 					<tr>
 						<td>@@introduction@@
 							<xsl:choose >
 								<xsl:when test="/notification_data/purchase_request/request_status='APPROVED'">
-									@@approved@@ <xsl:value-of select="notification_data/purchase_request/poline_reference" />.
+									<strong>@@approved@@</strong>.<br /><br />
+									<strong><xsl:call-template name="SLSP-multilingual">
+										<xsl:with-param name="en" select="'Order number'"/>
+										<xsl:with-param name="fr" select="'Nombre de commande'"/>
+										<xsl:with-param name="it" select="'Numero di ordini'"/>
+										<xsl:with-param name="de" select="'Bestellnummer'"/>
+									</xsl:call-template>: </strong><xsl:value-of select="notification_data/purchase_request/poline_reference" />
 								</xsl:when>
 								<xsl:otherwise>
-									@@rejected@@: <xsl:value-of select="notification_data/purchase_request/reject_reason_desc" />.
+									<strong>@@rejected@@</strong>.<br /><br />
+									<strong><xsl:call-template name="SLSP-multilingual">
+											<xsl:with-param name="en" select="'Reason for rejection'"/>
+											<xsl:with-param name="fr" select="'Raison du rejet'"/>
+											<xsl:with-param name="it" select="'Motivo del rifiuto'"/>
+											<xsl:with-param name="de" select="'Grund für die Ablehnung'"/>
+											</xsl:call-template>: </strong><xsl:value-of select="notification_data/purchase_request/reject_reason_desc" />
 								</xsl:otherwise>
 							</xsl:choose>
-							<br />@@title@@: <xsl:value-of select="notification_data/purchase_request/title" />.
-					</td>
+							<br /><strong>@@title@@: </strong><xsl:value-of select="notification_data/purchase_request/title" />.
+						</td>
 					</tr>
-
 				</table>
-				<br />
-				<table role='presentation' >
-						<tr><td>@@sincerely@@</td></tr>
-						<tr><td>@@department@@</td></tr>
+				<table>
+					<tr><td><br />@@sincerely@@</td></tr>
+					<tr><td><br /><xsl:value-of select="notification_data/organization_unit/name" /></td></tr>
+					<tr>
+						<td><br/><i>powered by SLSP</i></td>
+					</tr>
 				</table>
-
-				<xsl:call-template name="lastFooter" /> <!-- footer.xsl -->
+				<!-- <xsl:call-template name="lastFooter" />  --><!-- footer.xsl -->
 			</body>
 	</html>
 </xsl:template>

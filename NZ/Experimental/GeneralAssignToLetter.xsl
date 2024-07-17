@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP version 07/2024
+<!-- SLSP initial version 06/2024
 
 	Dependance:
 		header - head
