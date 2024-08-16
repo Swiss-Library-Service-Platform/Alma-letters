@@ -6,7 +6,8 @@
         10/2021 fixed printUserAnonymize
         11/2021 smaller margin to fix issue on slip printers (SUPPORT-13074)
         11/2021 added Barcode edu-ID
-        05/2022 synced header adaptation -->
+        05/2022 synced header adaptation
+        08/2024 Added space between request barcode and item barcode -->
 <!-- Dependance:
         recordTitle - SLSP-multilingual
         style - generalStyle, bodyStyleCss
@@ -77,9 +78,22 @@ xmlns:str="http://exslt.org/strings">
                         Barcode edu-ID: <br />
                         <span style="font-family:'IDAutomationHC39M Free Version'; font-size:20pt">( <xsl:value-of select="/notification_data/user_for_printing/identifiers/code_value[code='01']/value"/>)</span> <br />
                     </xsl:if>
-                    <xsl:if test="/notification_data/user_for_printing/identifiers/code_value[code='02']/value">
+                    <xsl:if test="/notification_data/user_for_printing/identifiers/code_value[code='02']">
+                        <xsl:variable name="barcodeValue" select="/notification_data/user_for_printing/identifiers/code_value[code='02']/value" />
+                        <xsl:if test="not(starts-with($barcodeValue, '6299'))">
+                            Barcode NZ: <br />
+                            <span style="font-family:'IDAutomationHC39M Free Version'; font-size:20pt">
+                                (<xsl:value-of select="$barcodeValue"/>)
+                            </span> <br />
+                        </xsl:if>
+                    </xsl:if>
+                    <xsl:if test="starts-with(/notification_data/user_for_printing/identifiers/code_value[code='02']/value, '6299')">
                         Barcode NZ: <br />
-                        <span style="font-family:'IDAutomationHC39M Free Version'; font-size:20pt">( <xsl:value-of select="/notification_data/user_for_printing/identifiers/code_value[code='02']/value"/>)</span> <br />
+                        <span style="font-family:'IDAutomationHC39M Free Version'; font-size:12pt">( <xsl:value-of select="/notification_data/user_for_printing/identifiers/code_value[code='02']/value"/>)</span> <br />
+                    </xsl:if>
+                    <xsl:if test="/notification_data/user_for_printing/identifiers/code_value[code='04']/value">
+                        Barcode NZ: <br />
+                        <span style="font-family:'IDAutomationHC39M Free Version'; font-size:20pt">( <xsl:value-of select="/notification_data/user_for_printing/identifiers/code_value[code='04']/value"/>)</span> <br />
                     </xsl:if>
                         Primary identifier: <xsl:value-of select="/notification_data/user_for_printing/identifiers/code_value[code='Primary Identifier']/value"/><br />
             </xsl:when>
@@ -143,9 +157,13 @@ xmlns:str="http://exslt.org/strings">
                                 </td>
                             </tr>
                             <tr>
-                                <td style="padding-bottom: 10px">
+                                <td style="padding-bottom: 25px">
                                     @@request_id@@<br />
-                                    <img src="cid:request_id_barcode.png" alt="Request Barcode" /><br />
+                                    <img src="cid:request_id_barcode.png" alt="Request Barcode" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px">
                                     @@item_barcode@@<br />
                                     <img src="cid:item_id_barcode.png" alt="Item Barcode" /><br />
                                     <xsl:if test="notification_data/request/system_notes != ''">

@@ -3,7 +3,8 @@
         10/2021 fixed printUserAnonymize
         11/2021 smaller margin to fix issue on slip printers (SUPPORT-13074)
         11/2021 added Barcode edu-ID
-        05/2022 synced header adaptation -->
+        05/2022 synced header adaptation
+        08/2024 Added space between request barcode and item barcode -->
 <!-- Dependance:
         recordTitle - SLSP-multilingual
         style - generalStyle, bodyStyleCss
@@ -122,9 +123,13 @@ xmlns:str="http://exslt.org/strings">
                                 </td>
                             </tr>
                             <tr>
-                                <td style="padding-bottom: 10px">
+                                <td style="padding-bottom: 25px">
                                     @@request_id@@<br />
-                                    <img src="cid:request_id_barcode.png" alt="Request Barcode" /><br />
+                                    <img src="cid:request_id_barcode.png" alt="Request Barcode" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px">
                                     @@item_barcode@@<br />
                                     <img src="cid:item_id_barcode.png" alt="Item Barcode" /><br />
                                     <xsl:if test="notification_data/request/system_notes != ''">
