@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- SLSP customized: receipt printer format
+        05/2024 changed format to fit receipt printer (SUPPORT-29017)
+        09/2024 request and system notes under the destination
+         -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<!-- IZ specific: receipt printer format
-    SLSP Customized
-        05/2024 changed format to fit receipt printer (SUPPORT-29017)-->
+
     <xsl:include href="header.xsl" />
     <xsl:include href="senderReceiver.xsl" />
     <xsl:include href="mailReason.xsl" />
@@ -19,7 +21,7 @@
 			<tr>
 				<xsl:for-each select="notification_data/general_data">
 					<td>
-						<h1><xsl:value-of select="subject"/></h1>
+						<h2><xsl:value-of select="subject"/></h2>
 					</td>
 					<td align="right">
 						<xsl:value-of select="current_date"/>
@@ -36,10 +38,9 @@
             </head>
 
             <body>
-                <h2>
-                    <strong>@@requested_for@@ : <xsl:value-of select="notification_data/user_for_printing/name" />
-                    </strong>
-                </h2>
+                <h1>
+                    <xsl:value-of select="notification_data/user_for_printing/name" />
+                </h1>
                 
                 <xsl:call-template name="head-letterName-print-date" />
 
@@ -168,24 +169,22 @@
                             <strong>@@move_to_library@@: </strong>
                             <xsl:value-of select="notification_data/destination" />
                         </p>
-                        <p>
-                            <strong>@@request_type@@: </strong>
-                            <xsl:value-of select="notification_data/request_type" />
-                        </p>
-
-                        <xsl:if test="notification_data/request/system_notes != ''">
-                            <p>
-                                <strong>@@system_notes@@: </strong>
-                                <xsl:value-of select="notification_data/request/system_notes" />
-                            </p>
-                        </xsl:if>
-
                         <xsl:if test="notification_data/request/note != ''">
                             <p>
                                 <strong>@@request_note@@: </strong>
                                 <xsl:value-of select="notification_data/request/note" />
                             </p>
                         </xsl:if>
+                        <xsl:if test="notification_data/request/system_notes != ''">
+                            <p>
+                                <strong>@@system_notes@@: </strong>
+                                <xsl:value-of select="notification_data/request/system_notes" />
+                            </p>
+                        </xsl:if>
+                        <p>
+                            <strong>@@request_type@@: </strong>
+                            <xsl:value-of select="notification_data/request_type" />
+                        </p>
                     </div>
                 </div>
             <!-- <xsl:call-template name="lastFooter" /> --> <!-- footer.xsl -->
