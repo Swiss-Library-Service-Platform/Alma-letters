@@ -2,6 +2,7 @@
 <!-- SLSP customized: receipt printer format
         05/2024 changed format to fit receipt printer (SUPPORT-29017)
         09/2024 request and system notes under the destination
+        11/2024 removed label requested for
          -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
