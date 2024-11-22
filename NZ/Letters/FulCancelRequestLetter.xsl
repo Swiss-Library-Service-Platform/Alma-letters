@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- WG: Letters 10/2022
 		05/2023 Added IZ message template
+		11/2024 Added reject reason from the Approval stage as additional source for the Cancellation note
 	Dependancy:
 		header - head
 		style - generalStyle, bodyStyleCss, listStyleCss
@@ -146,16 +147,28 @@
 									<xsl:value-of select="notification_data/request/status_note_display" />
 								</td>
 							</tr>
-							<xsl:if test="notification_data/request/cancel_reason != ''">
-								<tr>
-									<td>
-										<strong>@@request_cancellation_note@@: </strong>
-										<xsl:call-template name="break">
-											<xsl:with-param name="text" select="notification_data/request/cancel_reason"/>
-										</xsl:call-template>
-									</td>
-								</tr>
-							</xsl:if>
+							<xsl:choose>
+								<xsl:when test="string-length(normalize-space(/notification_data/request/approval_entity/note)) != 0">
+									<tr>
+										<td>
+											<strong>@@request_cancellation_note@@: </strong>
+											<xsl:call-template name="break">
+												<xsl:with-param name="text" select="notification_data/request/approval_entity/note"/>
+											</xsl:call-template>
+										</td>
+									</tr>
+								</xsl:when>
+								<xsl:when test="string-length(normalize-space(/notification_data/request/cancel_reason)) != 0">
+									<tr>
+										<td>
+											<strong>@@request_cancellation_note@@: </strong>
+											<xsl:call-template name="break">
+												<xsl:with-param name="text" select="notification_data/request/cancel_reason"/>
+											</xsl:call-template>
+										</td>
+									</tr>
+								</xsl:when>
+							</xsl:choose>
 							<xsl:variable name="callNo">
 								<xsl:choose>
 									<xsl:when test="notification_data/phys_item_display/display_alt_call_numbers != ''">
@@ -170,6 +183,10 @@
 							<tr>
 								<td>
 									<xsl:call-template name="recordTitle" /> <!-- recordTitle.xsl -->
+									<!-- Workaround for a case when the request for article is missing title -->
+									<xsl:if test="/notification_data/phys_item_display/title = ''">
+										<strong><xsl:value-of select="/notification_data/metadata/journal_title"/></strong>
+									</xsl:if>
 									<xsl:if test="$callNo != ''">
 										<strong>@@call_number@@: </strong><xsl:value-of select="$callNo"/>
 									</xsl:if>
