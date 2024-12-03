@@ -6,7 +6,8 @@
       01/2023 Rapido: hide digitizing library row if lender library is empty
       03/2023 Fixed linking for docDel with URL
       05/2023 Added IZ message template; adapted formatting of the letter
-      12/2023 Fixed display of the digitizing library -->
+      12/2023 Fixed display of the digitizing library
+      12/2024 Differentiation for the download link depending on the user group and primary id-->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss
@@ -82,10 +83,67 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   </xsl:if>
 </xsl:template>
 
+<!-- Checks the node notification_data/user_for_printing.
+ If the user_group's value equals exactly 01 or 02 or 03 or 04 or 05, return "eduid".
+ If the user_group's value equals exactly any digits between 11-18 or 91-92, return "slsp-internal"
+ If the user_group's value equals anything else, but has @eduid.ch in the primary identifier, return "eduid"
+ If the user_group's value equals anything else, return "internal"-->
+<xsl:template name="accountType">
+  <!-- create a variable prim_id_is_eduID if there is a children of notification_data/user_for_printing/identifiers/
+   if there is a child node code_value that has a child <code>Primary Identifier</code>
+   and a child value containing "@eduid.ch", set the variable as true -->
+  <xsl:variable name="prim_id_is_eduID" select="/notification_data/user_for_printing/identifiers/code_value[code='Primary Identifier' and value[contains(., '@eduid.ch')]]"/>
+  <xsl:choose>
+    <xsl:when test="notification_data/user_for_printing/user_group = '01' or notification_data/user_for_printing/user_group = '02' or notification_data/user_for_printing/user_group = '03' or notification_data/user_for_printing/user_group = '04' or notification_data/user_for_printing/user_group = '05'">
+      <xsl:text>eduid</xsl:text>
+    </xsl:when>
+    <xsl:when test="notification_data/user_for_printing/user_group &gt;= '11' and notification_data/user_for_printing/user_group &lt;= '18' or notification_data/user_for_printing/user_group &gt;= '91' and notification_data/user_for_printing/user_group &lt;= '92'">
+      <xsl:text>slsp-internal</xsl:text>
+    </xsl:when>
+    <xsl:when test="$prim_id_is_eduID">
+      <xsl:text>eduid</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>internal</xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
+  <!-- Debug: Primary ID node
+  <br/>
+  <xsl:text>Prim id: <xsl:value-of select="$prim_id_is_eduID"/></xsl:text>
+  <br/> -->
+  <!-- Debug: true if prim_id_is_eduID is not empty -->
+  <!-- <xsl:if test="$prim_id_is_eduID">
+    <xsl:text>Prim id is eduID</xsl:text>
+  </xsl:if> -->
+</xsl:template>
+
+<!-- style using css to style <a> to look like a button -->
+<xsl:template name="download-button-class">
+  <style>
+    .slsp-download-button {
+      background-color: #4E4A99; /* SLSP purple */
+      border: none;
+      color: white !important;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 120%;
+      font-weight: 600;
+      margin: 0;
+      cursor: pointer;
+      padding: 0 12px;
+      border-radius: 3px;
+      line-height: 48px;
+    }
+  </style>
+</xsl:template>
+
+
   <xsl:template match="/">
     <html>
       <head>
         <xsl:call-template name="generalStyle" />
+        <xsl:call-template name="download-button-class"/>
       </head>
       <body>
         <xsl:attribute name="style">
@@ -93,10 +151,19 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
         </xsl:attribute>
         <xsl:call-template name="head" />
         <xsl:call-template name="senderReceiver" />
+        <xsl:variable name="userType">
+          <xsl:call-template name="accountType"/>
+        </xsl:variable>
         <div class="messageArea">
           <div class="messageBody">
 
           	<table cellspacing="0" cellpadding="5" border="0">
+              <!-- DEBUG
+              <tr>
+                <td>
+                  Account type: <xsl:call-template name="accountType"/>
+                </td>
+              </tr> -->
               <tr>
                 <td>
                   <xsl:call-template name="SLSP-greeting" />
@@ -219,33 +286,92 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                   </tr>
                   <tr>
                     <td>
-                      <xsl:for-each select="/notification_data/url_list/string">
-                        <xsl:variable name="index" select="position()"/>
-                        <xsl:if test="$index != '1'">
-                          <br/>
-                        </xsl:if>
-                        <xsl:variable name="linkText" select="concat('Link ', $index)"/>
-                        <xsl:variable name="linkNoHttps" select="substring-after(.,'//')"/>
-                        <xsl:variable name="linkDomain" select="substring-before($linkNoHttps,'/')"/>
-                        <a>
-                          <xsl:attribute name="href"><xsl:value-of select="."/></xsl:attribute>
-                          <xsl:attribute name="alt"><xsl:value-of select="concat($linkText, ': ', $linkDomain)"/></xsl:attribute>
-                          <xsl:attribute name="title"><xsl:value-of select="$linkDomain"/></xsl:attribute>
-                          <xsl:attribute name="target"><xsl:value-of select="_blank"/></xsl:attribute>
-                          <xsl:value-of select="$linkText"/>
-                        </a>
-                      </xsl:for-each>
+                      <ul>
+                        <xsl:for-each select="/notification_data/url_list/string">
+                          <li>
+                            <!-- Obsolete
+                            <xsl:variable name="index" select="position()"/>
+                            <xsl:if test="$index != '1'">
+                              <br/>
+                            </xsl:if>
+                            <xsl:variable name="linkText" select="concat('Link ', $index)"/> -->
+                            <!-- if the node has //, extract substring-after //, otherwise keep whole string -->
+                            <xsl:variable name="linkNoHttps">
+                              <xsl:choose>
+                                <xsl:when test="contains(., '//')">
+                                  <xsl:value-of select="substring-after(.,'//')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <xsl:value-of select="."/>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:variable>
+                            <xsl:variable name="linkDomain">
+                              <xsl:choose>
+                                <xsl:when test="contains($linkNoHttps, '/')">
+                                  <xsl:value-of select="substring-before($linkNoHttps,'/')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <xsl:value-of select="$linkNoHttps"/>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:variable>
+                            
+                            <xsl:variable name="linkDestination" select="substring-after($linkNoHttps,'/')"/>
+                            <!-- extract last 30 characters from $linkDestination -->
+                            <xsl:variable name="linkDestinationShort">
+                              <xsl:choose>
+                                <xsl:when test="string-length($linkDestination) &gt; 30">
+                                  <xsl:value-of select="concat('...', substring($linkDestination, string-length($linkDestination) - 30))"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <xsl:value-of select="$linkDestination"/>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:variable>
+                            <xsl:variable name="linkText">
+                              <xsl:choose>
+                                <xsl:when test="string-length($linkDestinationShort) != 0">
+                                  <xsl:value-of select="$linkDomain"/>/<xsl:value-of select="$linkDestinationShort"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <xsl:value-of select="$linkDomain"/>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:variable>
+                            <!-- DEBUG
+                            Link no HTTPS: <xsl:value-of select="$linkNoHttps"/><br/>
+                            Link domain: <xsl:value-of select="$linkDomain"/><br/>
+                            Link destination: <xsl:value-of select="$linkDestinationShort"/><br/> -->
+                            <a>
+                              <xsl:attribute name="href"><xsl:value-of select="."/></xsl:attribute>
+                              <xsl:attribute name="alt"><xsl:value-of select="$linkDomain"/></xsl:attribute>
+                              <xsl:attribute name="title"><xsl:value-of select="$linkDomain"/></xsl:attribute>
+                              <xsl:attribute name="target"><xsl:value-of select="_blank"/></xsl:attribute>
+                              <xsl:value-of select="$linkText"/>
+                            </a>
+                          </li>
+                        </xsl:for-each>
+                      </ul>
                     </td>
                   </tr>
                 </xsl:when>
                 <xsl:otherwise>
-                  <tr>
+                  <!-- <tr>
                     <td>@@to_see_the_resource@@</td>
-                  </tr>
+                  </tr> -->
                   <tr>
                     <td>
-                      @@for_local_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_local" /></xsl:attribute>@@click_here@@</a><br/>
-                      @@for_saml_users@@&#160;<a><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_saml" /></xsl:attribute>@@click_here@@</a><br/>
+                      <xsl:choose>
+                        <xsl:when test="$userType = 'eduid'">
+                          <a class="slsp-download-button"><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_saml" /></xsl:attribute>@@click_here@@</a>
+                        </xsl:when>
+                        <xsl:when test="$userType = 'slsp-internal' or $userType = 'internal'">
+                          <a class="slsp-download-button"><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_local" /></xsl:attribute>@@click_here@@</a>
+                        </xsl:when>
+                      </xsl:choose>
+                      <br/>
+                      <br/>
                       <xsl:choose>
                         <!-- non-rapido request -->
                         <xsl:when test="notification_data/request/document_delivery_max_num_of_view != ''">
