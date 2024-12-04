@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- WG version 02/2022
 	03/2024 - added different layout when the terms are the same but the pickup date is different
+	12/2024 - terminate the letter creation if the price of the request has not changed
+
 Dependancy:
 	header - head
 	style - generalStyle, bodyStyleCss, listStyleCss
@@ -28,6 +30,21 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		</xsl:choose>		
 	</xsl:template>
 
+	<!-- Checks whether the terms for price has changed. If the price is the same, returns false, otherwise returns true. -->
+	<xsl:template name="priceChanged">
+		<xsl:choose>
+			<xsl:when test="notification_data/old_cost = notification_data/new_cost">
+				<xsl:value-of select="'false'"/>
+			</xsl:when>
+			<xsl:when test="string-length(notification_data/new_cost) = 0">
+				<xsl:value-of select="'false'"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="'true'"/>
+			</xsl:otherwise>
+		</xsl:choose>		
+	</xsl:template>
+
 	<!-- Checks whether the old pickup date and new pickup date are the same. If they are the same, returns false, otherwise returns true. -->
 	<xsl:template name="pickupDateChanged">
 		<xsl:choose>
@@ -47,6 +64,13 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		<xsl:variable name="pickupDateChanged">
 			<xsl:call-template name="pickupDateChanged"/>
 		</xsl:variable>
+		<xsl:variable name="priceChanged">
+			<xsl:call-template name="priceChanged"/>
+		</xsl:variable>
+		<!-- Terminate the letter generation if the price of the request has not changed. -->
+		<xsl:if test="$priceChanged = 'false'">
+			<xsl:message terminate="yes">Price has not changed.</xsl:message>
+		</xsl:if>
 		<br/>
 		<html>
 			<xsl:if test="notification_data/languages/string">
@@ -137,7 +161,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							</tr>
 						</xsl:when>
 					</xsl:choose>
-					
 					<tr>
 						<td>
 							<xsl:if test="notification_data/old_terms_exist='true'">
