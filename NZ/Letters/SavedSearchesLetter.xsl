@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- SLSP customized 02/2025
+    02/2025 Changed link color and style in header
+-->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="html"/>
 	<xsl:template match="/">
@@ -25,7 +28,7 @@
 						</h2>
 						<h3 style="font-size: 1rem; margin: 0 0 30px 0; font-weight: normal;">
 							<xsl:value-of select="/notification_data/alert_heading"/>
-							<a style="font-style: italic; text-decoration: none;">
+							<a style="font-style: italic; text-decoration: underlined; color: #fffa6d;">
 								<xsl:attribute name="href">
 									<xsl:value-of select="/notification_data/link/node()"/>
 								</xsl:attribute>
