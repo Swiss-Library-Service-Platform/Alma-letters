@@ -7,7 +7,8 @@
       03/2023 Fixed linking for docDel with URL
       05/2023 Added IZ message template; adapted formatting of the letter
       12/2023 Fixed display of the digitizing library
-      12/2024 Differentiation for the download link depending on the user group and primary id-->
+      02/2025 Differentiation for the download link depending on the user group and primary id
+              Added message for inst. accounts with login issue-->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss
@@ -363,11 +364,41 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                   <tr>
                     <td>
                       <xsl:choose>
+                      <!-- add message to institutional accounts using the @@to_see_the_resource@@ label -->
                         <xsl:when test="$userType = 'eduid'">
                           <a class="slsp-download-button"><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_saml" /></xsl:attribute>@@click_here@@</a>
                         </xsl:when>
                         <xsl:when test="$userType = 'slsp-internal' or $userType = 'internal'">
                           <a class="slsp-download-button"><xsl:attribute name="href"><xsl:value-of select="notification_data/download_url_local" /></xsl:attribute>@@click_here@@</a>
+                          <br />
+                          <i>
+                          <xsl:call-template name="SLSP-multilingual">
+                            <xsl:with-param name="en" select="'If you can’t login and/or download the file, please '" />
+                            <xsl:with-param name="fr">
+                              <![CDATA[Si vous ne pouvez pas vous connecter et/ou télécharger le fichier, veuillez vous ]]>
+                            </xsl:with-param>
+                            <xsl:with-param name="it" select="'Se non riesci a effettuare il login e/o scaricare il file, per favore'" />
+                            <xsl:with-param name="de" select="'Wenn Sie sich nicht einloggen und/oder die Datei nicht herunterladen können, '" />
+                          </xsl:call-template> 
+                          <a>
+                            <xsl:attribute name="href">@@email_my_account@@&#38;lang=<xsl:value-of
+                                select="/notification_data/receivers/receiver/preferred_language" /></xsl:attribute>
+                            <xsl:attribute name="target">_blank</xsl:attribute>
+                            <xsl:call-template name="SLSP-multilingual">
+                              <xsl:with-param name="en" select="'login to your library account'" />
+                              <xsl:with-param name="fr">
+                                <![CDATA[connecter à votre compte de bibliothèque]]></xsl:with-param>
+                              <xsl:with-param name="it" select="'accedi al tuo account della biblioteca'" />
+                              <xsl:with-param name="de" select="'melden Sie sich bitte bei Ihrem Bibliothekskonto an'" />
+                            </xsl:call-template>
+                          </a>
+                          <xsl:call-template name="SLSP-multilingual">
+                            <xsl:with-param name="en" select="'and then try again.'" />
+                            <xsl:with-param name="fr"><![CDATA[, puis réessayez.]]>
+                            </xsl:with-param>
+                            <xsl:with-param name="it" select="'e poi riprova.'" />
+                            <xsl:with-param name="de" select="'und versuchen Sie es erneut.'" />
+                          </xsl:call-template></i>
                         </xsl:when>
                       </xsl:choose>
                       <br/>
