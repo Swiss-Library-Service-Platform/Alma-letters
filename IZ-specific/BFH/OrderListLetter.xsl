@@ -109,10 +109,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 <xsl:value-of select="po/bill_to_address/postal_code"/>&#160;<xsl:value-of select="po/bill_to_address/city"/><br />
                             </xsl:if>
                             <xsl:if test="po/bill_to_address/country != ''">
-                                <xsl:value-of select="po/bill_to_address/country"/>
+                                <xsl:value-of select="po/bill_to_address/country"/><br />
                             </xsl:if>
                             <xsl:if test="po/bill_to_address/line5 != ''">
-                                <xsl:value-of select="po/bill_to_address/line5"/><br />
+                                <xsl:value-of select="po/bill_to_address/line5"/>
                             </xsl:if>
                         </td>                                    
                     </tr>
