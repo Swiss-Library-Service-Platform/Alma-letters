@@ -65,7 +65,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                 
                 <table width="100%">
                     <tr>
-                        <td width="50%">
+                        <td width="50%" style="vertical-align: top;">
                             <b>@@shipping_address@@: </b><br />
                             <!-- removed the organization name as per request: SUPPORT-26777 -->
                             <xsl:if test="po/ship_to_address/line1 != ''">
@@ -90,7 +90,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 <xsl:value-of select="po/ship_to_address/country"/>
                             </xsl:if>
                         </td>
-                        <td width="50%">
+                        <td width="50%" style="vertical-align: top;">
                             <b>@@billing_address@@: </b><br />
                             <!-- removed the organization name as per request: SUPPORT-26777 -->
                             <xsl:if test="po/bill_to_address/line1 != ''">
