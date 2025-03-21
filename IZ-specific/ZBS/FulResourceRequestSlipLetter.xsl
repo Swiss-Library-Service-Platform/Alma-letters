@@ -7,6 +7,7 @@
 		08/2022 Added anonymization to print existing Hold Shelf slips
 		10/2022 added personal delivery field extraction
 		11/2022 add extraction for destination of Rapido requests
+		03/2025 added chapter title, author and pages for GetIt digitization requests
     Dependancy:
         recordTitle - recordTitle, SLSP-Rapido-request-note, SLSP-Rapido-extract-volume, SLSP-Rapido-extract-pages
         style - generalStyle
@@ -135,6 +136,43 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 										</xsl:call-template>: </strong><xsl:value-of select="$requestPages"/>
 								</td>
 							</tr>
+						</xsl:if>
+						<!-- SLSP add the digitization request information if present -->
+						<xsl:if test="notification_data/request/request_type = 'PHYSICAL_TO_DIGITIZATION'">
+							<p>
+								<!-- SLSP add chapter title from the getit digitization request -->
+								<xsl:if test="notification_data/request/chapter_article_title != ''">
+									<strong><xsl:call-template name="SLSP-multilingual">
+										<xsl:with-param name="en" select="'Chapter title'" />
+										<xsl:with-param name="fr" select="'Titre du chapitre'" />
+										<xsl:with-param name="it" select="'Titolo del capitolo'" />
+										<xsl:with-param name="de" select="'Kapiteltitel'" />
+									</xsl:call-template>: </strong>
+									<xsl:value-of select="notification_data/request/chapter_article_title" />
+									<br/>
+								</xsl:if>
+								<!-- SLSP add chapter authors from the getit digitization request -->
+								<xsl:if test="notification_data/request/chapter_article_author != ''">
+									<strong><xsl:call-template name="SLSP-multilingual">
+										<xsl:with-param name="en" select="'Chapter author'" />
+										<xsl:with-param name="fr" select="'Auteur du chapitre'" />
+										<xsl:with-param name="it" select="'Autore del capitolo'" />
+										<xsl:with-param name="de" select="'Kapitelautor'" />
+									</xsl:call-template>: </strong>
+									<xsl:value-of select="notification_data/request/chapter_article_author" />
+									<br/>
+								</xsl:if>
+								<!-- SLSP add pages from the getit digitization request -->
+								<xsl:if test="notification_data/request/pages != ''">
+									<strong><xsl:call-template name="SLSP-multilingual">
+										<xsl:with-param name="en" select="'Pages'" />
+										<xsl:with-param name="fr" select="'Pages'" />
+										<xsl:with-param name="it" select="'Pagine'" />
+										<xsl:with-param name="de" select="'Seiten'" />
+									</xsl:call-template>: </strong>
+									<xsl:value-of select="notification_data/request/pages" />
+								</xsl:if>
+							</p>
 						</xsl:if>
 						<tr>
 							<td><h2><strong>@@location@@: </strong><xsl:value-of select="notification_data/phys_item_display/location_name"/></h2></td>
