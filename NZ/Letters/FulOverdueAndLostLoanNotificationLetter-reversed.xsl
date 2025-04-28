@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- IZ adaptation: reversed senderReceiver address field
+<!-- IZ Customization: reversed senderReceiver address field
 
 	SLSP WG: Letters version 10/2021
 		10/2021 - fix date in header
@@ -11,7 +11,8 @@
 		05/2023 - Added IZ message template; added 5th line to address;
 				adapted bottom margin and font size of address to better fit envelope window
 				Added author to loans description; fixed display of call number
-		12/2023 - Added support for temporary call numbers-->
+		12/2023 - Added support for temporary call numbers
+		05/2025 - Reformatted the General message -->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
         recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
@@ -283,6 +284,26 @@ If overdue profiles are changed then the text bellow has to be adapted.
 	</xsl:if>
 </xsl:template>
 
+<!-- Prints the text message stored in label 'additional_info_1' for the language of the letter.
+		If value in the label is empty or with value "blank" does not print anything.
+		The label can contain also HTML markup such as links or formatting.
+		Warning: the label 'additional_info_1' has to be available in the letter for this template to work	
+		Usage:
+			1. Configure the label additional_info_1 with text in all languages.
+			2. Insert the template: <xsl:call-template name="SLSP-general-message"/> -->
+<xsl:template name="SLSP-general-message">
+	<xsl:variable name="generalMessage">@@additional_info_1@@</xsl:variable>
+	<xsl:if test="$generalMessage != '' and $generalMessage != 'blank'">
+		<h4><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+			<xsl:with-param name="en" select="'General information on recall letters'"/>
+			<xsl:with-param name="fr" select="'Informations générales concernant les lettres de rappel'"/>
+			<xsl:with-param name="it" select="'Informazioni generali sulle lettere di richiamo'"/>
+			<xsl:with-param name="de" select="'Allgemeine Informationen zu Mahnschreiben'"/>
+		</xsl:call-template></h4>
+		<xsl:value-of select="$generalMessage" disable-output-escaping="yes" />
+	</xsl:if>
+</xsl:template>
+
 <xsl:template match="/">
 	<html>
 		<head>
@@ -483,16 +504,15 @@ If overdue profiles are changed then the text bellow has to be adapted.
 			<p>
 				<xsl:call-template name="SLSP-userAccount"/>
 			</p>
-			<p>
-				<xsl:choose>
-					<xsl:when test="/notification_data/notification_type = 'OverdueNotificationType4'"> <!-- 3rd recall -->
+				<!-- <xsl:choose>
+					<xsl:when test="/notification_data/notification_type = 'OverdueNotificationType4'">
 						@@notification_profiles@@
 					</xsl:when>
 					<xsl:otherwise>
-						@@additional_info_1@@
+						<xsl:call-template name="SLSP-general-message"/>
 					</xsl:otherwise>
-				</xsl:choose>
-			</p>
+				</xsl:choose> -->
+				<xsl:call-template name="SLSP-general-message"/>
 			<p>@@sincerely@@</p>
 			<p>
 				<xsl:value-of select="notification_data/organization_unit/name" />
