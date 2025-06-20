@@ -5,7 +5,8 @@
 		05/2023 - Added IZ message template; removed previous solution
 				- Updated URL to list of libraries
 		11/2023 - Updated the label for link to libraries list
-		07/2024 - Added request note -->
+		07/2024 - Added request note
+		06/2025 - Added a message if item with a reading room policy -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle, SLSP-greeting, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss
@@ -159,16 +160,43 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 									</td>
 								</tr>
 							</xsl:if>
+							<xsl:if test="notification_data/phys_item_display/item_policy != ''">
+								<xsl:variable name="item_policy_code" select="substring(notification_data/phys_item_display/item_policy, 1, 2)"/>
+								<xsl:if test="$item_policy_code = '05'
+											or $item_policy_code = '10'
+											or $item_policy_code = '11'
+											or $item_policy_code = '12'
+											or $item_policy_code = '25'
+											or $item_policy_code = '30'
+											or $item_policy_code = '31'
+											or $item_policy_code = '32'
+											or $item_policy_code = '38'
+											or $item_policy_code = '39'
+											or $item_policy_code = '45'
+											or $item_policy_code = '50'
+											or $item_policy_code = '51'
+											or $item_policy_code = '52'">
+									<tr>
+										<td>
+											<span style="font-size: 140%;">&#9888; </span>
+											<xsl:call-template name="SLSP-multilingual">
+												<xsl:with-param name="en" select="'The document can only be used on site.'"/>
+												<xsl:with-param name="fr">
+													<![CDATA[Le document mis à disposition ne peut être utilisé que sur place.]]>
+												</xsl:with-param>
+												<xsl:with-param name="it" select="'Il documento fornito può essere utilizzato solo in sede.'"/>
+												<xsl:with-param name="de" select="'Das bereitgestellte Dokument kann nur vor Ort benutzt werden.'"/>
+											</xsl:call-template>
+										</td>
+									</tr>
+								</xsl:if>
+							</xsl:if>
 							<tr>
 								<td>
 									<span style="font-size: 140%; font-weight: bold;">@@circulation_desk@@&#160;<xsl:value-of select="notification_data/request/delivery_address"/></span>
-									(<xsl:call-template name="SLSP-librariesURL"/>)<br />
+									(<xsl:call-template name="SLSP-librariesURL"/>)
 									<xsl:if test="notification_data/request/work_flow_entity/expiration_date">
-										<tr>
-											<td>
-												@@note_item_held_until@@ <xsl:value-of select="notification_data/request/work_flow_entity/expiration_date"/>.<br />
-											</td>
-										</tr>
+										<br />@@note_item_held_until@@ <xsl:value-of select="notification_data/request/work_flow_entity/expiration_date"/>.<br />
 									</xsl:if>
 								</td>
 							</tr>

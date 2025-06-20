@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
-IZ customization: HSGLibrariesURL template; circ desk bracket adaptation; another row before user account link
+<!-- IZ Customization: Salle Senebier information
 
 SLSP WG: Letters version 12/2021
-	01/2022 - Fixed FR version of librariesURL template
-	10/2022 - replaced greeting template
-	05/2023 - Added IZ message template; removed previous solution
-			- Updated URL to list of libraries
-	11/2023 - Updated the label for link to libraries list
-	07/2024 - Added request note
-	06/2025 - Added a message if item with a reading room policy -->
+		01/2022 - Fixed FR version of librariesURL template
+		10/2022 - replaced greeting template
+		05/2023 - Added IZ message template; removed previous solution
+				- Updated URL to list of libraries
+		11/2023 - Updated the label for link to libraries list
+		07/2024 - Added request note
+        06/2025 - Added a message if item with a reading room policy -->
 <!-- Dependance:
-		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle
+		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle, SLSP-greeting, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss
 		header - head
 		-->
@@ -25,26 +24,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 <xsl:include href="style.xsl" />
 <xsl:include href="recordTitle.xsl" />
 
-<!-- Template to display link to Library Homepage -->
-<!-- Weicht hier vom SLSP-Standard-Letter ab, geändert 30.06.22/frm-->
-<xsl:template name="HSGLibrariesURL">
-     <xsl:variable name="lang" select="/notification_data/receivers/receiver/preferred_language"/>
-     <xsl:choose>
-        <xsl:when test=" $lang = 'de' ">
-              <a>
-		<xsl:attribute name="href">https://www.unisg.ch/de/universitaet/bibliothek/</xsl:attribute>
-		<xsl:attribute name="target">_blank</xsl:attribute>Weitere Informationen zum Bibliotheksstandort</a>
-        </xsl:when>
-        <xsl:otherwise>
-              <a>
-		<xsl:attribute name="href">https://www.unisg.ch/en/university/library/</xsl:attribute>
-		<xsl:attribute name="target">_blank</xsl:attribute>Further information on library location</a>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <!-- Template to display link to list of Libraries on SLSP page -->
-<xsl:template name="SLSP-LibrariesURL">
+<xsl:template name="SLSP-librariesURL">
 	<a>
 		<xsl:attribute name="href">https://libraries.swisscovery.help/?lang=<xsl:value-of select="/notification_data/receivers/receiver/preferred_language"/></xsl:attribute>
 		<xsl:attribute name="target">_blank</xsl:attribute>
@@ -56,7 +37,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 		</xsl:call-template>
 	</a>
 </xsl:template>
-<!--Ende Änderung SLSP-Standard-Letter-->
 
 <!-- Prints the IZ message stored in label 'department' for the language of the letter.
 		If value in the label is empty or with value "blank" does not print anything.
@@ -182,7 +162,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 									</td>
 								</tr>
 							</xsl:if>
-							<xsl:if test="notification_data/phys_item_display/item_policy != ''">
+                            <xsl:if test="notification_data/phys_item_display/item_policy != ''">
 								<xsl:variable name="item_policy_code" select="substring(notification_data/phys_item_display/item_policy, 1, 2)"/>
 								<xsl:if test="$item_policy_code = '05'
 											or $item_policy_code = '10'
@@ -216,44 +196,42 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 							<tr>
 								<td>
 									<span style="font-size: 140%; font-weight: bold;">@@circulation_desk@@&#160;<xsl:value-of select="notification_data/request/delivery_address"/></span>
-									<!-- Weicht hier vom SLSP-Standard-Letter ab, geändert 30.06.22/frm-->
-									(<xsl:choose>
-										<xsl:when test="starts-with(notification_data/request/delivery_address, 'HSG')">
-											<xsl:call-template name="HSGLibrariesURL"/>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:call-template name="SLSP-LibrariesURL"/>
-										</xsl:otherwise>
-									</xsl:choose>)
-									<!--Ende Änderung SLSP-Standard-Letter-->
+									<xsl:choose>
+									    <!--Info Salle Senebier-->
+									    <xsl:when test="notification_data/request/work_flow_entity/assigned_unit_id = '838255380005524'">
+									        <br/>&#8618;
+                                        	(<a>
+                                        		<xsl:attribute name="href">https://www.bge-geneve.ch/collections/imprimes-anciens-precieux#consulter</xsl:attribute>
+                                        		<xsl:attribute name="target">_blank</xsl:attribute>
+                                        		<xsl:call-template name="SLSP-multilingual">
+                                        			<xsl:with-param name="en"><![CDATA[Conditions of use - Identity card required]]></xsl:with-param>
+                                        			<xsl:with-param name="fr"><![CDATA[Conditions de constultation - Carte d'identité obligatoire]]></xsl:with-param>
+                                        			<xsl:with-param name="it"><![CDATA[Condizioni di utilizzo - Carta d'identità richiesta]]></xsl:with-param>
+                                        			<xsl:with-param name="de"><![CDATA[Bedingungen für die Konstultation - Personalausweis erforderlich]]></xsl:with-param>
+                                        		</xsl:call-template>
+                                        	</a>)
+									        <br/>&#8618;
+                                        	(<a>
+                                        		<xsl:attribute name="href">https://www.bge-geneve.ch/horaires-acces/bastions</xsl:attribute>
+                                        		<xsl:attribute name="target">_blank</xsl:attribute>
+                                        		<xsl:call-template name="SLSP-multilingual">
+                                        			<xsl:with-param name="en"><![CDATA[Opening times and access]]></xsl:with-param>
+                                        			<xsl:with-param name="fr"><![CDATA[Horaires et accès]]></xsl:with-param>
+                                        			<xsl:with-param name="it"><![CDATA[Orari di apertura e accesso]]></xsl:with-param>
+                                        			<xsl:with-param name="de"><![CDATA[Öffnungszeiten und Zugang]]></xsl:with-param>
+                                        		</xsl:call-template>
+                                        	</a>)
+									    </xsl:when>
+									    <!--Info autres bib-->
+									    <xsl:otherwise>
+									        (<xsl:call-template name="SLSP-librariesURL"/>)
+									    </xsl:otherwise>
+									</xsl:choose>
 									<xsl:if test="notification_data/request/work_flow_entity/expiration_date">
 										<br />@@note_item_held_until@@ <xsl:value-of select="notification_data/request/work_flow_entity/expiration_date"/>.<br />
 									</xsl:if>
 								</td>
 							</tr>
-							<!-- Weicht hier vom SLSP-Standard-Letter ab, geändert 30.06.22/frm-->
-							<tr>
-								<td>
-									<xsl:variable name="lang" select="/notification_data/receivers/receiver/preferred_language"/>
-								     <xsl:choose>
-										<xsl:when test=" $lang = 'de' and starts-with(notification_data/request/delivery_address, 'HSG') ">
-										Bitte beachten Sie, dass die Medien nur zu den 
-											<a>
-										<xsl:attribute name="href">https://www.unisg.ch/de/universitaet/bibliothek/besuchen-und-arbeiten/oeffnungszeiten-und-anfahrt/</xsl:attribute>
-										<xsl:attribute name="target">_blank</xsl:attribute>Servicezeiten</a>
-										 abgeholt werden können.
-										</xsl:when>
-										<xsl:when test=" ($lang = 'en' or 'fr' or 'it') and starts-with(notification_data/request/delivery_address, 'HSG') ">
-										Please note that the items can only be picked up during 
-											<a>
-										<xsl:attribute name="href">https://www.unisg.ch/en/university/library/visiting-and-studying/opening-hours-and-directions/</xsl:attribute>
-										<xsl:attribute name="target">_blank</xsl:attribute>service hours</a>.
-										</xsl:when>
-										<xsl:otherwise></xsl:otherwise>
-   									 </xsl:choose>
-								</td>
-							</tr>	
-							<!--Ende Änderung SLSP-Standard-Letter-->						
 							<tr>
 								<td>
 									<xsl:call-template name="SLSP-IZMessage"/>
