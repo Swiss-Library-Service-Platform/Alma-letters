@@ -8,7 +8,8 @@ SLSP WG: Letters version 12/2021
 				- Updated URL to list of libraries
 		11/2023 - Updated the label for link to libraries list
 		07/2024 - Added request note
-        06/2025 - Added a message if item with a reading room policy -->
+        06/2025 - Added a message if item with a reading room policy
+		07/2025 - Updated the reading room message french text -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, recordTitle, SLSP-greeting, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss
@@ -184,7 +185,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/str
 											<xsl:call-template name="SLSP-multilingual">
 												<xsl:with-param name="en" select="'The document can only be used on site.'"/>
 												<xsl:with-param name="fr">
-													<![CDATA[Le document mis à disposition ne peut être utilisé que sur place.]]>
+													<![CDATA[Le document mis à disposition peut uniquement être consulté sur place.]]>
 												</xsl:with-param>
 												<xsl:with-param name="it" select="'Il documento fornito può essere utilizzato solo in sede.'"/>
 												<xsl:with-param name="de" select="'Das bereitgestellte Dokument kann nur vor Ort benutzt werden.'"/>
