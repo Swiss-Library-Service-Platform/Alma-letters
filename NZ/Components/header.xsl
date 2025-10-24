@@ -2,7 +2,8 @@
 <!-- SLSP customized
 	12/2021 - added onerror attribute to logo so it displays in user attachment preview
 	05/2022 - added height parameters to control sizing for Post envelopes
-	05/2022 - using subject label for header for letters appearing in Print Queue-->
+	05/2022 - using subject label for header for letters appearing in Print Queue
+	02/2025 - using subject label for ResourceSharingConversationLetter-->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -71,6 +72,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 							<h1><xsl:value-of select="subject"/></h1>
 						</xsl:when>
 						<xsl:when test="letter_type='ResourceSharingShippingSlipLetter'">
+							<h1><xsl:value-of select="subject"/></h1>
+						</xsl:when>
+						<!-- special case to use the subject that the user inputs in Alma in the header -->
+						<xsl:when test="letter_type='ResourceSharingConversationLetter'">
 							<h1><xsl:value-of select="subject"/></h1>
 						</xsl:when>
 						<xsl:otherwise>
