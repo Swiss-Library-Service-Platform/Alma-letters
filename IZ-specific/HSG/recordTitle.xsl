@@ -12,6 +12,8 @@ SLSP WG: Letters version 08/2021
 11/2022	Added template SLSP-Rapido-destination
 05/2023 Added template SLSP-Rapido-pod-name
 		Adapted labels for template SLSP-userAccount
+02/2024 Added support for Journal requests to SLSP-Rapido-extract-volume
+10/2025 Updated French text in SLSP-userAccount
 -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -72,34 +74,39 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 </xsl:template>
 
 <!-- template to show link to user account
-	for link to swisscovery uses system variable @@email_my_account@@ in Configuration -> General -> Other Settings
+	for link to swisscovery uses system variable @@email_my_account@@ in Configuration -> General ->
+	Other Settings
 	one link per IZ is possible, therefore the default view is used.
 	The lang parameter for URL is used from the user preferred language
 	Depends on:
 		recordTitle - SLSP-multilingual
 	USAGE: <xsl:call-template name="SLSP-userAccount"/>
 -->
-<xsl:template name="SLSP-userAccount">
-	<xsl:call-template name="SLSP-multilingual">
-		<xsl:with-param name="en" select="'To check your current loans and fees, please log in to swisscovery: '"/>
+	<xsl:template name="SLSP-userAccount">
+		<xsl:call-template name="SLSP-multilingual">
+			<xsl:with-param name="en"
+				select="'To check your current loans and fees, please log in to swisscovery: '" />
 			<!-- Adaptation to include single quote in "n'ont" in the text -->
 			<xsl:with-param name="fr">
-				<![CDATA[Pour consulter vos prêts en cours et les frais, veuillez vous connecter à swisscovery: ]]>
+				<![CDATA[Pour consulter vos demandes en cours, livres empruntés et frais éventuels, veuillez-vous connecter à swisscovery: ]]>
 			</xsl:with-param>
-			<xsl:with-param name="it" select="'Per controllare i suoi prestiti attuali e i costi, effettui il login su swisscovery: '"/>
-			<xsl:with-param name="de" select="'Um Ihre aktuellen Ausleihen und Gebühren zu überprüfen, loggen Sie sich bitte bei swisscovery ein: '"/>
-	</xsl:call-template>
-	<a>
-		<xsl:attribute name="href">@@email_my_account@@&#38;lang=<xsl:value-of select="/notification_data/receivers/receiver/preferred_language"/></xsl:attribute>
-		<xsl:attribute name="target">_blank</xsl:attribute>
-		<xsl:call-template name="SLSP-multilingual">
-			<xsl:with-param name="en" select="'My account'"/>
-			<xsl:with-param name="fr" select="'Mon compte'"/>
-			<xsl:with-param name="it" select="'Il mio conto'"/>
-			<xsl:with-param name="de" select="'Mein Konto'"/>
+			<xsl:with-param name="it"
+				select="'Per controllare i suoi prestiti attuali e i costi, effettui il login su swisscovery: '" />
+			<xsl:with-param name="de"
+				select="'Um Ihre aktuellen Ausleihen und Gebühren zu überprüfen, loggen Sie sich bitte bei swisscovery ein: '" />
 		</xsl:call-template>
-	</a>
-</xsl:template>
+		<a>
+			<xsl:attribute name="href">@@email_my_account@@&#38;lang=<xsl:value-of
+					select="/notification_data/receivers/receiver/preferred_language" /></xsl:attribute>
+			<xsl:attribute name="target">_blank</xsl:attribute>
+			<xsl:call-template name="SLSP-multilingual">
+				<xsl:with-param name="en" select="'My account'" />
+				<xsl:with-param name="fr" select="'Mon compte'" />
+				<xsl:with-param name="it" select="'Il mio conto'" />
+				<xsl:with-param name="de" select="'Mein Konto'" />
+			</xsl:call-template>
+		</a>
+	</xsl:template>
 
 <!-- Template to extract request note from Rapido request
 Usage:
@@ -122,29 +129,36 @@ Usage:
 	</xsl:choose>
 </xsl:template>
 
-<!-- Template to extract volume from the encoded XML metadata provided in letter XML
-Usage: 
-	<xsl:variable name="requestVolume">
-		<xsl:call-template name="SLSP-Rapido-extract-volume" />
-	</xsl:variable>
-	<xsl:if test="$requestVolume != ''">
-	...
-	</xsl:if>
+<!-- Template for Resource Sharing Request Slip to extract volume from the encoded XML metadata
+	provided in letter XML
+	Usage: 
+		<xsl:variable name="requestVolume">
+			<xsl:call-template name="SLSP-Rapido-extract-volume" />
+		</xsl:variable>
+		<xsl:if test="$requestVolume != ''">
+		...
+		</xsl:if>
 -->
-<xsl:template name="SLSP-Rapido-extract-volume">
-	<!-- Loading of the righthand part of metadata field based on XML layout -->
-	<xsl:variable name="user-volume-temp">
+	<xsl:template name="SLSP-Rapido-extract-volume">
 		<xsl:choose>
-			<xsl:when test="/notification_data/incoming_request/request_metadata != ''">
-				<xsl:value-of select="substring-after(/notification_data/incoming_request/request_metadata, 'dc:volume&gt;')"/>
+			<!-- For journal requests the volume value is not present in the dc:volume but in
+			dc:rlterms_volumePartNumber -->
+			<xsl:when
+				test="/notification_data/incoming_request/request_metadata != ''
+			and contains(/notification_data/incoming_request/request_metadata, '&lt;dc:material_type&gt;Journal&lt;/dc:material_type&gt;')">
+				<xsl:variable name="user-volume-temp">
+					<xsl:value-of select="substring-after(/notification_data/incoming_request/request_metadata, 'dc:rlterms_volumePartNumber&gt;')" />
+				</xsl:variable>
+				<xsl:value-of select="substring-before($user-volume-temp, '&lt;/dc:rlterms_volumePartNumber')" />
 			</xsl:when>
-			<xsl:when test="/notification_data/resource_sharing_request/request_metadata != ''">
-				<xsl:value-of select="substring-after(/notification_data/resource_sharing_request/request_metadata, 'dc:volume&gt;')"/>
+			<xsl:when test="/notification_data/incoming_request/request_metadata != ''">
+				<xsl:variable name="user-volume-temp">
+					<xsl:value-of select="substring-after(/notification_data/incoming_request/request_metadata, 'dc:volume&gt;')" />
+				</xsl:variable>
+				<xsl:value-of select="substring-before($user-volume-temp, '&lt;/dc:volume')" />
 			</xsl:when>
 		</xsl:choose>
-	</xsl:variable>
-	<xsl:value-of select="substring-before($user-volume-temp, '&lt;/dc:volume')"/>
-</xsl:template>
+	</xsl:template>
 
 <!-- Template to extract pages from the encoded XML metadata provided in letter XML
 Usage: 
