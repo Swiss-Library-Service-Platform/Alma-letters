@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    IZ Customization: Print delivery address if available in any loan on the receipt
+    IZ Customization: Print delivery address if available in any loan, otherwise print user address
 
     WG: Letters 05/2022
 	12/2022 Added SLSP greeting template
 	05/2023 Added IZ message template 
-	03/2024 Fixed the display logic of senderReceiver -->
+	03/2024 Fixed the display logic of senderReceiver
+	10/2025 show senderReceiver with user address if no delivery address is available -->
 <!-- Dependance:
 		recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-IZMessage
 		style - generalStyle, bodyStyleCss, mainTableStyleCss
@@ -194,10 +195,15 @@
 		</xsl:attribute>
 
 		<xsl:call-template name="head" />
-        <!-- true if any delivery address is non-empty -->
-        <xsl:if test="notification_data/items/item_loan/delivery_address[(.!='')]">
-            <xsl:call-template name="senderReceiver-personal-delivery-right"/>
-        </xsl:if>
+        <!-- Check for the delivery address and print it. If not available, print the user address. -->
+		<xsl:choose>
+			<xsl:when test="notification_data/items/item_loan/delivery_address[(.!='')]">
+				<xsl:call-template name="senderReceiver-personal-delivery-right"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="senderReceiver" /><!-- SenderReceiver.xsl -->
+			</xsl:otherwise>
+		</xsl:choose>
 		<div class="messageArea">
 		<div class="messageBody">
 			<table cellspacing="0" cellpadding="5" border="0">
