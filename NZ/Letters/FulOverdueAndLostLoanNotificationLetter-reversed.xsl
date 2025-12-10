@@ -12,7 +12,8 @@
 				adapted bottom margin and font size of address to better fit envelope window
 				Added author to loans description; fixed display of call number
 		12/2023 - Added support for temporary call numbers
-		05/2025 - Reformatted the General message -->
+		05/2025 - Reformatted the General message
+		12/2025 - general message html in a label, separate label for further info-->
 <!-- Dependance: 
         style - generalStyle, bodyStyleCss, listStyleCss, mainTableStyleCss
         recordTitle - SLSP-multilingual, SLSP-userAccount, SLSP-greeting
@@ -294,12 +295,12 @@ If overdue profiles are changed then the text bellow has to be adapted.
 <xsl:template name="SLSP-general-message">
 	<xsl:variable name="generalMessage">@@additional_info_1@@</xsl:variable>
 	<xsl:if test="$generalMessage != '' and $generalMessage != 'blank'">
-		<h4><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+		<!-- <h4><xsl:call-template name="SLSP-multilingual">
 			<xsl:with-param name="en" select="'General information on recall letters'"/>
 			<xsl:with-param name="fr" select="'Informations générales concernant les lettres de rappel'"/>
 			<xsl:with-param name="it" select="'Informazioni generali sulle lettere di richiamo'"/>
 			<xsl:with-param name="de" select="'Allgemeine Informationen zu Mahnschreiben'"/>
-		</xsl:call-template></h4>
+		</xsl:call-template></h4> -->
 		<xsl:value-of select="$generalMessage" disable-output-escaping="yes" />
 	</xsl:if>
 </xsl:template>
@@ -361,19 +362,19 @@ If overdue profiles are changed then the text bellow has to be adapted.
 					</xsl:when>
 					<xsl:when test="/notification_data/notification_type = 'OverdueNotificationType2'">
 						@@inform_you_item_below@@
-						@@inform_you_item_below_type1@@
+						<!-- @@inform_you_item_below_type1@@ -->
 						@@additional_info_1_type2@@
 					</xsl:when>
 					<xsl:when test="/notification_data/notification_type = 'OverdueNotificationType3'">
 						@@inform_you_item_below@@
-						@@inform_you_item_below_type1@@
+						<!-- @@inform_you_item_below_type1@@ -->
 						@@additional_info_1_type3@@
 					</xsl:when>
 					<xsl:when test="/notification_data/notification_type = 'OverdueNotificationType4'">
 				<!-- If the user does not have a block after the 3rd recall then don't print the account blocked info -->
 						<xsl:if test="notification_data/user_for_printing/blocks != ''">
 							@@inform_you_item_below@@
-							@@inform_you_item_below_type1@@
+							<!-- @@inform_you_item_below_type1@@ -->
 							@@additional_info_1_type4@@
 						</xsl:if>
 						<xsl:if test="notification_data/user_for_printing/blocks = ''">
@@ -513,6 +514,7 @@ If overdue profiles are changed then the text bellow has to be adapted.
 					</xsl:otherwise>
 				</xsl:choose> -->
 				<xsl:call-template name="SLSP-general-message"/>
+			<p>@@library@@</p>
 			<p>@@sincerely@@</p>
 			<p>
 				<xsl:value-of select="notification_data/organization_unit/name" />
