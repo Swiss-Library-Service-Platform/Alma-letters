@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP customized 02/2021
-	01/2022 - Added POL number and greeting -->
+	01/2022 - Added POL number and greeting
+    07/2024 - greeting using template -->
 	<!-- Dependancy: 
 		recordTitle - SLSP-multilingual
 		style - generalStyle, bodyStyleCss
@@ -35,12 +36,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<tr>
 					<td>
 						<br />
-						<xsl:call-template name="SLSP-multilingual">
-							<xsl:with-param name="en" select="'Hello'"/>
-							<xsl:with-param name="fr" select="'Bonjour'"/>
-							<xsl:with-param name="it" select="'Buongiorno,'"/>
-							<xsl:with-param name="de" select="'Guten Tag'"/>
-						</xsl:call-template>
+						<xsl:call-template name="SLSP-greeting" />
 					</td>
 				</tr>
 				<tr>
@@ -59,7 +55,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                 </tr>
 				<tr>
 					<td>
-						@@orderNumber@@ <xsl:value-of  select="notification_data/line_number"/>
+						@@orderNumber@@:&#160;<xsl:value-of  select="notification_data/line_number"/>
 						<br />
 					</td>
 				</tr>
