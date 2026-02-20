@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP customization: hide org. unit name, add ship to and bill to address
-    IZ customization: address line2 in sincerely
-    02/2026 - hide org. unit name -->
+    02/2026 - hide org. unit name in addresses, change sincerely to org. unit name -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -230,7 +229,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<br />
 				<table>
 						<tr><td>@@sincerely@@</td></tr>
-						<tr><td><xsl:value-of select="/notification_data/po/ship_to_address/line2"/></td></tr>
+						<tr><td><xsl:value-of select="notification_data/organization_unit/name" /></td></tr>
                         <tr>
                             <td>
                                 <br/><i>powered by SLSP</i>

@@ -10,7 +10,7 @@
 		11/2022 add extraction for destination of Rapido requests
 		06/2024 changed format to fit receipt printer (SUPPORT-29017)
 		03/2025 added chapter title, author and pages for GetIt digitization requests
-		02/2026 added logo
+		02/2026 added logic to display logo for non-PHGR libraries
 	Dependance:
 		header - head
 		style - generalStyle
@@ -25,6 +25,25 @@ SLSP-Rapido-extract-pages, SLSP-Rapido-persDel
 	<xsl:include href="footer.xsl" />
 	<xsl:include href="style.xsl" />
 	<xsl:include href="recordTitle.xsl" />
+
+	<!-- insert transit header without logo-->
+    <xsl:template name="head-letterName-print-date">
+		<table cellspacing="0" cellpadding="5" border="0">
+			<xsl:attribute name="style">
+				<xsl:call-template name="headerTableStyleCss" />; height: 15mm;
+			</xsl:attribute>
+			<tr>
+				<xsl:for-each select="notification_data/general_data">
+					<td>
+						<h1><xsl:value-of select="subject"/></h1>
+					</td>
+					<td align="right">
+						<xsl:value-of select="current_date"/>
+					</td>
+				</xsl:for-each>
+			</tr>
+		</table>
+    </xsl:template>
 
 	<xsl:template match="/">
 		<html>
@@ -45,7 +64,16 @@ SLSP-Rapido-extract-pages, SLSP-Rapido-persDel
 						<strong>@@requested_for@@ : <xsl:value-of select="notification_data/user_for_printing/name" /></strong>
 					</h2>
 				</xsl:if>
-				<xsl:call-template name="head" />
+				
+				<xsl:choose>
+                    <xsl:when test="/notification_data/organization_unit/code = 'N12'">
+                        <xsl:call-template name="head-letterName-print-date" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="head" />
+                    </xsl:otherwise>
+                </xsl:choose>
+
 				<div class="messageArea">
 					<div class="messageBody">
 						<xsl:if test="notification_data/request/selected_inventory_type='ITEM'">

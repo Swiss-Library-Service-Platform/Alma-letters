@@ -3,7 +3,7 @@
         05/2024 changed format to fit receipt printer (SUPPORT-29017)
         09/2024 request and system notes under the destination
         11/2024 removed label requested for
-        02/2026 added logo
+        02/2026 added logic to display logo for non-PHGR libraries
          -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -13,6 +13,25 @@
     <xsl:include href="footer.xsl" />
     <xsl:include href="style.xsl" />
     <xsl:include href="recordTitle.xsl" />
+
+    <!-- insert transit header without logo-->
+    <xsl:template name="head-letterName-print-date">
+		<table cellspacing="0" cellpadding="5" border="0">
+			<xsl:attribute name="style">
+				<xsl:call-template name="headerTableStyleCss" />; height: 15mm;
+			</xsl:attribute>
+			<tr>
+				<xsl:for-each select="notification_data/general_data">
+					<td>
+						<h2><xsl:value-of select="subject"/></h2>
+					</td>
+					<td align="right">
+						<xsl:value-of select="current_date"/>
+					</td>
+				</xsl:for-each>
+			</tr>
+		</table>
+    </xsl:template>
 
     <xsl:template match="/">
         <html>
@@ -24,8 +43,14 @@
                 <h1>
                     <xsl:value-of select="notification_data/user_for_printing/name" />
                 </h1>
-                
-                <xsl:call-template name="head" />
+                <xsl:choose>
+                    <xsl:when test="/notification_data/organization_unit/code = 'N12'">
+                        <xsl:call-template name="head-letterName-print-date" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="head" />
+                    </xsl:otherwise>
+                </xsl:choose>
 
                 <div class="messageArea">
                     <div class="messageBody">
