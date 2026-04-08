@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SLSP customized 02/2021
 	01/2022 - Added POL number and greeting
-    07/2024 - greeting using template -->
+    07/2024 - greeting using template
+	03/2026 - updated message format
+	04/2026 - added IZ message template -->
 	<!-- Dependancy: 
 		recordTitle - SLSP-multilingual
 		style - generalStyle, bodyStyleCss
@@ -15,6 +17,24 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:include href="footer.xsl" />
 <xsl:include href="style.xsl" />
 <xsl:include href="recordTitle.xsl" />
+
+<!-- Prints the IZ message stored in label 'department' for the language of the letter.
+		If value in the label is empty or with value "blank" does not print anything.
+		The label can contain also HTML markup such as links or formatting.
+		Usage:
+			1. Configure the label department with text in all languages.
+			2. <<already done by SLSP in this letter>>Insert the template: <xsl:call-template name="SLSP-IZMessage"/> -->
+<xsl:template name="SLSP-IZMessage">
+	<xsl:variable name="notice">@@department@@</xsl:variable>
+	<xsl:if test="$notice != '' and $notice != 'blank'">
+		<strong><xsl:call-template name="SLSP-multilingual"> <!-- recordTitle -->
+			<xsl:with-param name="en" select="'Notice of the library'"/>
+			<xsl:with-param name="fr" select="'Avis de la bibliothèque'"/>
+			<xsl:with-param name="it" select="'Comunicazione della biblioteca'"/>
+			<xsl:with-param name="de" select="'Notiz der Bibliothek'"/>
+		</xsl:call-template>:</strong>&#160;<xsl:value-of select="$notice" disable-output-escaping="yes" />
+	</xsl:if>
+</xsl:template>
 
 <xsl:template match="/">
 	<html>
@@ -107,23 +127,26 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                         <br />
 					</td>
                 </tr>
-				</table>
-				<br />
-				<table>
-					<tr>
-						<td>
-							@@sincerely@@
-						</td>
-					</tr>
-					<tr>
-						<td><br/>
-							<xsl:value-of select="notification_data/organization_unit/name" />
-						</td>
-					</tr>
-					<tr>
-						<td><br/><i>powered by SLSP</i></td>
-					</tr>
-				</table>
+				<tr>
+					<td>
+						<xsl:call-template name="SLSP-IZMessage"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<br />
+						@@sincerely@@
+					</td>
+				</tr>
+				<tr>
+					<td><br/>
+						<xsl:value-of select="notification_data/organization_unit/name" />
+					</td>
+				</tr>
+				<tr>
+					<td><br/><i>powered by SLSP</i></td>
+				</tr>
+			</table>
 			</body>
 	</html>
 </xsl:template>
