@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP customized 02/2021
+<!-- 
+    IZ customization: document link per view
+
+SLSP customized 02/2021
 	01/2022 - Added POL number and greeting
     07/2024 - greeting using template
 	03/2026 - updated message format
@@ -101,16 +104,46 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<br />
 					</td>
 				</tr>
+                <!-- IZ customization: document link per view -->
+                 <tr>
+                    <td>
+                        @@mmsId@@:
+                        <xsl:choose>
+                                <xsl:when test="(substring(/notification_data/organization_unit/code, 1,3) = 'LUH'  
+                                or  substring(/notification_data/organization_unit/code, 1,5) = 'LUMHS')">
+                                <br/>  
+                                <a target="_blank">
+                        <xsl:attribute name="href">http://rzs.swisscovery.slsp.ch/discovery/search?query=any,contains,<xsl:value-of select="/notification_data/mms_id"/>&#38;sortby=rank&#38;vid=41SLSP_RZS:VU06&#38;offset=0</xsl:attribute>
+                        <xsl:value-of select="/notification_data/mms_id"/></a>          
+                                </xsl:when>  
+
+                                <xsl:when test="(substring(/notification_data/organization_unit/code , 1,3) = 'LUP'  
+                                or  substring(/notification_data/organization_unit/code, 1,5) = 'LUUHL' )">
+                                <a target="_blank">
+                        <xsl:attribute name="href">http://rzs.swisscovery.slsp.ch/discovery/search?query=any,contains,<xsl:value-of select="/notification_data/mms_id"/>&#38;sortby=rank&#38;vid=41SLSP_RZS:VU07&#38;offset=0</xsl:attribute>
+                        <xsl:value-of select="/notification_data/mms_id"/></a>          
+                                </xsl:when>  
+
+                            <xsl:otherwise>   
+                            <a target="_blank">                                
+                        <xsl:attribute name="href">http://rzs.swisscovery.slsp.ch/discovery/search?query=any,contains,<xsl:value-of select="/notification_data/mms_id"/>&#38;sortby=rank&#38;vid=41SLSP_RZS:VU15&#38;offset=0</xsl:attribute>
+                        <xsl:value-of select="/notification_data/mms_id"/></a>          
+                        </xsl:otherwise>
+                        </xsl:choose>
+
+                    </td>
+                </tr>
+                <!-- End of IZ customization -->
 				<!-- if the /notification_data/letter_params/subject contains 'activated' or 'aktiviert'
 				 or 'activé' or 'attivato' display the link-->
-				<xsl:if test="contains(notification_data/letter_params/subject, 'activated') or contains(notification_data/letter_params/subject, 'aktiviert') or contains(notification_data/letter_params/subject, 'activé') or contains(notification_data/letter_params/subject, 'attivato')">
+				<!-- <xsl:if test="contains(notification_data/letter_params/subject, 'activated') or contains(notification_data/letter_params/subject, 'aktiviert') or contains(notification_data/letter_params/subject, 'activé') or contains(notification_data/letter_params/subject, 'attivato')">
 					<tr>
 						<td>
 						<br />
 						@@mmsId@@: <xsl:call-template name="SLSP-displayLink" />
 						</td>
 					</tr>
-				</xsl:if>
+				</xsl:if> -->
 				
 			<!-- 	<tr>
 					<td>

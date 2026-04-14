@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP customized 02/2021
+<!--
+    IZ Customization: Custom USI link to catalogue
+
+SLSP customized 02/2021
 	01/2022 - Added POL number and greeting
     07/2024 - greeting using template
 	03/2026 - updated message format
@@ -103,14 +106,39 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				</tr>
 				<!-- if the /notification_data/letter_params/subject contains 'activated' or 'aktiviert'
 				 or 'activé' or 'attivato' display the link-->
-				<xsl:if test="contains(notification_data/letter_params/subject, 'activated') or contains(notification_data/letter_params/subject, 'aktiviert') or contains(notification_data/letter_params/subject, 'activé') or contains(notification_data/letter_params/subject, 'attivato')">
+				<!-- <xsl:if test="contains(notification_data/letter_params/subject, 'activated') or contains(notification_data/letter_params/subject, 'aktiviert') or contains(notification_data/letter_params/subject, 'activé') or contains(notification_data/letter_params/subject, 'attivato')">
 					<tr>
 						<td>
 						<br />
 						@@mmsId@@: <xsl:call-template name="SLSP-displayLink" />
 						</td>
 					</tr>
-				</xsl:if>
+				</xsl:if> -->
+                <!-- Custom USI link to catalogue (SB, 13.01.2025) -->
+				<xsl:variable name="userlang" select="notification_data/receivers/receiver/preferred_language"/>
+				<xsl:variable name="mmsid" select="notification_data/mms_id"/>
+				<xsl:variable name="scope">
+					<xsl:choose>
+						<xsl:when test="notification_data/organization_unit/code='MEAA'">USI_ARC_ALL</xsl:when>
+						<xsl:otherwise>USI_BUL_OPAC_RERO</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				<xsl:variable name="tab">
+					<xsl:choose>
+						<xsl:when test="notification_data/organization_unit/code='MEAA'">USI_ARC_ONLY</xsl:when>
+						<xsl:otherwise>USI_BUL_ONLY</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				<xsl:variable name="mmsidlink" select="concat('https://reperio.usi.ch/discovery/fulldisplay?docid=alma', $mmsid, '&amp;context=L&amp;vid=41SLSP_USI:BiUSI&amp;lang=', $userlang, '&amp;search_scope=', $scope, '&amp;tab=', $tab)"/>
+                <tr>
+					<td>
+                        <br />
+                        <b>@@mmsId@@</b>
+                        <br />
+						<a href="{$mmsidlink}">&#8594; Reperio link</a>
+                        <br />
+					</td>
+                </tr>
 				
 			<!-- 	<tr>
 					<td>

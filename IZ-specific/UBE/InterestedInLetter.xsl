@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SLSP customized 02/2021
+<!--
+    IZ customization - display receiving note
+
+SLSP customized 02/2021
 	01/2022 - Added POL number and greeting
     07/2024 - greeting using template
 	03/2026 - updated message format
@@ -136,15 +139,24 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<br />
 					</td>
 				</tr> -->
+                <!-- IZ customization-->
                 <tr>
 					<td>
                         <br />
                         <b>@@message@@:</b>
                         <br />
-                        <xsl:value-of  select="notification_data/message"/>
+						<xsl:choose>
+                            <xsl:when test= "not((notification_data/message = 'Bestellung wurde storniert.')or(notification_data/message = 'Order was Cancelled.')or(notification_data/message = 'La commande a été annulée.')or(notification_data/message = 'L&quot;ordine è stato Annullato.'))">
+                                @@receivingNote@@
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="notification_data/message" />
+                            </xsl:otherwise>
+						</xsl:choose>
                         <br />
 					</td>
                 </tr>
+                <!-- end IZ customization -->
 				<tr>
 					<td>
 						<xsl:call-template name="SLSP-IZMessage"/>
