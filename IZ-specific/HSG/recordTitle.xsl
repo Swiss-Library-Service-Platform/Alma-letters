@@ -14,16 +14,19 @@ SLSP WG: Letters version 08/2021
 		Adapted labels for template SLSP-userAccount
 02/2024 Added support for Journal requests to SLSP-Rapido-extract-volume
 10/2025 Updated French text in SLSP-userAccount
+05/2026 Added commented utf-8 character to ensure correct encoding
 -->
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
 <!-- Source code from https://github.com/uio-library/alma-letters-ubo -->
 	<!--
 	Template to make it easier to insert multilingual text.
-	*** Important ***: If the IZ has disabled a language in UI, the appropriate param and <when> row need to be commented here as well (see SUPPORT-14329)
+	*** Important ***: If the IZ has disabled a language in Alma UI,
+	the appropriate param and <when> row need to be commented here as well
+	(see SUPPORT-14329)
 	Depends on: (none)
-	When calling the template, the fr param is using CDATA to avoid error when single quote is in the text, i.e. n'ont
+	When calling the template, the fr param is using CDATA to avoid error
+	when single quote is in the text, i.e. n'ont
 	USAGE:
 		<xsl:call-template name="SLSP-multilingual">
 			<xsl:with-param name="en" select="'Testing multilingual text.'"/>
@@ -35,18 +38,28 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		</xsl:call-template>
 	-->
 <xsl:template name="SLSP-multilingual">
-	<xsl:param name="en" />
-	<!-- <xsl:param name="fr" /> --><!-- Disabled in UI -->
-	<xsl:param name="de" />
-	<!-- <xsl:param name="it" /> --><!-- Disabled in UI -->
+	<xsl:param name="en"/>
+	<!-- <xsl:param name="fr"/> --><!-- Disabled in UI -->
+	<xsl:param name="de"/>
+	<!-- <xsl:param name="it"/> --><!-- Disabled in UI -->
 	<xsl:choose>
 		<xsl:when test="/notification_data/receivers/receiver/preferred_language != ''">
 			<xsl:choose>
-				<!-- <xsl:when test="/notification_data/receivers/receiver/preferred_language = 'fr'"><xsl:value-of select="$fr"/></xsl:when> --><!-- Disabled in UI -->
-				<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'en'"><xsl:value-of select="$en"/></xsl:when>
-				<!-- <xsl:when test="/notification_data/receivers/receiver/preferred_language = 'it'"><xsl:value-of select="$it"/></xsl:when> --><!-- Disabled in UI -->
-				<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'de'"><xsl:value-of select="$de"/></xsl:when>
-				<xsl:otherwise><xsl:value-of select="$en"/></xsl:otherwise>
+				<!-- <xsl:when test="/notification_data/receivers/receiver/preferred_language = 'fr'">
+				 <xsl:value-of select="$fr"/>
+				 </xsl:when> --><!-- Disabled in UI -->
+				<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'en'">
+					<xsl:value-of select="$en"/>
+				</xsl:when>
+				<!-- <xsl:when test="/notification_data/receivers/receiver/preferred_language = 'it'">
+				 <xsl:value-of select="$it"/>
+				 </xsl:when> --><!-- Disabled in UI -->
+				<xsl:when test="/notification_data/receivers/receiver/preferred_language = 'de'">
+					<xsl:value-of select="$de"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$en"/>
+				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:when>
 		<!-- Added for letters where the recipient's preferred language is not specified.
@@ -83,12 +96,13 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	USAGE: <xsl:call-template name="SLSP-userAccount"/>
 -->
 	<xsl:template name="SLSP-userAccount">
+		<xsl:comment> ™ </xsl:comment>
 		<xsl:call-template name="SLSP-multilingual">
 			<xsl:with-param name="en"
 				select="'To check your current loans and fees, please log in to swisscovery: '" />
 			<!-- Adaptation to include single quote in "n'ont" in the text -->
 			<xsl:with-param name="fr">
-				<![CDATA[Pour consulter vos demandes en cours, livres empruntés et frais éventuels, veuillez-vous connecter à swisscovery: ]]>
+				<![CDATA[Pour consulter vos demandes en cours, livres empruntés et frais éventuels, veuillez vous connecter à swisscovery: ]]>
 			</xsl:with-param>
 			<xsl:with-param name="it"
 				select="'Per controllare i suoi prestiti attuali e i costi, effettui il login su swisscovery: '" />
@@ -108,7 +122,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		</a>
 	</xsl:template>
 
-<!-- Template to extract request note from Rapido request
+<!-- Template for Resource Sharing Request Slip to extract request note
+ from Rapido request
 Usage:
 	<xsl:variable name="requestNote">
 		<xsl:call-template name="SLSP-Rapido-request-note" />
@@ -160,7 +175,8 @@ Usage:
 		</xsl:choose>
 	</xsl:template>
 
-<!-- Template to extract pages from the encoded XML metadata provided in letter XML
+<!-- Template for Resource Sharing Request Slip to extract pages
+ from the encoded XML metadata provided in letter XML
 Usage: 
 	<xsl:variable name="requestPages">
 		<xsl:call-template name="SLSP-Rapido-extract-pages" />
@@ -184,7 +200,8 @@ Usage:
 	<xsl:value-of select="substring-before($user-pages-temp, '&lt;/dc:rlterms_pages')"/>
 </xsl:template>
 
-<!-- Template to print the home / office delivery information
+<!-- Template for Resource Sharing Request Slip to
+ print the home / office delivery information
 	Usage:
 		<xsl:variable name="personalDelivery">
 			<xsl:call-template name="SLSP-Rapido-persDel" />
@@ -233,10 +250,10 @@ Usage:
 		</xsl:if>
 	</xsl:template>
 
-
 <!-- Template to add greeting to letters in case the label is missing in configuration
 USAGE: <xsl:call-template name="SLSP-greeting" /> -->
 <xsl:template name="SLSP-greeting">
+	<xsl:comment> ™ </xsl:comment>
 	<xsl:call-template name="SLSP-multilingual">
 		<xsl:with-param name="en" select="'Hello,'"/>
 		<xsl:with-param name="fr" select="'Bonjour,'"/>
@@ -248,6 +265,7 @@ USAGE: <xsl:call-template name="SLSP-greeting" /> -->
 <!-- Template to add greeting to ILL letters in case the label is missing in configuration
 USAGE: <xsl:call-template name="SLSP-greeting-ILL" /> -->
 <xsl:template name="SLSP-greeting-ILL">
+	<xsl:comment> ™ </xsl:comment>
 	<xsl:call-template name="SLSP-multilingual">
 		<xsl:with-param name="en" select="'Dear Colleagues,'"/>
 		<xsl:with-param name="fr" select="'Cher(e)s collègues,'"/>
@@ -256,9 +274,11 @@ USAGE: <xsl:call-template name="SLSP-greeting-ILL" /> -->
 	</xsl:call-template>
 </xsl:template>
 
-<!-- Template to add sincerely paragraph to letters in case the label is missing in configuration
+<!-- Template to add sincerely paragraph to letters
+in case the label is missing in configuration
 USAGE: <xsl:call-template name="SLSP-sincerely" /> -->
 <xsl:template name="SLSP-sincerely">
+	<xsl:comment> ™ </xsl:comment>
 	<xsl:call-template name="SLSP-multilingual">
 		<xsl:with-param name="en" select="'Sincerely,'"/>
 		<xsl:with-param name="fr" select="'Meilleures salutations,'"/>
@@ -268,6 +288,7 @@ USAGE: <xsl:call-template name="SLSP-sincerely" /> -->
 </xsl:template>
 
 <xsl:template name="recordTitle">
+	<xsl:comment> ™ </xsl:comment>
 	<div class="recordTitle">
 		<span class="spacer_after_1em">
 			<span class="recordTitle">
